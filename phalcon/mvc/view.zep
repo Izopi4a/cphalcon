@@ -691,9 +691,11 @@ class View extends Injectable implements ViewInterface
 
 				let viewEnginePaths[] = viewEnginePath;
 			}
-		}
 
-		if notExists === true {
+			if notExists === false {
+				break;
+			}
+
 			/**
 			 * Notify about not found views
 			 */

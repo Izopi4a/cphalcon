@@ -155,7 +155,7 @@ PHP_METHOD(Phalcon_Validation_Validator_Uniqueness, validate) {
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(_6$$3);
 		ZVAL_STRING(_6$$3, "Uniqueness", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 467, _4$$3, field, _6$$3, _5$$3);
+		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 465, _4$$3, field, _6$$3, _5$$3);
 		zephir_check_temp_parameter(_6$$3);
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, validation, "appendmessage", NULL, 0, _1$$3);
@@ -389,7 +389,7 @@ PHP_METHOD(Phalcon_Validation_Validator_Uniqueness, isUniquenessModel) {
 				ZVAL_LONG(&_12$$6, 0);
 				ZEPHIR_SINIT_NVAR(_13$$6);
 				ZVAL_LONG(&_13$$6, (zephir_fast_count_int(except TSRMLS_CC) - 1));
-				ZEPHIR_CALL_FUNCTION(&_14$$6, "range", &_15, 447, &_12$$6, &_13$$6);
+				ZEPHIR_CALL_FUNCTION(&_14$$6, "range", &_15, 446, &_12$$6, &_13$$6);
 				zephir_check_call_status();
 				_10$$6 = !ZEPHIR_IS_IDENTICAL(_11$$6, _14$$6);
 			}
@@ -579,7 +579,7 @@ PHP_METHOD(Phalcon_Validation_Validator_Uniqueness, isUniquenessCollection) {
 	HashPosition _1, _8$$10, _11$$13;
 	zephir_fcall_cache_entry *_5 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *field = NULL, *values = NULL, *arrayValue$$10 = NULL, *arrayValue$$12 = NULL, *arrayValue$$13 = NULL, *arrayValue$$15 = NULL, *_16$$17;
+	zval *field = NULL, *values = NULL, *arrayValue$$10 = NULL, *arrayValue$$12 = NULL, *arrayValue$$13 = NULL, *arrayValue$$15 = NULL, *arrayValue$$16, *_16$$17;
 	zval *record, *field_param = NULL, *values_param = NULL, *exceptConditions = NULL, *fieldExcept = NULL, *notInValues = NULL, *value = NULL, *singleField = NULL, *params = NULL, *except = NULL, *singleExcept = NULL, *_0, **_3, *_14 = NULL, *_4$$3 = NULL, **_10$$10, **_13$$13, *_15$$16 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -677,9 +677,12 @@ PHP_METHOD(Phalcon_Validation_Validator_Uniqueness, isUniquenessCollection) {
 	ZEPHIR_CALL_METHOD(&_14, record, "getdirtystate", NULL, 0);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_LONG(_14, 0)) {
+		ZEPHIR_INIT_VAR(arrayValue$$16);
+		zephir_create_array(arrayValue$$16, 1, 0 TSRMLS_CC);
 		ZEPHIR_CALL_METHOD(&_15$$16, record, "getid", NULL, 0);
 		zephir_check_call_status();
-		zephir_array_update_multi(&params, &_15$$16 TSRMLS_CC, SL("ss"), 4, SL("conditions"), SL("_id"));
+		zephir_array_update_string(&arrayValue$$16, SL("$ne"), &_15$$16, PH_COPY | PH_SEPARATE);
+		zephir_array_update_multi(&params, &arrayValue$$16 TSRMLS_CC, SL("ss"), 4, SL("conditions"), SL("_id"));
 	}
 	if (!(ZEPHIR_IS_EMPTY(exceptConditions))) {
 		ZEPHIR_INIT_VAR(_16$$17);

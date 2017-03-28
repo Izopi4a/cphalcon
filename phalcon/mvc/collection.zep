@@ -365,6 +365,10 @@ abstract class Collection implements EntityInterface, CollectionInterface, Injec
 			let base = collection;
 		}
 
+        if base instanceof Collection {
+		    base->setDirtyState(self::DIRTY_STATE_PERSISTENT);
+        }
+
 		let source = collection->getSource();
 		if empty source {
 			throw new Exception("Method getSource() returns empty string");
@@ -752,9 +756,6 @@ abstract class Collection implements EntityInterface, CollectionInterface, Injec
 	 *     }
 	 * }
 	 *</code>
-	 *
-	 * @deprecated 3.1.0
-	 * @see \Phalcon\Validation
 	 */
 	public function validationHasFailed() -> boolean
 	{
@@ -1002,7 +1003,6 @@ abstract class Collection implements EntityInterface, CollectionInterface, Injec
 						if fetch id, data["_id"] {
 							let this->_id = id;
 						}
-					} else {
 						let this->_dirtyState = self::DIRTY_STATE_PERSISTENT;
 					}
 				}
@@ -1059,6 +1059,7 @@ abstract class Collection implements EntityInterface, CollectionInterface, Injec
 						if fetch id, data["_id"] {
 							let this->_id = id;
 						}
+						let this->_dirtyState = self::DIRTY_STATE_PERSISTENT;
 					}
 				}
 			}

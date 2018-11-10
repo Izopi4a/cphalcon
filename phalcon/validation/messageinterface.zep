@@ -70,6 +70,6 @@ interface MessageInterface
 	/**
 	 * Magic __set_state helps to recover messages from serialization
 	 */
-	public static function __set_state(array! message) -> <MessageInterface>;
+	public static function __set_state(array! message);
 
 }

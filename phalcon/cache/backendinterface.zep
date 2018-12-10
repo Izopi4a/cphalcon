@@ -101,12 +101,9 @@ interface BackendInterface
 	 *
 	 * @param string keyName
 	 * @return boolean
+	 *
 	 */
-<<<<<<< HEAD
 	public function delete(string keyName);
-=======
-	public function delete(string! keyName);
->>>>>>> 3b55639d756b342db306c3fb8c0c97180cf0d8bf
 
 	/**
 	 * Query the existing cached keys

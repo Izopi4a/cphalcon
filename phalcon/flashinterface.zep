@@ -50,5 +50,9 @@ interface FlashInterface
 	/**
 	 * Outputs a message
 	 */
+<<<<<<< HEAD
 	public function message(string type, string message);
+=======
+	public function message(string type, string message) -> void;
+>>>>>>> 3b55639d756b342db306c3fb8c0c97180cf0d8bf
 }

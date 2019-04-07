@@ -129,6 +129,8 @@ class Apcu extends Backend
 		let success = apcu_store(lastKey, preparedContent, ttl);
 
 		if !success {
+			var_dump(preparedContent);
+			exit;
 			throw new Exception("Failed storing data in APCu");
 		}
 

@@ -317,7 +317,7 @@ class Redis extends Backend
 		/**
 		* Delete the key from redis
 		*/
-		return (bool) redis->delete(lastKey);
+		return (bool) redis->del(lastKey);
 	}
 
 	/**
@@ -481,7 +481,7 @@ class Redis extends Backend
 			for key in keys {
 				let lastKey = "_PHCR" . key;
 				redis->sRem(specialKey, key);
-				redis->delete(lastKey);
+				redis->del(lastKey);
 			}
 		}
 

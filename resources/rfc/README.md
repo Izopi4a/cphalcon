@@ -41,6 +41,6 @@ Survey notes from the reading agents are saved as `survey-*.md` in this director
 - [x] branch created, handoff written
 - [x] surveys saved: symfony-core, symfony-types, symfony-data, symfony-view
 - [x] survey saved: phalcon-current
-- [ ] 17106-forms-rfc.md drafted
+- [x] 17106-forms-rfc.md drafted (2026-10-15, awaiting user review)
 - [ ] user review
 - [ ] posted on #17106

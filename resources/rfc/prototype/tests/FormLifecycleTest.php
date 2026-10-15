@@ -120,6 +120,20 @@ final class FormLifecycleTest extends TestCase
         self::assertSame(['a' => 'x-high-low'], $form->getData(), 'higher priority runs first');
     }
 
+    public function testListenersWithEqualPriorityRunInInsertionOrder(): void
+    {
+        // Phalcon's Events\Manager (SplPriorityQueue) does not guarantee this on its own.
+        $builder = $this->factory->createNamedBuilder('f')->add('a', TextType::class);
+        for ($i = 1; $i <= 8; ++$i) {
+            $builder->addEventListener(FormEvents::PRE_SUBMIT, static fn (FormEvent $e) => $e->setData(['a' => $e->getData()['a'] . $i]));
+        }
+        $form = $builder->getForm();
+
+        $form->submit(['a' => '']);
+
+        self::assertSame(['a' => '12345678'], $form->getData());
+    }
+
     public function testErrorBubblingDefaults(): void
     {
         $form = $this->factory->createNamedBuilder('f')

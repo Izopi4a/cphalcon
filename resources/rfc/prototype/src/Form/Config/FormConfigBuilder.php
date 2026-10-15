@@ -24,6 +24,11 @@ class FormConfigBuilder implements FormConfigBuilderInterface
 
     private static ?RequestHandlerInterface $nativeRequestHandler = null;
 
+    /** Room for 100k listeners per priority level before sequence numbers collide with the next level. */
+    private const PRIORITY_SCALE = 100000;
+
+    private int $listenerSequence = 0;
+
     protected bool $locked = false;
     private EventsManagerInterface $eventsManager;
     private string $name;
@@ -85,6 +90,12 @@ class FormConfigBuilder implements FormConfigBuilderInterface
     {
         $this->assertNotLocked();
 
+        // Phalcon's Events\Manager keeps handlers in an SplPriorityQueue, whose order for equal
+        // priorities is undefined. Forms rely on insertion order within a priority (Symfony
+        // guarantees it), so fold a decreasing sequence number into the effective priority.
+        // prototype: in Zephir this belongs in Events\Manager itself (stable ordering).
+        $effectivePriority = $priority * self::PRIORITY_SCALE - $this->listenerSequence++;
+
         // Phalcon handlers are called as (Event, source, data); our listeners take the FormEvent (= data).
         $this->eventsManager->attach(
             $eventName,
@@ -93,7 +104,7 @@ class FormConfigBuilder implements FormConfigBuilderInterface
                     $listener($data);
                 }
             },
-            $priority
+            $effectivePriority
         );
 
         return $this;

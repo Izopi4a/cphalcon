@@ -56,12 +56,23 @@ blocks for all of it (Validation, Events, TagFactory, Volt, the new Container, S
   `Model::assign()` reimplements inline. Per-form events are a straight use of
   `Phalcon\Events\Manager`. Delivering these as reusable pieces is cheaper than three local fixes.
 
-## Non-goals
+## Inspiration and scope
 
-- Not a 1:1 port of Symfony Forms. We copy the architecture and the proven option names where
-  they fit, and leave out what depends on Symfony-only infrastructure: Intl/localized number and
-  date transformers, OptionsResolver's deprecations/nested options/info, PropertyInfo-based
-  guessing, Twig-specific renderer internals, DataCollector, Flow types, polymorphic collections.
+This design is inspired by Symfony Forms, deliberately. It is the forms model most PHP
+developers already know: a decade of production use, well understood concepts (form types,
+compound forms, data transformers, form themes), and a vocabulary that thousands of blog posts,
+answers and tutorials already explain. Using the same architecture and the same option names
+wherever they fit means a developer coming to Phalcon brings working knowledge with them, Phalcon
+users can learn from existing Symfony material while our own documentation catches up, and
+reviewers can check our behaviour against a reference implementation instead of a blank page.
+
+What we build is Phalcon's own component on Phalcon's own parts (Validation, Events, TagFactory,
+Volt, Container, Security), not a port. The parts of Symfony Forms that only exist because of
+Symfony's surrounding infrastructure are out of scope: Intl-localized number and date transformers,
+OptionsResolver's deprecations, nested options and info, PropertyInfo-based type guessing,
+Twig-specific renderer internals, the DataCollector, Flow types and polymorphic collections.
+
+Also out of scope:
 - Not a replacement for `Phalcon\Filter\Validation` or `Phalcon\Html\TagFactory`. Both are
   consumed as they are, with small additive changes called out below.
 - No HTTP changes. The request handler is an interface precisely so #17054 can land before or

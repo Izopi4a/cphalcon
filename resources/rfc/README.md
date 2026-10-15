@@ -31,6 +31,19 @@ own parts, NOT a 1:1 port of Symfony Forms. Closes GitHub issue phalcon/cphalcon
 - Repo hygiene: user has write access upstream. Push ONLY to remote `fork`
   (git@github.com:Izopi4a/cphalcon.git), never to `origin`. Open PRs from the fork.
 
+## Toolchain (set up 2026-10-15, system PHP 8.5.4 from apt)
+- Zephir CLI: `vendor/bin/zephir` (0.19.0, from composer). Parser ext built from source
+  (zephir-lang/php-zephir-parser v1.8.0; needs `./configure CC='gcc -std=gnu99 -w'` on gcc 15)
+  installed at ~/.local/lib/php/zephir_parser.so, enabled by ~/.config/php/conf.d/zephir_parser.ini.
+  Shell must have: `export PHP_INI_SCAN_DIR=":$HOME/.config/php/conf.d"` (leading colon = append).
+- Regenerate ext/: `vendor/bin/zephir generate` (~7s). Build: `cd ext && phpize && ./configure
+  --enable-phalcon CFLAGS='-g -O0' && make -j32`. Tests: `php -d extension=ext/modules/phalcon.so
+  vendor/bin/phpunit -c phpunit.xml.dist tests/unit/Forms`.
+- NEVER commit ext/ changes (CONTRIBUTING); `git checkout -- ext && git clean -f ext/phalcon/*__closure*`
+  before committing. The committed ext/ on 7.0.x is stale (297 files differ after generate).
+- PHP prototype of the M1 core lives in resources/rfc/prototype/ (plain PHP 8.3+, PHPUnit from
+  cphalcon's vendor). It is design validation only; delete before any upstream PR.
+
 ## Research inputs
 Symfony sources shallow-cloned (scratch, may be gone):
 /tmp/claude-1000/-home-izopi4a/326b8842-b11d-4ad8-bc9d-f685b0a6d968/scratchpad/symfony/{form,options-resolver,property-access}
@@ -42,5 +55,7 @@ Survey notes from the reading agents are saved as `survey-*.md` in this director
 - [x] surveys saved: symfony-core, symfony-types, symfony-data, symfony-view
 - [x] survey saved: phalcon-current
 - [x] 17106-forms-rfc.md drafted (2026-10-15, awaiting user review)
-- [ ] user review
+- [x] Zephir toolchain working (generate + build)
+- [ ] user review of RFC
+- [ ] PHP prototype of M1 core (resources/rfc/prototype/)
 - [ ] posted on #17106

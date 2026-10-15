@@ -54,18 +54,26 @@ final class TransformerTest extends TestCase
 
     public function testChoiceToValue(): void
     {
-        $list = new ArrayChoiceList(['Yes' => true, 'No' => false, 'Maybe' => null]);
+        $list = new ArrayChoiceList(['Yes' => true, 'No' => false]);
         $t    = new ChoiceToValueTransformer($list);
 
         self::assertSame('1', $t->transform(true));
-        self::assertSame('0', $t->transform(false));
+        self::assertSame('0', $t->transform(false), 'false is "0", not ""');
         self::assertTrue($t->reverseTransform('1'));
         self::assertFalse($t->reverseTransform('0'));
         self::assertNull($t->reverseTransform(''), '"" with no matching choice is null');
         self::assertNull($t->reverseTransform(null));
 
+        // A null choice is not castable to a string (Symfony): the whole list switches to index values
+        $list = new ArrayChoiceList(['Yes' => true, 'No' => false, 'Maybe' => null]);
+        $t    = new ChoiceToValueTransformer($list);
+        self::assertSame(['0', '1', '2'], $list->getValues());
+        self::assertSame('2', $t->transform(null));
+        self::assertNull($t->reverseTransform('2'), 'the "Maybe" choice is null, like "no selection"');
+        self::assertNull($t->reverseTransform(''));
+
         $this->expectException(TransformationFailedException::class);
-        $t->reverseTransform('2');
+        $t->reverseTransform('3');
     }
 
     public function testChoicesToValuesWithObjectChoicesUseIndices(): void

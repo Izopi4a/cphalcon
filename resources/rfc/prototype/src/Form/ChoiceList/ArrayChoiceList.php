@@ -4,21 +4,24 @@ declare(strict_types=1);
 namespace Phalcon\Form\ChoiceList;
 
 /**
- * Choice list over an array of label => choice. Values are the stringified choices when all
- * choices are scalars with distinct string forms, otherwise their 0-based index; a "choice_value"
- * callable overrides both.
+ * Choice list over an array of label => choice, optionally nested one level or more as
+ * group label => [label => choice]. Values are the stringified choices when all choices are
+ * scalars with distinct string forms, otherwise their 0-based index; a "choice_value" callable
+ * overrides both.
  *
- * prototype: flat lists only, no choice groups.
+ * The list itself is always flat (value => choice); the grouping only survives in
+ * getStructuredValues(), which the view factory uses to build ChoiceGroupView instances.
+ * Same algorithm as Symfony's ArrayChoiceList.
  */
-final class ArrayChoiceList implements ChoiceListInterface
+class ArrayChoiceList implements ChoiceListInterface
 {
     /** @var array<string, mixed> value => choice */
-    private array $choices = [];
+    protected array $choices = [];
     /** @var array<string, int|string> value => original key */
-    private array $originalKeys = [];
-    /** @var array<int|string, string> original key => value */
-    private array $structuredValues = [];
-    private ?\Closure $valueCallback = null;
+    protected array $originalKeys = [];
+    /** @var array<int|string, string|array> original key => value, nested for groups */
+    protected array $structuredValues = [];
+    protected ?\Closure $valueCallback = null;
 
     /** @param iterable<int|string, mixed> $choices */
     public function __construct(iterable $choices, ?callable $value = null)
@@ -28,18 +31,19 @@ final class ArrayChoiceList implements ChoiceListInterface
         if (null === $value && self::castableToString($choices)) {
             $value = static fn (mixed $choice): string => false === $choice ? '0' : (string) $choice;
         }
+
         if (null !== $value) {
+            // A deterministic value generator: also usable for getValuesForChoices()
             $this->valueCallback = $value(...);
+        } else {
+            // Otherwise generate incrementing integers as values
+            $i     = 0;
+            $value = static function () use (&$i): int {
+                return $i++;
+            };
         }
 
-        $index = 0;
-        foreach ($choices as $key => $choice) {
-            $stringValue = null !== $value ? (string) $value($choice) : (string) $index++;
-
-            $this->choices[$stringValue]     = $choice;
-            $this->originalKeys[$stringValue] = $key;
-            $this->structuredValues[$key]    = $stringValue;
-        }
+        $this->flatten($choices, $value, $this->choices, $this->originalKeys, $this->structuredValues);
     }
 
     public function getChoices(): array
@@ -99,18 +103,52 @@ final class ArrayChoiceList implements ChoiceListInterface
         return $values;
     }
 
-    private static function castableToString(array $choices): bool
+    /**
+     * Flattens nested choice arrays (groups) into value => choice while recording the structure.
+     *
+     * @param array<int|string, mixed> $choices
+     */
+    protected function flatten(array $choices, callable $value, array &$choicesByValues, array &$keysByValues, array &$structuredValues): void
     {
-        $seen = [];
+        foreach ($choices as $key => $choice) {
+            if (is_array($choice)) {
+                $structuredValues[$key] = [];
+                $this->flatten($choice, $value, $choicesByValues, $keysByValues, $structuredValues[$key]);
+
+                continue;
+            }
+
+            $choiceValue                  = (string) $value($choice);
+            $choicesByValues[$choiceValue] = $choice;
+            $keysByValues[$choiceValue]    = $key;
+            $structuredValues[$key]        = $choiceValue;
+        }
+    }
+
+    /**
+     * All choices (groups included) scalar, with distinct string forms. Like Symfony a null
+     * choice is not castable and switches the whole list to index values.
+     */
+    private static function castableToString(array $choices, array &$cache = []): bool
+    {
         foreach ($choices as $choice) {
-            if (!is_scalar($choice) && null !== $choice) {
+            if (is_array($choice)) {
+                if (!self::castableToString($choice, $cache)) {
+                    return false;
+                }
+
+                continue;
+            }
+            if (!is_scalar($choice)) {
                 return false;
             }
+
+            // prevent false being cast to the empty string
             $string = false === $choice ? '0' : (string) $choice;
-            if (isset($seen[$string])) {
+            if (isset($cache[$string])) {
                 return false;
             }
-            $seen[$string] = true;
+            $cache[$string] = true;
         }
 
         return true;

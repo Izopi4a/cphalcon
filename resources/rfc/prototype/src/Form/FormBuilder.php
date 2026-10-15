@@ -152,7 +152,8 @@ class FormBuilder extends FormConfigBuilder implements FormBuilderInterface
     private function resolveChildren(): void
     {
         foreach ($this->unresolvedChildren as $name => [$type, $options]) {
-            $this->children[$name] = $this->create($name, $type, $options);
+            // PHP turns numeric string keys ("0", child names of expanded ChoiceType) into ints
+            $this->children[$name] = $this->create((string) $name, $type, $options);
         }
         $this->unresolvedChildren = [];
     }

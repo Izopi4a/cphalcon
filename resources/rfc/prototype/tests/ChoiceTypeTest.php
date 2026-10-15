@@ -80,7 +80,9 @@ final class ChoiceTypeTest extends TestCase
         self::assertSame([], $form->getData(), 'nothing selected is an empty array');
 
         $form = $this->factory->createNamed('f', ChoiceType::class, null, ['choices' => self::CHOICES, 'multiple' => true])->submit(['r', 'nope']);
-        self::assertFalse($form->isSynchronized(), 'one unknown value fails the whole submit');
+        self::assertTrue($form->isSynchronized(), 'multiple: unknown values do not fail the submit (Symfony)...');
+        self::assertSame(['r'], $form->getData(), '...the known ones are kept...');
+        self::assertCount(1, $form->getErrors(), '...and the form gets one error');
     }
 
     public function testObjectChoicesWithCallbacksAndPreferred(): void
@@ -104,12 +106,18 @@ final class ChoiceTypeTest extends TestCase
         self::assertSame(['Red', 'Green'], array_map(static fn (ChoiceView $c) => $c->label, $view->vars['choices']));
         self::assertSame(['data-id' => 10], $view->vars['choices'][0]->attr);
         self::assertCount(1, $view->vars['preferred_choices']);
-        self::assertSame($green, $view->vars['preferred_choices'][0]->data);
+        self::assertSame($green, reset($view->vars['preferred_choices'])->data, 'preferred views are keyed by choice index');
     }
 
-    public function testExpandedIsNotSupported(): void
+    public function testExpandedBuildsOneChildPerChoice(): void
     {
+        $form = $this->factory->createNamed('f', ChoiceType::class, 'g', ['choices' => self::CHOICES, 'expanded' => true]);
+
+        self::assertSame([0, 1, 2], array_keys($form->all()), 'children are named by index (PHP int keys), required: no placeholder radio');
+        self::assertTrue($form->get('1')->getData());
+        self::assertSame('g', $form->submit('g')->getData());
+
         $this->expectException(InvalidOptionsException::class);
-        $this->factory->createNamed('f', ChoiceType::class, null, ['choices' => self::CHOICES, 'expanded' => true]);
+        $this->factory->createNamed('f', ChoiceType::class, null, ['choices' => self::CHOICES, 'expanded' => 'yes']);
     }
 }

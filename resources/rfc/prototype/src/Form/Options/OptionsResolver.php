@@ -46,7 +46,11 @@ final class OptionsResolver implements Options
             if ($firstType instanceof \ReflectionNamedType && Options::class === $firstType->getName()) {
                 // Lazy default. A second parameter means "chain onto the previous default",
                 // otherwise this closure replaces whatever was set before.
-                if (count($params) < 2 || !isset($this->lazy[$option])) {
+                if (count($params) >= 2 && !isset($this->lazy[$option]) && array_key_exists($option, $this->defaults)) {
+                    // Chain onto an existing plain default: expose it as $previousValue.
+                    $previous             = $this->defaults[$option];
+                    $this->lazy[$option]  = [static fn (Options $options) => $previous];
+                } elseif (count($params) < 2 || !isset($this->lazy[$option])) {
                     $this->lazy[$option] = [];
                 }
                 $this->lazy[$option][] = $value;

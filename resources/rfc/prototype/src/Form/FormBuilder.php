@@ -138,7 +138,7 @@ class FormBuilder extends FormConfigBuilder implements FormBuilderInterface
 
     public function getIterator(): \Traversable
     {
-        throw new BadMethodCallException('FormBuilder::getIterator() is not supported; use all().');
+        return new \ArrayIterator($this->all());
     }
 
     private function resolveChild(string $name): FormBuilderInterface

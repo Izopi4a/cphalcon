@@ -81,12 +81,13 @@ class FormConfigBuilder implements FormConfigBuilderInterface
 
         if (null === $eventsManager) {
             $eventsManager = new EventsManager();
-            $eventsManager->enablePriorities(true);
         }
+        // Priorities are ignored by Phalcon's manager unless explicitly enabled; forms need them.
+        $eventsManager->enablePriorities(true);
         $this->eventsManager = $eventsManager;
     }
 
-    public function addEventListener(string $eventName, callable $listener, int $priority = 100): static
+    public function addEventListener(string $eventName, callable $listener, int $priority = 0): static
     {
         $this->assertNotLocked();
 
@@ -94,6 +95,8 @@ class FormConfigBuilder implements FormConfigBuilderInterface
         // priorities is undefined. Forms rely on insertion order within a priority (Symfony
         // guarantees it), so fold a decreasing sequence number into the effective priority.
         // prototype: in Zephir this belongs in Events\Manager itself (stable ordering).
+        // Default priority is 0 like Symfony's dispatcher (NOT Phalcon's 100), so Symfony-style
+        // explicit priorities keep their meaning. |priority| must stay below 21474 on 32-bit builds.
         $effectivePriority = $priority * self::PRIORITY_SCALE - $this->listenerSequence++;
 
         // Phalcon handlers are called as (Event, source, data); our listeners take the FormEvent (= data).
@@ -117,8 +120,14 @@ class FormConfigBuilder implements FormConfigBuilderInterface
         foreach ($subscriber::getSubscribedEvents() as $eventName => $params) {
             if (is_string($params)) {
                 $this->addEventListener($eventName, $subscriber->$params(...));
+            } elseif (is_string($params[0])) {
+                // [method, priority]
+                $this->addEventListener($eventName, $subscriber->{$params[0]}(...), $params[1] ?? 0);
             } else {
-                $this->addEventListener($eventName, $subscriber->{$params[0]}(...), $params[1] ?? 100);
+                // [[method, priority], [method, priority], ...]
+                foreach ($params as $listener) {
+                    $this->addEventListener($eventName, $subscriber->{$listener[0]}(...), $listener[1] ?? 0);
+                }
             }
         }
 

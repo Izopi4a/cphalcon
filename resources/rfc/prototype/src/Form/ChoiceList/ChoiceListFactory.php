@@ -28,9 +28,13 @@ final class ChoiceListFactory
         return new ArrayChoiceList($choices, $this->valueCallable($value));
     }
 
-    /** @param callable(): iterable<int|string, mixed> $loader */
-    public function createListFromLoader(callable $loader, callable|string|PropertyPathInterface|null $value = null): ChoiceListInterface
+    /** @param callable(): iterable<int|string, mixed>|ChoiceLoaderInterface $loader */
+    public function createListFromLoader(callable|ChoiceLoaderInterface $loader, callable|string|PropertyPathInterface|null $value = null): ChoiceListInterface
     {
+        if ($loader instanceof ChoiceLoaderInterface) {
+            return new LazyChoiceList($loader->loadChoices(...), $this->valueCallable($value), $loader->loadChoicesForValues(...));
+        }
+
         return new LazyChoiceList($loader, $this->valueCallable($value));
     }
 

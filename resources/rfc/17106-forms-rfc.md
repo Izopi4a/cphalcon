@@ -329,6 +329,23 @@ and ORM). It confirmed the life cycle above end to end, including the exact nest
   metadata; submitted ids become model instances. Promoted from "later" to M1 because it is the
   single most asked-about Phalcon form feature.
 
+- **`ModelType` details settled by the prototype:** choice values are primary keys read through
+  the models metadata (column map honoured), composite keys joined with `|`; `parameters` is the
+  `find()` argument or a closure returning it, evaluated lazily; a submitted id before the list is
+  loaded triggers a single `findFirst`-style query instead of loading the whole table; a
+  `Resultset` or array of models can be passed as `choices` for code that already calls `find()`.
+  Mapping from the old `Forms\Element\Select`: `using[0]` -> `choice_value` (usually omitted),
+  `using[1]` -> `choice_label`, `useEmpty`/`emptyText`/`emptyValue` -> `required`/`placeholder`.
+  Open: Phalcon has no identity map, so a resultset yields fresh instances on each iteration;
+  anything comparing choices with `===` (preferred choices, merge listener, adder/remover diff)
+  must compare by choice value for models. Relations work through `Model::__get`/`__set`
+  (PropertyAccess falls through to magic access), with `country_id` written on save.
+- **Review findings fixed in the prototype:** default listener priority is 0 (Symfony), not
+  Phalcon's 100; `enablePriorities(true)` is forced on injected managers; PropertyAccess treats a
+  null intermediate object property as an error and auto-creates arrays only through indices;
+  adder/remover pairs win over a setter for iterables; lazy option defaults chain onto a plain
+  default; the `isEmpty()` rule follows Symfony 5.1+.
+
 ## Backward compatibility
 
 - `Phalcon\Forms\*` unchanged in 7.0, `@deprecated` in docblocks and stubs, emits

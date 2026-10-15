@@ -512,9 +512,10 @@ class Form implements FormInterface, ClearableErrorsInterface
         }
 
         return FormUtil::isEmpty($this->modelData)
-            || false === $this->modelData
             // arrays, countables
-            || ((is_array($this->modelData) || $this->modelData instanceof \Countable) && 0 === count($this->modelData));
+            || ((is_array($this->modelData) || $this->modelData instanceof \Countable) && 0 === count($this->modelData))
+            // traversables that are not countable
+            || ($this->modelData instanceof \Traversable && 0 === iterator_count($this->modelData));
     }
 
     public function isValid(): bool

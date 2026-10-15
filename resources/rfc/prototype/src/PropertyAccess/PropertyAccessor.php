@@ -22,7 +22,8 @@ final class PropertyAccessor implements PropertyAccessorInterface
 
         for ($i = 0; $i < $length; ++$i) {
             if (null === $current) {
-                return null;
+                // Symfony: a null intermediate is an error (no null-safe operator in the reduced version).
+                throw new UnexpectedTypeException(sprintf('Cannot read "%s" on null (path "%s").', $path->getElement($i), (string) $path));
             }
             if (!is_object($current) && !is_array($current)) {
                 throw new UnexpectedTypeException(sprintf('Cannot read "%s" on a value of type "%s" (path "%s").', $path->getElement($i), get_debug_type($current), (string) $path));
@@ -63,8 +64,8 @@ final class PropertyAccessor implements PropertyAccessorInterface
             $element = $path->getElement($last);
 
             if (null === $target) {
-                // Parent chain would be auto-created as arrays; writable if the root is writable.
-                return null !== $parent;
+                // Only a null reached through an index is auto-created as an array (see write()).
+                return null !== $parent && $parent->isIndex($parent->getLength() - 1) && $path->isIndex($last);
             }
             if ($path->isIndex($last)) {
                 return is_array($target) || $target instanceof \ArrayAccess;
@@ -123,6 +124,10 @@ final class PropertyAccessor implements PropertyAccessorInterface
         $isLast  = $i === $path->getLength() - 1;
 
         if (null === $target) {
+            if (!$path->isIndex($i)) {
+                // Symfony auto-creates arrays for missing indices only; a null object property is an error.
+                throw new UnexpectedTypeException(sprintf('Cannot write property "%s" on null (path "%s").', $element, (string) $path));
+            }
             $target = [];
         }
         if (!is_object($target) && !is_array($target)) {
@@ -184,10 +189,7 @@ final class PropertyAccessor implements PropertyAccessorInterface
         $camel  = self::camelize($property);
         $setter = 'set' . $camel;
 
-        if (method_exists($target, $setter) && (new \ReflectionMethod($target, $setter))->isPublic()) {
-            return static fn (mixed $v) => $target->$setter($v);
-        }
-
+        // Symfony prefers an adder/remover pair over a setter when writing an iterable.
         if (is_iterable($value) || !$forWrite) {
             foreach (self::singulars($camel) as $singular) {
                 $adder   = 'add' . $singular;
@@ -198,6 +200,10 @@ final class PropertyAccessor implements PropertyAccessorInterface
                     };
                 }
             }
+        }
+
+        if (method_exists($target, $setter) && (new \ReflectionMethod($target, $setter))->isPublic()) {
+            return static fn (mixed $v) => $target->$setter($v);
         }
 
         if (property_exists($target, $property) && (new \ReflectionProperty($target, $property))->isPublic()) {

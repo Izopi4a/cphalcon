@@ -57,7 +57,7 @@ Survey notes from the reading agents are saved as `survey-*.md` in this director
 - [x] 17106-forms-rfc.md drafted (2026-10-15, awaiting user review)
 - [x] Zephir toolchain working (generate + build)
 - [ ] user review of RFC
-- [x] PHP prototype of M1 (2026-10-15 late): core + transformers + all core types + CollectionType + buttons + Native/Http request handlers + ChoiceType full + 103-test select matrix + FormRenderer/DefaultTheme. 219 tests green on a freshly zephir-generated ext. In progress: ModelType (ORM-backed select). Earlier note: PHP prototype of M1 core: tree, config/builder, factory/registry, options, events, PropertyAccess, DataMapper, FormType, TextType done + 12 lifecycle tests green (2026-10-15). Remaining: transformers, core types, CollectionType, buttons, HttpRequestHandler, view renderer.
+- [x] PHP prototype of M1 (2026-10-15 late): core + transformers + all core types + CollectionType + buttons + Native/Http request handlers + ChoiceType full + 103-test select matrix + FormRenderer/DefaultTheme. 219 tests green on a freshly zephir-generated ext. ModelType (ORM-backed select, 34 tests) done; independent core review applied (default priority 0 etc.). 253 tests. Earlier note: PHP prototype of M1 core: tree, config/builder, factory/registry, options, events, PropertyAccess, DataMapper, FormType, TextType done + 12 lifecycle tests green (2026-10-15). Remaining: transformers, core types, CollectionType, buttons, HttpRequestHandler, view renderer.
 - [ ] posted on #17106
 
 ## Next step after prototype M1 core: the <select> test matrix (user priority, 2026-10-15)

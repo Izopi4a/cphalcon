@@ -27,19 +27,14 @@ final class PropertyPathAccessor implements DataAccessorInterface
     {
         $path = $this->getPropertyPath($form);
 
-        // Keep identity: if the current value is the very same object reference and the form is
-        // by_reference, the object was already modified in place by the children.
-        if (is_object($viewData) && $form->getConfig()->getByReference()) {
-            $current = $this->propertyAccessor->getValue($viewData, $path);
-            if (is_object($current) && $current === $value) {
+        // Symfony: write unless (object data && by_reference && value identical to the current one);
+        // when writing, skip equal DateTime instances to keep object identity.
+        if (!is_object($viewData) || !$form->getConfig()->getByReference() || $value !== $this->propertyAccessor->getValue($viewData, $path)) {
+            if ($value instanceof \DateTimeInterface && $value == $this->propertyAccessor->getValue($viewData, $path)) {
                 return;
             }
-            if ($current instanceof \DateTimeInterface && $value instanceof \DateTimeInterface && $current == $value) {
-                return;
-            }
+            $this->propertyAccessor->setValue($viewData, $path, $value);
         }
-
-        $this->propertyAccessor->setValue($viewData, $path, $value);
     }
 
     public function isReadable(object|array $viewData, FormInterface $form): bool

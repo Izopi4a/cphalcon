@@ -5,6 +5,7 @@ namespace Phalcon\Form\Type\Core;
 
 use Phalcon\Form\ChoiceList\ChoiceGroupView;
 use Phalcon\Form\ChoiceList\ChoiceListFactory;
+use Phalcon\Form\ChoiceList\ChoiceLoaderInterface;
 use Phalcon\Form\ChoiceList\ChoiceListInterface;
 use Phalcon\Form\ChoiceList\ChoiceListView;
 use Phalcon\Form\ChoiceList\ChoiceView;
@@ -39,8 +40,9 @@ use Phalcon\Support\PropertyAccess\PropertyPathInterface;
  * The model data is the choice itself (string, int, object...), never its HTML value. Same
  * semantics as Symfony's ChoiceType; translation-related options are left out.
  *
- * prototype: "choice_loader" is a callable returning the choices (Symfony: ChoiceLoaderInterface);
- * "choice_name"/"choice_filter"/"choice_translation_*" are not implemented.
+ * prototype: "choice_loader" is a callable returning the choices, or a ChoiceLoaderInterface when
+ * the loader can also fetch choices by value (ModelType); "choice_name"/"choice_filter"/
+ * "choice_translation_*" are not implemented.
  */
 final class ChoiceType extends AbstractType
 {
@@ -330,7 +332,7 @@ final class ChoiceType extends AbstractType
         $resolver->setAllowedTypes('multiple', 'bool');
         $resolver->setAllowedTypes('expanded', 'bool');
         $resolver->setAllowedTypes('choices', ['null', 'array', \Traversable::class]);
-        $resolver->setAllowedTypes('choice_loader', ['null', 'callable']);
+        $resolver->setAllowedTypes('choice_loader', ['null', 'callable', ChoiceLoaderInterface::class]);
         $resolver->setAllowedTypes('choice_label', ['null', 'bool', 'callable', 'string', PropertyPathInterface::class]);
         $resolver->setAllowedTypes('choice_value', ['null', 'callable', 'string', PropertyPathInterface::class]);
         $resolver->setAllowedTypes('choice_attr', ['null', 'array', 'callable', 'string', PropertyPathInterface::class]);

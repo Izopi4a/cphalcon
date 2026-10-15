@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Phalcon\Form;
 
 use Phalcon\Form\Exception\InvalidArgumentException;
+use Phalcon\Form\Exception\InvalidConfigurationException;
 use Phalcon\Form\Options\OptionsResolver;
 use Phalcon\Form\Type\ButtonTypeInterface;
 use Phalcon\Form\Type\SubmitButtonTypeInterface;
@@ -53,7 +54,16 @@ class ResolvedType implements ResolvedTypeInterface
         try {
             $options = $this->getOptionsResolver()->resolve($options);
         } catch (\Phalcon\Form\Exception\ExceptionInterface $e) {
-            throw new $e(sprintf('An error has occurred resolving the options of the form "%s": ', get_debug_type($this->innerType)) . $e->getMessage(), 0, $e);
+            $message = sprintf('An error has occurred resolving the options of the form "%s": ', get_debug_type($this->innerType)) . $e->getMessage();
+
+            // Keep the resolver's exception type (callers catch InvalidOptionsException etc.);
+            // only exceptions with a non-standard constructor are wrapped.
+            if ($e instanceof \Phalcon\Form\Exception\UnexpectedTypeException) {
+                throw new InvalidConfigurationException($message, 0, $e);
+            }
+            $class = $e::class;
+
+            throw new $class($message, 0, $e);
         }
 
         $builder = $this->newBuilder($name, $options['data_class'] ?? null, $factory, $options);

@@ -89,7 +89,12 @@ final class PropertyPath implements PropertyPathInterface
         $parent = clone $this;
         array_pop($parent->elements);
         array_pop($parent->isIndex);
-        $parent->pathAsString = substr($this->pathAsString, 0, max(strrpos($this->pathAsString, '.') ?: 0, strrpos($this->pathAsString, '[') ?: 0));
+
+        $string = '';
+        foreach ($parent->elements as $i => $element) {
+            $string .= $parent->isIndex[$i] ? '[' . $element . ']' : ('' === $string ? $element : '.' . $element);
+        }
+        $parent->pathAsString = $string;
 
         return $parent;
     }

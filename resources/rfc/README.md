@@ -93,3 +93,12 @@ ModelType (Phalcon\Mvc\Model backed, like old Select element with ResultsetData 
   and modelsMetadata, a fixture model created with CREATE TABLE in setUp.
 Also mirror each case as a Volt rendering expectation later (M1 view/renderer): <select>,
 <option value selected disabled>, <optgroup label>.
+ChoiceType, expanded (user: `<input type=checkbox name="color[]">` must be a normal case):
+- expanded+multiple -> one CheckboxType child per choice, child full_name = parent full_name + "[]",
+  CheckboxListMapper (array of values <-> per-child bools), submit of ['red','blue'] -> ['red','blue']
+  model data, unknown value -> error on the parent, none checked -> []
+- expanded single -> RadioType children, RadioListMapper, placeholder radio -> null, required
+- preselected from data/entity, disabled option, choice_attr per checkbox, optgroups rendered as
+  fieldsets/labels, by_reference false with adder/remover on entity
+- also assert FileType multiple and <select multiple> get "[]" and that CollectionType(allow_add)
+  accepts PHP-auto-indexed `tags[]` submissions (0..n keys)

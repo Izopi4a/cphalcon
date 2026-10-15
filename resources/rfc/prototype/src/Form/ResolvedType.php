@@ -5,6 +5,8 @@ namespace Phalcon\Form;
 
 use Phalcon\Form\Exception\InvalidArgumentException;
 use Phalcon\Form\Options\OptionsResolver;
+use Phalcon\Form\Type\ButtonTypeInterface;
+use Phalcon\Form\Type\SubmitButtonTypeInterface;
 use Phalcon\Form\Type\TypeExtensionInterface;
 use Phalcon\Form\Type\TypeInterface;
 use Phalcon\Form\View\FormView;
@@ -54,12 +56,25 @@ class ResolvedType implements ResolvedTypeInterface
             throw new $e(sprintf('An error has occurred resolving the options of the form "%s": ', get_debug_type($this->innerType)) . $e->getMessage(), 0, $e);
         }
 
-        $builder = new FormBuilder($name, $options['data_class'] ?? null, null, $factory, $options);
+        $builder = $this->newBuilder($name, $options['data_class'] ?? null, $factory, $options);
         $builder->setType($this);
 
         $this->buildForm($builder, $options);
 
         return $builder;
+    }
+
+    /** Buttons get a ButtonBuilder / SubmitButtonBuilder, everything else a FormBuilder (Symfony's ResolvedFormType::newBuilder). */
+    protected function newBuilder(string $name, ?string $dataClass, FormFactoryInterface $factory, array $options): FormBuilderInterface
+    {
+        if ($this->innerType instanceof ButtonTypeInterface) {
+            return new ButtonBuilder($name, $options);
+        }
+        if ($this->innerType instanceof SubmitButtonTypeInterface) {
+            return new SubmitButtonBuilder($name, $options);
+        }
+
+        return new FormBuilder($name, $dataClass, null, $factory, $options);
     }
 
     public function createView(FormInterface $form, ?FormView $parent = null): FormView

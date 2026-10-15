@@ -171,6 +171,13 @@ documentation maps 1:1:
 The `data` argument is a `Form\Event\FormEvent` (`getForm()`, `getData()`, `setData()`;
 `setData()` throws on the two post-events). Listeners attach through
 `FormBuilder::addEventListener()` or `addEventSubscriber(EventSubscriberInterface)`.
+**Finding from the prototype:** `Phalcon\Events\Manager` stores handlers in an `SplPriorityQueue`,
+so two listeners with the same priority run in undefined order. Forms depend on insertion order
+within a priority (Symfony's dispatcher guarantees it; e.g. `TrimListener` and `ResizeFormListener`
+both sit at the default priority on `preSubmit`). The prototype works around it in the config
+builder by folding an insertion counter into the effective priority. The proper fix is a stable
+queue in `Events\Manager` itself, which is a small, independent improvement worth its own PR.
+
 Core listeners: `TrimListener` (`preSubmit`), `ResizeFormListener` (collections, see below),
 `MergeCollectionListener` (multiple choice with `by_reference`), `TransformationFailureListener`
 (`postSubmit`, priority -1024, only when no `constraints` option is set).

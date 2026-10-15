@@ -57,5 +57,5 @@ Survey notes from the reading agents are saved as `survey-*.md` in this director
 - [x] 17106-forms-rfc.md drafted (2026-10-15, awaiting user review)
 - [x] Zephir toolchain working (generate + build)
 - [ ] user review of RFC
-- [ ] PHP prototype of M1 core (resources/rfc/prototype/)
+- [~] PHP prototype of M1 core: tree, config/builder, factory/registry, options, events, PropertyAccess, DataMapper, FormType, TextType done + 12 lifecycle tests green (2026-10-15). Remaining: transformers, core types, CollectionType, buttons, HttpRequestHandler, view renderer.
 - [ ] posted on #17106

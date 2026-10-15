@@ -1,0 +1,23 @@
+<?php
+declare(strict_types=1);
+
+namespace Phalcon\Form\Type;
+
+use Phalcon\Form\FormBuilderInterface;
+use Phalcon\Form\FormInterface;
+use Phalcon\Form\Options\OptionsResolver;
+use Phalcon\Form\View\FormView;
+
+interface TypeExtensionInterface
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void;
+
+    public function buildView(FormView $view, FormInterface $form, array $options): void;
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void;
+
+    public function configureOptions(OptionsResolver $resolver): void;
+
+    /** @return iterable<class-string<TypeInterface>> types this extension applies to */
+    public static function getExtendedTypes(): iterable;
+}

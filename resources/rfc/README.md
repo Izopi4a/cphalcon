@@ -102,3 +102,18 @@ ChoiceType, expanded (user: `<input type=checkbox name="color[]">` must be a nor
   fieldsets/labels, by_reference false with adder/remover on entity
 - also assert FileType multiple and <select multiple> get "[]" and that CollectionType(allow_add)
   accepts PHP-auto-indexed `tags[]` submissions (0..n keys)
+
+### Verified ORM recipe for ModelType tests (2026-10-15, works against built phalcon.so)
+```php
+$di = new Phalcon\Di\FactoryDefault();
+$db = new Phalcon\Db\Adapter\Pdo\Sqlite(['dbname' => ':memory:']);
+$di->setShared('db', $db);
+$di->setShared('modelsManager', new Phalcon\Mvc\Model\Manager());
+$di->setShared('modelsMetadata', new Phalcon\Mvc\Model\MetaData\Memory());
+$db->execute('CREATE TABLE countries (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, continent TEXT)');
+// class Country extends Phalcon\Mvc\Model { public ?int $id; public ?string $name; public ?string $continent;
+//   public function initialize(): void { $this->setSource('countries'); } }
+Country::find(['conditions' => 'continent = :c:', 'bind' => ['c' => 'Europe'], 'order' => 'name']); // Resultset\Simple
+$di->get('modelsMetadata')->getPrimaryKeyAttributes(new Country()); // ['id']
+Country::findFirst(3)->readAttribute('id'); // int
+```

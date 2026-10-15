@@ -289,12 +289,45 @@ when a type is not registered, as Symfony does). No `Di::getDefault()` anywhere,
 
 | | Scope | Closes |
 |---|---|---|
-| **M1 Core** | Form tree, config/builder/factory/registry, reduced OptionsResolver, events, `PropertyAccess`, `DataMapper`, core transformers, `NativeRequestHandler` + `HttpRequestHandler`, `FormView` + `DefaultTheme` + Volt functions. Types: `FormType`, `TextType`, `TextareaType`, `HiddenType`, `PasswordType`, `EmailType`, `UrlType`, `TelType`, `SearchType`, `CheckboxType`, `RadioType`, `ChoiceType` (collapsed), `IntegerType`, `NumberType`, `DateType` (`single_text`), `CollectionType`, `SubmitType`, `ButtonType`. | #17106, #17338 |
+| **M1 Core** | Form tree, config/builder/factory/registry, reduced OptionsResolver, events, `PropertyAccess`, `DataMapper`, core transformers, `NativeRequestHandler` + `HttpRequestHandler`, `FormView` + `DefaultTheme` + Volt functions. Types: `FormType`, `TextType`, `TextareaType`, `HiddenType`, `PasswordType`, `EmailType`, `UrlType`, `TelType`, `SearchType`, `CheckboxType`, `RadioType`, `ChoiceType` (collapsed), `IntegerType`, `NumberType`, `DateType` (`single_text`), `CollectionType`, `ModelType`, `SubmitType`, `ButtonType`. | #17106, #17338 |
 | **M2 Validation and CSRF** | `ValidationExtension`, `ValidationListener`, `ViolationMapper`, `error_mapping`, `CsrfExtension`, `TransformationFailureListener`; `ChoiceType` expanded (+ `CheckboxListMapper`/`RadioListMapper`), `RepeatedType`, `FileType` (uploads), `ColorType`, `RangeType`, `DateTimeType`/`TimeType` (`single_text`). | #17332 (events in validation) |
 | **M3 Theming, guessing, migration** | Volt theme files with block override and parent-block fallback, `form_theme` tag; type guessing from `Mvc\Model\MetaData` (`TypeGuesserInterface`); `Phalcon\Forms` deprecation notices + migration guide; `Forms\Manager` replacement in `FormFactory`; docs. | |
 
 Rough size: M1 ≈ 6k lines of Zephir plus tests, M2 ≈ 3k, M3 ≈ 2k. Each milestone is one PR
 series against `7.0.x`; M1 alone is useful and shippable.
+
+## Decisions taken while prototyping (2026-10-15)
+
+A plain-PHP prototype of M1 lives in `resources/rfc/prototype/` (219 tests at the time of writing,
+runs against the built extension so it uses the real `Events\Manager`, `TagFactory`, `Http\Request`
+and ORM). It confirmed the life cycle above end to end, including the exact nesting from #17106
+(`ticket[messages][0][notes][0][note]`), and settled these points:
+
+- **`""` stays a legitimate choice value**, as in Symfony. A `""` choice in first position doubles
+  as the placeholder (`placeholder_in_choices`); `"0"`, `0`, `""` and `null` are all distinct.
+- **Disabled options are an HTML concern.** The server accepts a submitted disabled option, as
+  Symfony does; rejecting it belongs to validation, not to the type.
+- **Unknown values:** single select -> not synchronized (`NOT_SYNCHRONIZED_ERROR` through the
+  transformation-failure extension); multiple -> stays synchronized, known values kept, one error
+  listing the unknown ones. Same as Symfony.
+- **`required` is a view/HTML flag only** until the M2 validation bridge; the `constraints` option
+  is undefined in M1 on purpose so nobody relies on it silently doing nothing.
+- **Null choices get index values** (Symfony), not `""`.
+- **Listener ordering** within a priority is made stable by the config builder (see Events).
+- **TagFactory helpers are stateful singletons** (`Input\Select::selected()` and `inOptGroup`
+  never reset, `inputInput::setType()` persists). The renderer constructs helpers per widget.
+  The additive `Phalcon\Html` change in section 7 is therefore required, not optional.
+- **Buttons** are leaf `FormInterface` implementations (`Button`, `SubmitButton`) with their own
+  builders, chosen by `ResolvedType::createBuilder()` from marker interfaces, like Symfony.
+- **Uploaded files** from `Phalcon\Http\Request::getUploadedFiles()` are keyed by dotted path
+  (`ticket.attachments.0.file`); `HttpRequestHandler` rebuilds the nested shape. Form names cannot
+  contain dots, so the split is safe.
+- **`EnumType`** (PHP enums as choices) is cheap on top of `ChoiceType` and goes into M2.
+- **`ModelType`** (Phalcon ORM backed select, successor of `Forms\Element\Select` with
+  `ResultsetData` + `using`): parent `ChoiceType`; options `class`, `parameters` (what `find()`
+  takes, or a callable), `choice_label`, `choice_value` defaulting to the primary key from
+  metadata; submitted ids become model instances. Promoted from "later" to M1 because it is the
+  single most asked-about Phalcon form feature.
 
 ## Backward compatibility
 

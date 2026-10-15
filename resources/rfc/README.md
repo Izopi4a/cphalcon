@@ -59,3 +59,37 @@ Survey notes from the reading agents are saved as `survey-*.md` in this director
 - [ ] user review of RFC
 - [~] PHP prototype of M1 core: tree, config/builder, factory/registry, options, events, PropertyAccess, DataMapper, FormType, TextType done + 12 lifecycle tests green (2026-10-15). Remaining: transformers, core types, CollectionType, buttons, HttpRequestHandler, view renderer.
 - [ ] posted on #17106
+
+## Next step after prototype M1 core: the <select> test matrix (user priority, 2026-10-15)
+User (long-time Phalcon user) says select is where people always got stuck: default value, empty
+value, validation, optgroups. Goal: exhaustive ChoiceType / ModelType tests in
+prototype/tests/Select*. Matrix to cover (each = at least one test):
+
+ChoiceType, collapsed single:
+- choices as label=>value with string values, int values, "0" and 0 and "" as legitimate values
+  (must not be confused with "no selection"), null/bool values
+- default/preselected value from setData, from entity property, from `data` option, from
+  `empty_data`; preselected value not in choices -> what happens (Symfony: no option selected,
+  submit of unknown value -> transformation failure -> not synchronized + error)
+- placeholder: string, false (none), with required true/false; placeholder selected when value null;
+  empty string submit with placeholder -> null model data; required + placeholder + "" -> invalid
+- validation: submitted value not in list -> error, synchronized false, view keeps raw value;
+  InclusionIn from Phalcon\Filter\Validation as `constraints` once the validation bridge exists
+- optgroups: nested choices array (group label => [label => value]), `group_by` callable,
+  preferred_choices (rendered first + separator), choice_attr (disabled options), choice_label /
+  choice_value callables, choice_translation off
+- disabled option submitted -> rejected?; disabled select submitted -> ignored
+- view vars: choices/preferred_choices structure, is_selected, placeholder_in_choices, value
+ChoiceType, multiple:
+- array data in/out, empty submit -> [], unknown value among several -> error on the form,
+  full_name ends with [], by_reference false + adder/remover on entity (MergeCollectionListener)
+ModelType (Phalcon\Mvc\Model backed, like old Select element with ResultsetData + `using`):
+- `class` + `parameters` (find() args: conditions, bind, order, columns?) -> options, lazy
+- choice_value defaults to primary key via metadata; choice_label as property/getter/closure
+- submitted id -> model instance as form data; multiple -> array of models; relation setter
+- empty resultset; placeholder; preselected from related model (belongsTo); invalid id -> error
+- optgroups via group_by property on the model
+- tests use in-memory SQLite (Phalcon\Db\Adapter\Pdo\Sqlite ':memory:') + DI with modelsManager
+  and modelsMetadata, a fixture model created with CREATE TABLE in setUp.
+Also mirror each case as a Volt rendering expectation later (M1 view/renderer): <select>,
+<option value selected disabled>, <optgroup label>.

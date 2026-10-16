@@ -1,0 +1,335 @@
+diff --color -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine/volt/base.c
+--- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 15:30:42.571089704 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 15:30:42.572299857 +0300
+@@ -69,6 +69,12 @@
+   { SL("++"),            PHVOLT_T_INCR },
+   { SL("--"),            PHVOLT_T_DECR },
+   { SL("BLOCK"),         PHVOLT_T_BLOCK },
++  { SL("EMBED"),         PHVOLT_T_EMBED },
++  { SL("ENDEMBED"),      PHVOLT_T_ENDEMBED },
++  { SL("ENDSET"),        PHVOLT_T_ENDSET },
++  { SL("??"),            PHVOLT_T_COALESCE },
++  { SL("?."),            PHVOLT_T_NULLSAFE },
++  { SL("IS NOT"),        PHVOLT_T_ISNOT },
+   { SL("ENDBLOCK"),      PHVOLT_T_ENDBLOCK },
+   { SL("CACHE"),         PHVOLT_T_CACHE },
+   { SL("ENDCACHE"),      PHVOLT_T_ENDCACHE },
+@@ -651,17 +657,55 @@
+ 				phvolt_(phvolt_parser, PHVOLT_DECR, NULL, parser_status);
+ 				break;
+ 
++			/*
++			 * "block" opens a {% block %} statement only right after the
++			 * opening delimiter; anywhere else (e.g. {{ block("title") }})
++			 * it is a plain identifier. Blocks may nest, and may sit inside
++			 * if/for/switch: the compiler resolves them on the AST.
++			 */
+ 			case PHVOLT_T_BLOCK:
+-				if (state->block_level > 0) {
+-					phvolt_create_error_msg(parser_status, "Embedding blocks into other blocks is not supported");
+-					parser_status->status = PHVOLT_PARSING_FAILED;
++				if (prev_token != PHVOLT_T_OPEN_DELIMITER) {
++					phvolt_parse_with_token(phvolt_parser, PHVOLT_T_IDENTIFIER, PHVOLT_IDENTIFIER, &token, parser_status);
+ 					break;
+-				} else {
+-					state->block_level++;
+ 				}
++
++				efree(token.value);
++				state->block_level++;
+ 				phvolt_(phvolt_parser, PHVOLT_BLOCK, NULL, parser_status);
+ 				break;
+ 
++			case PHVOLT_T_EMBED:
++				if (state->extends_mode == 1 && state->block_level == 0) {
++					phvolt_create_error_msg(parser_status, "Child templates only may contain blocks");
++					parser_status->status = PHVOLT_PARSING_FAILED;
++					break;
++				}
++
++				state->block_level++;
++				phvolt_(phvolt_parser, PHVOLT_EMBED, NULL, parser_status);
++				break;
++
++			case PHVOLT_T_ENDEMBED:
++				state->block_level--;
++				phvolt_(phvolt_parser, PHVOLT_ENDEMBED, NULL, parser_status);
++				break;
++
++			case PHVOLT_T_ENDSET:
++				phvolt_(phvolt_parser, PHVOLT_ENDSET, NULL, parser_status);
++				break;
++
++			case PHVOLT_T_COALESCE:
++				phvolt_(phvolt_parser, PHVOLT_COALESCE, NULL, parser_status);
++				break;
++
++			case PHVOLT_T_NULLSAFE:
++				phvolt_(phvolt_parser, PHVOLT_NULLSAFE, NULL, parser_status);
++				break;
++
++			case PHVOLT_T_ISNOT:
++				phvolt_(phvolt_parser, PHVOLT_ISNOT, NULL, parser_status);
++				break;
++
+ 			case PHVOLT_T_ENDBLOCK:
+ 				state->block_level--;
+ 				phvolt_(phvolt_parser, PHVOLT_ENDBLOCK, NULL, parser_status);
+diff --color -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 15:30:42.579715306 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 15:30:42.580898339 +0300
+@@ -320,6 +320,51 @@
+ }
+ /* }}} */
+ 
++/* {{{ phvolt_ret_embed_statement */
++static void phvolt_ret_embed_statement(zval *ret, zval *path, zval *params, zval *block_statements,
++	phvolt_scanner_state *state)
++{
++	array_init(ret);
++
++	add_assoc_long(ret, "type", PHVOLT_T_EMBED);
++
++	add_assoc_zval(ret, "path", path);
++	if (params) {
++		add_assoc_zval(ret, "params", params);
++	}
++
++	if (block_statements) {
++		add_assoc_zval(ret, "block_statements", block_statements);
++	}
++
++	Z_TRY_ADDREF_P(state->active_file);
++	add_assoc_zval(ret, "file", state->active_file);
++	add_assoc_long(ret, "line", state->active_line);
++}
++/* }}} */
++
++/* {{{ phvolt_ret_set_capture_statement */
++static void phvolt_ret_set_capture_statement(zval *ret, phvolt_parser_token *name, zval *block_statements,
++	phvolt_scanner_state *state)
++{
++	array_init(ret);
++
++	add_assoc_long(ret, "type", PHVOLT_T_SET_CAPTURE);
++
++	phvolt_add_assoc_stringl(ret, "name", name->token, name->token_len, 0);
++	efree(name->token);
++	efree(name);
++
++	if (block_statements) {
++		add_assoc_zval(ret, "block_statements", block_statements);
++	}
++
++	Z_TRY_ADDREF_P(state->active_file);
++	add_assoc_zval(ret, "file", state->active_file);
++	add_assoc_long(ret, "line", state->active_line);
++}
++/* }}} */
++
+ /* {{{ phvolt_ret_do_statement */
+ static void phvolt_ret_do_statement(zval *ret, zval *expr, phvolt_scanner_state *state)
+ {
+diff --color -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 15:30:42.575646492 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 15:30:42.576590223 +0300
+@@ -22,10 +22,11 @@
+ %right OPEN_DELIMITER .
+ %left COMMA .
+ %left QUESTION COLON .
++%right COALESCE .
+ %left RANGE .
+ %left AND OR .
+ %left IN .
+-%left IS EQUALS NOTEQUALS LESS GREATER GREATEREQUAL LESSEQUAL IDENTICAL NOTIDENTICAL .
++%left IS ISNOT EQUALS NOTEQUALS LESS GREATER GREATEREQUAL LESSEQUAL IDENTICAL NOTIDENTICAL .
+ %left DIVIDE TIMES MOD .
+ %left PLUS MINUS CONCAT .
+ %right SBRACKET_OPEN .
+@@ -33,7 +34,7 @@
+ %right NOT .
+ %left INCR DECR .
+ %right PARENTHESES_OPEN .
+-%left DOT .
++%left DOT NULLSAFE .
+ 
+ %include {
+ #include "parser.php.inc.h"
+@@ -235,6 +236,14 @@
+ 	R = E;
+ }
+ 
++statement(R) ::= embed_statement(E) . {
++	R = E;
++}
++
++statement(R) ::= set_capture_statement(E) . {
++	R = E;
++}
++
+ statement(R) ::= cache_statement(E) . {
+ 	R = E;
+ }
+@@ -468,6 +477,32 @@
+ 	phvolt_ret_block_statement(&R, I, NULL, status->scanner_state);
+ }
+ 
++/* {% embed "card.volt" [with expr] %} {% block x %}...{% endblock %} {% endembed %} */
++embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
++	phvolt_ret_embed_statement(&R, &E, NULL, &T, status->scanner_state);
++}
++
++embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) CLOSE_DELIMITER OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
++	phvolt_ret_embed_statement(&R, &E, NULL, NULL, status->scanner_state);
++}
++
++embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) WITH expr(P) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
++	phvolt_ret_embed_statement(&R, &E, &P, &T, status->scanner_state);
++}
++
++embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) WITH expr(P) CLOSE_DELIMITER OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
++	phvolt_ret_embed_statement(&R, &E, &P, NULL, status->scanner_state);
++}
++
++/* {% set name %}...{% endset %} */
++set_capture_statement(R) ::= OPEN_DELIMITER SET IDENTIFIER(I) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDSET CLOSE_DELIMITER . {
++	phvolt_ret_set_capture_statement(&R, I, &T, status->scanner_state);
++}
++
++set_capture_statement(R) ::= OPEN_DELIMITER SET IDENTIFIER(I) CLOSE_DELIMITER OPEN_DELIMITER ENDSET CLOSE_DELIMITER . {
++	phvolt_ret_set_capture_statement(&R, I, NULL, status->scanner_state);
++}
++
+ cache_statement(R) ::= OPEN_DELIMITER CACHE expr(E) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDCACHE CLOSE_DELIMITER . {
+ 	phvolt_ret_cache_statement(&R, &E, NULL, &T, status->scanner_state);
+ }
+@@ -648,6 +683,49 @@
+ 	phvolt_ret_expr(&R, PHVOLT_T_ISITERABLE, &O1, NULL, NULL, status->scanner_state);
+ }
+ 
++/* is not <test>: a negated test, distinct from != */
++expr(R) ::= expr(O1) ISNOT DEFINED . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISSET, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT EMPTY . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISEMPTY, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT EVEN . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISEVEN, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT ODD . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISODD, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT NUMERIC . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISNUMERIC, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT SCALAR . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISSCALAR, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT ITERABLE . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISITERABLE, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT expr(O2) . {
++	phvolt_ret_expr(&R, PHVOLT_T_ISNOT, &O1, &O2, NULL, status->scanner_state);
++}
++
++/* a ?? b */
++expr(R) ::= expr(O1) COALESCE expr(O2) . {
++	phvolt_ret_expr(&R, PHVOLT_T_COALESCE, &O1, &O2, NULL, status->scanner_state);
++}
++
++/* a?.b, a?.b() */
++expr(R) ::= expr(O1) NULLSAFE expr(O2) . {
++	phvolt_ret_expr(&R, PHVOLT_T_NULLSAFE, &O1, &O2, NULL, status->scanner_state);
++}
++
+ expr(R) ::= expr(O1) IS expr(O2) . {
+ 	phvolt_ret_expr(&R, PHVOLT_T_IS, &O1, &O2, NULL, status->scanner_state);
+ }
+diff --color -ru a/ext/phalcon/mvc/view/engine/volt/scanner.h b/ext/phalcon/mvc/view/engine/volt/scanner.h
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 15:30:42.561268550 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 15:30:42.562604168 +0300
+@@ -164,6 +164,15 @@
+ #define PHVOLT_T_DEFAULT 413
+ #define PHVOLT_T_ENDSWITCH 414
+ 
++/* Volt NFR: nested blocks, embed, set capture, ??, ?., is not */
++#define PHVOLT_T_COALESCE 420
++#define PHVOLT_T_NULLSAFE 421
++#define PHVOLT_T_ISNOT 422
++#define PHVOLT_T_EMBED 423
++#define PHVOLT_T_ENDEMBED 424
++#define PHVOLT_T_ENDSET 425
++#define PHVOLT_T_SET_CAPTURE 426
++
+ /* List of tokens and their names */
+ typedef struct _phvolt_token_names { /* {{{ */
+ 	char *name;
+diff --color -ru a/ext/phalcon/mvc/view/engine/volt/scanner.re b/ext/phalcon/mvc/view/engine/volt/scanner.re
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 15:30:42.566114479 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 15:30:42.567257673 +0300
+@@ -384,6 +384,24 @@
+ 		'block' {
+ 			s->statement_position++;
+ 			token->opcode = PHVOLT_T_BLOCK;
++			token->value = estrndup(start, YYCURSOR - start);
++			token->len = YYCURSOR - start;
++			return 0;
++		}
++
++		'embed' {
++			s->statement_position++;
++			token->opcode = PHVOLT_T_EMBED;
++			return 0;
++		}
++
++		'endembed' {
++			token->opcode = PHVOLT_T_ENDEMBED;
++			return 0;
++		}
++
++		'endset' {
++			token->opcode = PHVOLT_T_ENDSET;
+ 			return 0;
+ 		}
+ 
+@@ -432,13 +450,13 @@
+ 
+ 		'is not' {
+ 			s->statement_position++;
+-			token->opcode = PHVOLT_T_NOTEQUALS;
++			token->opcode = PHVOLT_T_ISNOT;
+ 			return 0;
+ 		}
+ 
+ 		[i][s][ ]+[n][o][t] {
+ 			s->statement_position++;
+-			token->opcode = PHVOLT_T_NOTEQUALS;
++			token->opcode = PHVOLT_T_ISNOT;
+ 			return 0;
+ 		}
+ 
+@@ -814,6 +832,16 @@
+ 			return 0;
+ 		}
+ 
++		"??" {
++			token->opcode = PHVOLT_T_COALESCE;
++			return 0;
++		}
++
++		"?." {
++			token->opcode = PHVOLT_T_NULLSAFE;
++			return 0;
++		}
++
+ 		"?" {
+ 			token->opcode = PHVOLT_T_QUESTION;
+ 			return 0;

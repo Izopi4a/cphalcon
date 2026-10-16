@@ -33,6 +33,7 @@ use Phalcon\Support\Settings;
  *   query (subqueries)
  * - `[identifier]` becomes an escaped identifier
  * - a model property becomes its column, through the model's column map
+ * - `"text"` is a string, as in PHQL, and becomes `'text'`
  *
  * String literals, quoted identifiers, keywords, operators, function names and
  * `::` casts are never touched, so any SQL the database understands passes
@@ -245,6 +246,24 @@ class FragmentRewriter
                     }
 
                     let output .= text;
+                    break;
+
+                case "dq":
+                    /**
+                     * PHQL reads "..." as a string, not an identifier:
+                     * emit it as a standard SQL string literal
+                     */
+                    if unlikely !this->literals {
+                        throw new Exception(
+                            "Literals are disabled in PHQL statements"
+                        );
+                    }
+
+                    let output .= "'" . str_replace(
+                        "'",
+                        "''",
+                        stripcslashes(substr(text, 1, -1))
+                    ) . "'";
                     break;
 
                 case "spl":
@@ -558,7 +577,7 @@ class FragmentRewriter
 
         let last = tokens[lastIndex];
 
-        if last[0] != "id" && last[0] != "br" && last[0] != "qid" {
+        if last[0] != "id" && last[0] != "br" && last[0] != "qid" && last[0] != "dq" {
             return [trim(item), null];
         }
 
@@ -584,7 +603,7 @@ class FragmentRewriter
             return [trim(item), null];
         }
 
-        if last[0] == "br" || last[0] == "qid" {
+        if last[0] == "br" || last[0] == "qid" || last[0] == "dq" {
             let alias = substr(last[1], 1, -1);
         } else {
             let alias = last[1];
@@ -635,7 +654,7 @@ class FragmentRewriter
         array kinds;
 
         let kinds = [
-            "cm", "str", "qid", "br", "cast", "spl", "pdo", "npl", "bpl",
+            "cm", "str", "dq", "qid", "br", "cast", "spl", "pdo", "npl", "bpl",
             "id", "num", "ws", "ch"
         ];
 
@@ -643,7 +662,7 @@ class FragmentRewriter
             tokens  = [];
 
         preg_match_all(
-            "/(?<cm>--[^\\n]*|\\/\\*.*?\\*\\/)|(?<str>'(?:[^']|'')*')|(?<qid>\"(?:[^\"]|\"\")*\"|`[^`]*`)|(?<br>\\[[A-Za-z_\\\\][A-Za-z0-9_\\\\]*\\])|(?<cast>::)|(?<spl>:[A-Za-z_][A-Za-z0-9_-]*:(?!:))|(?<pdo>:[A-Za-z_][A-Za-z0-9_]*)|(?<npl>\\?[0-9]+)|(?<bpl>\\{[A-Za-z_][A-Za-z0-9_-]*(?::[a-z-]+)?\\})|(?<id>\\\\?[A-Za-z_][A-Za-z0-9_]*(?:\\\\[A-Za-z_][A-Za-z0-9_]*)*)|(?<num>[0-9]+(?:\\.[0-9]+)?(?:[eE][-+]?[0-9]+)?)|(?<ws>\\s+)|(?<ch>.)/s",
+            "/(?<cm>--[^\\n]*|\\/\\*.*?\\*\\/)|(?<str>'(?:[^']|'')*')|(?<dq>\"(?:\\\\.|[^\"\\\\])*\")|(?<qid>`[^`]*`)|(?<br>\\[[A-Za-z_\\\\][A-Za-z0-9_\\\\]*\\])|(?<cast>::)|(?<spl>:[A-Za-z_][A-Za-z0-9_-]*:(?!:))|(?<pdo>:[A-Za-z_][A-Za-z0-9_]*)|(?<npl>\\?[0-9]+)|(?<bpl>\\{[A-Za-z_][A-Za-z0-9_-]*(?::[a-z-]+)?\\})|(?<id>\\\\?[A-Za-z_][A-Za-z0-9_]*(?:\\\\[A-Za-z_][A-Za-z0-9_]*)*)|(?<num>[0-9]+(?:\\.[0-9]+)?(?:[eE][-+]?[0-9]+)?)|(?<ws>\\s+)|(?<ch>.)/s",
             fragment,
             matches,
             PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL

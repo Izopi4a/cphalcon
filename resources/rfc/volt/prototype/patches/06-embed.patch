@@ -1,6 +1,6 @@
 diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine/volt/base.c
---- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.898473718 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.926541589 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:56:25.252100762 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:56:25.281331718 +0300
 @@ -69,6 +69,8 @@
    { SL("++"),            PHVOLT_T_INCR },
    { SL("--"),            PHVOLT_T_DECR },
@@ -10,7 +10,7 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine
    { SL("?."),            PHVOLT_T_NULLSAFE },
    { SL("??"),            PHVOLT_T_COALESCE },
    { SL("IS NOT"),        PHVOLT_T_ISNOT },
-@@ -689,6 +691,22 @@
+@@ -692,6 +694,22 @@
  				phvolt_(phvolt_parser, PHVOLT_NULLSAFE, NULL, parser_status);
  				break;
  
@@ -34,8 +34,8 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine
  				if (state->macro_level > 0) {
  					phvolt_create_error_msg(parser_status, "Embedding macros into other macros is not allowed");
 diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h
---- a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 16:44:04.790411933 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 16:44:04.926604837 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 16:56:24.981218978 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 16:56:25.281393927 +0300
 @@ -320,6 +320,29 @@
  }
  /* }}} */
@@ -67,8 +67,8 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h b/ext/phalcon/mvc/v
  static void phvolt_ret_do_statement(zval *ret, zval *expr, phvolt_scanner_state *state)
  {
 diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon
---- a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.898637253 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.926750783 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:56:25.252239388 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:56:25.281585671 +0300
 @@ -236,6 +236,10 @@
  	R = E;
  }
@@ -105,8 +105,8 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon b/ext/phalcon/mvc/v
  	phvolt_ret_cache_statement(&R, &E, NULL, &T, status->scanner_state);
  }
 diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.h b/ext/phalcon/mvc/view/engine/volt/scanner.h
---- a/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.898231945 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.926335955 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:56:25.251889279 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:56:25.281103246 +0300
 @@ -164,6 +164,10 @@
  #define PHVOLT_T_DEFAULT 413
  #define PHVOLT_T_ENDSWITCH 414
@@ -119,8 +119,8 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.h b/ext/phalcon/mvc/view/eng
  #define PHVOLT_T_NULLSAFE 421
  
 diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.re b/ext/phalcon/mvc/view/engine/volt/scanner.re
---- a/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.898304733 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.926396934 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:56:25.251956177 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:56:25.281176793 +0300
 @@ -394,6 +394,17 @@
  			return 0;
  		}

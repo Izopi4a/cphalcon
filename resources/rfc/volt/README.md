@@ -45,6 +45,18 @@ exists three times: the C parser, the Zephir compiler and the PHP port `phalcon/
 - The upstream Volt suite against the patched parser:
   `php -d extension=resources/rfc/volt/prototype/.build/patched/ext/modules/phalcon.so vendor/bin/phpunit -c resources/phpunit.xml.dist tests/unit/Mvc/View`
   gives 718/720; the 2 failures pin `a is not b` == `a != b`, which is the intended change.
+- **Zephir (for the real PRs):** `vendor/bin/zephir` (phalcon/zephir 1.6.1, a composer dev dependency).
+  It has a built-in pure-PHP parser, so the `zephir_parser` extension is optional (a speed-up only).
+  Upstream CI runs `vendor/bin/zephir fullclean && vendor/bin/zephir generate`, then phpize/make.
+  `generate` takes about 21 s. **On PHP 8.5 it rewrites two unrelated files**
+  (`ext/phalcon/db/enum.zep.c`, `ext/phalcon/datamapper/pdo/connection/abstractconnection.zep.c`)
+  because PDO's fetch flags were renumbered in 8.5 (bug draft `issues/20-…`). Keep those out of
+  Volt PRs.
+- `git archive` skips `phalcon/`, `resources/` and `tests/` (`export-ignore` in `.gitattributes`);
+  copy sources with `git ls-files -z … | xargs -0 cp --parents`.
+- `prototype/tools/cook.py`: patches for any subset of the parser features, plus `--check-all`.
+  `prototype/tools/check-features.sh`: builds each feature alone (incrementally, from a copy of the
+  stock build) and runs the upstream Volt suite.
 - Probe gotcha: Volt's `stat` recompiles when the source and the compiled file have the same mtime
   second. Back-date sources (the test base does `touch(-3600)`), or staleness probes lie.
 - Phalcon binds engine factories and service closures to the container: they must not be `static`.
@@ -80,6 +92,9 @@ exists three times: the C parser, the Zephir compiler and the PHP port `phalcon/
 - [ ] M0 bug issues (compiler drift): `//` parsed as modulo, `{% call %}` drops its body, `{% cache %}`
       parses then fails, `|e` escaped twice under autoescape, `is not` with function tests
 - [ ] docs PR to phalcon/documentation with `docs-extending-volt.md` (independent of the NFR)
+- [x] split per niden: `issues/` (plan + wave 1 drafts), independent per-feature patches (`cook.py`)
+- [ ] PRs for the tickets once they are open: C from `cook.py`, Zephir in `Compiler.zep`, tests in
+      `tests/unit/Mvc/View/Engine/Volt`, the same change in phalcon/volt
 
 ## Side findings
 1. Compiler/grammar drift, listed above (M0). All reproduced in `tests/Today`.

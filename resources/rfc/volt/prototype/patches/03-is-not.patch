@@ -1,6 +1,6 @@
 diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine/volt/base.c
---- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.817300751 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.842984965 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:56:25.168443009 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:56:25.194602270 +0300
 @@ -69,6 +69,7 @@
    { SL("++"),            PHVOLT_T_INCR },
    { SL("--"),            PHVOLT_T_DECR },
@@ -9,7 +9,7 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine
    { SL("ENDBLOCK"),      PHVOLT_T_ENDBLOCK },
    { SL("CACHE"),         PHVOLT_T_CACHE },
    { SL("ENDCACHE"),      PHVOLT_T_ENDCACHE },
-@@ -674,6 +675,10 @@
+@@ -677,6 +678,10 @@
  				phvolt_(phvolt_parser, PHVOLT_ENDBLOCK, NULL, parser_status);
  				break;
  
@@ -21,8 +21,8 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine
  				if (state->macro_level > 0) {
  					phvolt_create_error_msg(parser_status, "Embedding macros into other macros is not allowed");
 diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon
---- a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.790315746 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.843115081 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:56:24.981120271 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:56:25.194734816 +0300
 @@ -25,7 +25,7 @@
  %left RANGE .
  %left AND OR .
@@ -73,8 +73,8 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon b/ext/phalcon/mvc/v
  	phvolt_ret_expr(&R, PHVOLT_T_IS, &O1, &O2, NULL, status->scanner_state);
  }
 diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.h b/ext/phalcon/mvc/view/engine/volt/scanner.h
---- a/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.790003096 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.842714694 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:56:24.980000994 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:56:25.194342078 +0300
 @@ -164,6 +164,9 @@
  #define PHVOLT_T_DEFAULT 413
  #define PHVOLT_T_ENDSWITCH 414
@@ -86,8 +86,8 @@ diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.h b/ext/phalcon/mvc/view/eng
  typedef struct _phvolt_token_names { /* {{{ */
  	char *name;
 diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.re b/ext/phalcon/mvc/view/engine/volt/scanner.re
---- a/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.817218363 +0300
-+++ b/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.842844240 +0300
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:56:25.168350252 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:56:25.194458075 +0300
 @@ -434,13 +434,13 @@
  
  		'is not' {

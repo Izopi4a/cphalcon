@@ -44,6 +44,30 @@ Post 07 before 08 and 11. The docs PR (06) needs the text moved into
 | 17 | new issue | `[NFR]: Volt: {% set x %}…{% endset %} capture` | none | `07-set-capture.patch` |
 | 18 | new issue + comment on #17368 | `[NFR]: Volt: include … with in its own scope` | none | E10 |
 
+## Found along the way, not Volt
+
+| # | file | where | title | labels |
+|---|---|---|---|---|
+| 20 | `20-bug-db-enum-php85.md` | new issue | `[BUG]: PHP 8.5: Db\Enum::FETCH_* and DataMapper fetchGroup() use pre-8.5 PDO flag values (ValueError)` | (template: bug), maybe `status: high`, since `fetchGroup()` fails with its defaults on 8.5 |
+
+## Cooking patches for whatever gets accepted
+
+Each parser feature anchors only on upstream text, so any subset applies to a clean checkout:
+
+```sh
+cd ../prototype
+python3 -I tools/cook.py null-safe embed --out /tmp/cooked   # 01 + 05 + 06 (embed pulls in nested-blocks)
+python3 -I tools/cook.py --check-all                         # all 127 subsets, both orders: 0 lemon conflicts
+./tools/check-features.sh                                    # each feature alone: build, parse smoke, upstream Volt suite
+```
+
+`check-features.sh` result (2026-10-16): all seven build alone and pass the upstream Volt suite.
+`is-not` has the 2 intended failures (`a is not b` stops meaning `!=`). `embed` needs `nested-blocks`,
+because a block inside an embed body is a nested block.
+
+The C part of a PR comes from `cook.py`. The compiler part (Zephir) is written per ticket after it is
+accepted, from the PHP prototype in `../prototype/src/`.
+
 ## Mapping to the patch series
 
 | patch | ticket |
@@ -56,5 +80,4 @@ Post 07 before 08 and 11. The docs PR (06) needs the text moved into
 | `06-embed.patch` | 10 |
 | `07-set-capture.patch` | 17 |
 
-The series applies in order (`../prototype/build.sh`); each prefix was checked with Lemon (0
-conflicts after every step).
+`build.sh` applies the full series in order. `cook.py --series` regenerates it.

@@ -12,8 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/string.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 #include "kernel/object.h"
 
 
@@ -27,19 +27,26 @@ ZEPHIR_INIT_CLASS(phalcon_10__closure)
 PHP_METHOD(phalcon_10__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *action, action_sub, _0;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *c, c_sub, _0;
 
-	ZVAL_UNDEF(&action_sub);
+	ZVAL_UNDEF(&c_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(action)
+		Z_PARAM_ZVAL(c)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &action);
+	zephir_fetch_params(1, 1, 0, &c);
 	ZEPHIR_INIT_VAR(&_0);
-	ZVAL_STRING(&_0, "-");
-	zephir_uncamelize(return_value, action, &_0);
+	object_init_ex(&_0, phalcon_filter_filterfactory_ce);
+	if (zephir_has_constructor(&_0)) {
+		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
+		zephir_check_call_status();
+	}
+
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "newInstance", NULL, 103);
+	zephir_check_call_status();
 	RETURN_MM();
 }
 

@@ -105,6 +105,7 @@ PHP_METHOD(Phalcon_DataMapper_Query_Delete, from)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&table_zv);
 	ZVAL_STR_COPY(&table_zv, table);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "FROM");
@@ -131,6 +132,11 @@ PHP_METHOD(Phalcon_DataMapper_Query_Delete, returning)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("store", 5, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		ZEPHIR_Z_PARAM_ARRAY(columns, columns_param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -139,8 +145,9 @@ PHP_METHOD(Phalcon_DataMapper_Query_Delete, returning)
 	zephir_fetch_params(1, 1, 0, &columns_param);
 	zephir_get_arrval(&columns, columns_param);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_read_property(&_1, this_ptr, ZEND_STRL("store"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_string(&_2, &_1, SL("RETURNING"), PH_NOISY | PH_READONLY, "phalcon/DataMapper/Query/Delete.zep", 63);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 394, PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&_2);
+	zephir_array_fetch_string(&_2, &_1, SL("RETURNING"), PH_NOISY, "phalcon/DataMapper/Query/Delete.zep", 63);
 	zephir_fast_array_merge(&_0, &_2, &columns);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "RETURNING");
@@ -164,20 +171,29 @@ PHP_METHOD(Phalcon_DataMapper_Query_Delete, getStatement)
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("store", 5, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "buildflags", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "buildFlags", NULL, 0);
 	zephir_check_call_status();
-	zephir_read_property(&_1, this_ptr, ZEND_STRL("store"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch_string(&_2, &_1, SL("FROM"), PH_NOISY | PH_READONLY, "phalcon/DataMapper/Query/Delete.zep", 78);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 394, PH_NOISY_CC | PH_READONLY);
+	zephir_memory_observe(&_2);
+	zephir_array_fetch_string(&_2, &_1, SL("FROM"), PH_NOISY, "phalcon/DataMapper/Query/Delete.zep", 78);
 	ZEPHIR_INIT_VAR(&_4);
 	ZVAL_STRING(&_4, "WHERE");
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "buildcondition", NULL, 0, &_4);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "buildCondition", NULL, 0, &_4);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_5, this_ptr, "buildreturning", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_5, this_ptr, "buildReturning", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_CONCAT_SVSVVV(return_value, "DELETE", &_0, " FROM ", &_2, &_3, &_5);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

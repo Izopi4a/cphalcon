@@ -1,0 +1,13 @@
+
+extern zend_class_entry *phalcon_container_interop_resolver_resolvable_ce;
+
+ZEPHIR_INIT_CLASS(Phalcon_Container_Interop_Resolver_Resolvable);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_container_interop_resolver_resolvable_resolve, 0, 0, 1)
+	ZEND_ARG_INFO(0, container)
+ZEND_END_ARG_INFO()
+
+ZEPHIR_INIT_FUNCS(phalcon_container_interop_resolver_resolvable_method_entry) {
+	PHP_ABSTRACT_ME(Phalcon_Container_Interop_Resolver_Resolvable, resolve, arginfo_phalcon_container_interop_resolver_resolvable_resolve)
+	PHP_FE_END
+};

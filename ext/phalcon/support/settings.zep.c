@@ -75,9 +75,8 @@ ZEPHIR_INIT_CLASS(Phalcon_Support_Settings)
  */
 PHP_METHOD(Phalcon_Support_Settings, get)
 {
-	zval _1$$21;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval key_zv, localOverrides, _0$$4;
+	zval key_zv, localOverrides, _0$$4, _1$$21;
 	zend_string *key = NULL;
 
 	ZVAL_UNDEF(&key_zv);
@@ -89,6 +88,7 @@ PHP_METHOD(Phalcon_Support_Settings, get)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
 	zephir_memory_observe(&localOverrides);
 	zephir_read_static_property_ce(&localOverrides, phalcon_support_settings_ce, SL("overrides"), PH_NOISY_CC);
@@ -96,75 +96,75 @@ PHP_METHOD(Phalcon_Support_Settings, get)
 		ZEPHIR_INIT_NVAR(&localOverrides);
 		array_init(&localOverrides);
 	}
-	if (zephir_array_isset(&localOverrides, &key_zv)) {
-		zephir_array_fetch(&_0$$4, &localOverrides, &key_zv, PH_NOISY | PH_READONLY, "phalcon/Support/Settings.zep", 68);
-		RETURN_CTOR(&_0$$4);
+	if (zephir_array_isset_value(&localOverrides, &key_zv)) {
+		zephir_memory_observe(&_0$$4);
+		zephir_array_fetch(&_0$$4, &localOverrides, &key_zv, PH_NOISY, "phalcon/Support/Settings.zep", 68);
+		RETURN_CCTOR(&_0$$4);
 	}
-	do {
-		if (ZEPHIR_IS_STRING(&key_zv, "db.escape_identifiers")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(db).escape_identifiers);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "db.force_casting")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(db).force_casting);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "form.strict_entity_property_check")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(form).strict_entity_property_check);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.case_insensitive_column_map")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).case_insensitive_column_map);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.cast_last_insert_id_to_int")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).cast_last_insert_id_to_int);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.cast_on_hydrate")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).cast_on_hydrate);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.column_renaming")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).column_renaming);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.disable_assign_setters")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).disable_assign_setters);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.enable_implicit_joins")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).enable_implicit_joins);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.enable_literals")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).enable_literals);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.events")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).events);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_save")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).exception_on_failed_save);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_metadata_save")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).exception_on_failed_metadata_save);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.ignore_unknown_columns")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).ignore_unknown_columns);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.late_state_binding")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).late_state_binding);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.not_null_validations")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).not_null_validations);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.resultset_prefetch_records")) {
-			ZEPHIR_INIT_VAR(&_1$$21);
-			ZEPHIR_INIT_NVAR(&_1$$21);
-			ZVAL_STRING(&_1$$21, "ZEPHIR_GLOBAL(orm).resultset_prefetch_records");
-			RETURN_MM_LONG(zephir_get_intval_ex(&_1$$21));
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.update_snapshot_on_save")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).update_snapshot_on_save);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.virtual_foreign_keys")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).virtual_foreign_keys);
-		}
-		if (ZEPHIR_IS_STRING(&key_zv, "orm.dynamic_update")) {
-			RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).dynamic_update);
-		}
-	} while(0);
+	if (ZEPHIR_IS_STRING(&key_zv, "db.escape_identifiers")) { goto zephir_switch_0_clause_0; }
+	if (ZEPHIR_IS_STRING(&key_zv, "db.force_casting")) { goto zephir_switch_0_clause_1; }
+	if (ZEPHIR_IS_STRING(&key_zv, "form.strict_entity_property_check")) { goto zephir_switch_0_clause_2; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.case_insensitive_column_map")) { goto zephir_switch_0_clause_3; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.cast_last_insert_id_to_int")) { goto zephir_switch_0_clause_4; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.cast_on_hydrate")) { goto zephir_switch_0_clause_5; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.column_renaming")) { goto zephir_switch_0_clause_6; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.disable_assign_setters")) { goto zephir_switch_0_clause_7; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.enable_implicit_joins")) { goto zephir_switch_0_clause_8; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.enable_literals")) { goto zephir_switch_0_clause_9; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.events")) { goto zephir_switch_0_clause_10; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_save")) { goto zephir_switch_0_clause_11; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_metadata_save")) { goto zephir_switch_0_clause_12; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.ignore_unknown_columns")) { goto zephir_switch_0_clause_13; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.late_state_binding")) { goto zephir_switch_0_clause_14; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.not_null_validations")) { goto zephir_switch_0_clause_15; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.resultset_prefetch_records")) { goto zephir_switch_0_clause_16; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.update_snapshot_on_save")) { goto zephir_switch_0_clause_17; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.virtual_foreign_keys")) { goto zephir_switch_0_clause_18; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.dynamic_update")) { goto zephir_switch_0_clause_19; }
+	goto zephir_switch_0_end;
+	zephir_switch_0_clause_0: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(db).escape_identifiers);
+	zephir_switch_0_clause_1: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(db).force_casting);
+	zephir_switch_0_clause_2: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(form).strict_entity_property_check);
+	zephir_switch_0_clause_3: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).case_insensitive_column_map);
+	zephir_switch_0_clause_4: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).cast_last_insert_id_to_int);
+	zephir_switch_0_clause_5: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).cast_on_hydrate);
+	zephir_switch_0_clause_6: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).column_renaming);
+	zephir_switch_0_clause_7: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).disable_assign_setters);
+	zephir_switch_0_clause_8: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).enable_implicit_joins);
+	zephir_switch_0_clause_9: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).enable_literals);
+	zephir_switch_0_clause_10: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).events);
+	zephir_switch_0_clause_11: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).exception_on_failed_save);
+	zephir_switch_0_clause_12: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).exception_on_failed_metadata_save);
+	zephir_switch_0_clause_13: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).ignore_unknown_columns);
+	zephir_switch_0_clause_14: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).late_state_binding);
+	zephir_switch_0_clause_15: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).not_null_validations);
+	zephir_switch_0_clause_16: ;
+		ZEPHIR_INIT_VAR(&_1$$21);
+		ZVAL_STRING(&_1$$21, "ZEPHIR_GLOBAL(orm).resultset_prefetch_records");
+		RETURN_MM_LONG(zephir_get_intval(&_1$$21));
+	zephir_switch_0_clause_17: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).update_snapshot_on_save);
+	zephir_switch_0_clause_18: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).virtual_foreign_keys);
+	zephir_switch_0_clause_19: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).dynamic_update);
+	zephir_switch_0_end: ;
 
 	RETURN_MM_NULL();
 }
@@ -196,6 +196,7 @@ PHP_METHOD(Phalcon_Support_Settings, set)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	value = ZEND_CALL_ARG(execute_data, 2);
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
 	zephir_memory_observe(&localOverrides);
 	zephir_read_static_property_ce(&localOverrides, phalcon_support_settings_ce, SL("overrides"), PH_NOISY_CC);
@@ -203,14 +204,53 @@ PHP_METHOD(Phalcon_Support_Settings, set)
 		ZEPHIR_INIT_NVAR(&localOverrides);
 		array_init(&localOverrides);
 	}
-	do {
-		if (ZEPHIR_IS_STRING(&key_zv, "db.escape_identifiers") || ZEPHIR_IS_STRING(&key_zv, "db.force_casting") || ZEPHIR_IS_STRING(&key_zv, "form.strict_entity_property_check") || ZEPHIR_IS_STRING(&key_zv, "orm.case_insensitive_column_map") || ZEPHIR_IS_STRING(&key_zv, "orm.cast_last_insert_id_to_int") || ZEPHIR_IS_STRING(&key_zv, "orm.cast_on_hydrate") || ZEPHIR_IS_STRING(&key_zv, "orm.column_renaming") || ZEPHIR_IS_STRING(&key_zv, "orm.disable_assign_setters") || ZEPHIR_IS_STRING(&key_zv, "orm.enable_implicit_joins") || ZEPHIR_IS_STRING(&key_zv, "orm.enable_literals") || ZEPHIR_IS_STRING(&key_zv, "orm.events") || ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_save") || ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_metadata_save") || ZEPHIR_IS_STRING(&key_zv, "orm.ignore_unknown_columns") || ZEPHIR_IS_STRING(&key_zv, "orm.late_state_binding") || ZEPHIR_IS_STRING(&key_zv, "orm.not_null_validations") || ZEPHIR_IS_STRING(&key_zv, "orm.resultset_prefetch_records") || ZEPHIR_IS_STRING(&key_zv, "orm.update_snapshot_on_save") || ZEPHIR_IS_STRING(&key_zv, "orm.virtual_foreign_keys") || ZEPHIR_IS_STRING(&key_zv, "orm.dynamic_update")) {
-			zephir_array_update_zval(&localOverrides, &key_zv, value, PH_COPY | PH_SEPARATE);
-			zephir_update_static_property_ce(phalcon_support_settings_ce, ZEND_STRL("overrides"), &localOverrides);
-			break;
-		}
-		break;
-	} while(0);
+	if (ZEPHIR_IS_STRING(&key_zv, "db.escape_identifiers")) { goto zephir_switch_0_clause_0; }
+	if (ZEPHIR_IS_STRING(&key_zv, "db.force_casting")) { goto zephir_switch_0_clause_1; }
+	if (ZEPHIR_IS_STRING(&key_zv, "form.strict_entity_property_check")) { goto zephir_switch_0_clause_2; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.case_insensitive_column_map")) { goto zephir_switch_0_clause_3; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.cast_last_insert_id_to_int")) { goto zephir_switch_0_clause_4; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.cast_on_hydrate")) { goto zephir_switch_0_clause_5; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.column_renaming")) { goto zephir_switch_0_clause_6; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.disable_assign_setters")) { goto zephir_switch_0_clause_7; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.enable_implicit_joins")) { goto zephir_switch_0_clause_8; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.enable_literals")) { goto zephir_switch_0_clause_9; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.events")) { goto zephir_switch_0_clause_10; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_save")) { goto zephir_switch_0_clause_11; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_metadata_save")) { goto zephir_switch_0_clause_12; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.ignore_unknown_columns")) { goto zephir_switch_0_clause_13; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.late_state_binding")) { goto zephir_switch_0_clause_14; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.not_null_validations")) { goto zephir_switch_0_clause_15; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.resultset_prefetch_records")) { goto zephir_switch_0_clause_16; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.update_snapshot_on_save")) { goto zephir_switch_0_clause_17; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.virtual_foreign_keys")) { goto zephir_switch_0_clause_18; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.dynamic_update")) { goto zephir_switch_0_clause_19; }
+	goto zephir_switch_0_clause_20;
+	zephir_switch_0_clause_0: ;
+	zephir_switch_0_clause_1: ;
+	zephir_switch_0_clause_2: ;
+	zephir_switch_0_clause_3: ;
+	zephir_switch_0_clause_4: ;
+	zephir_switch_0_clause_5: ;
+	zephir_switch_0_clause_6: ;
+	zephir_switch_0_clause_7: ;
+	zephir_switch_0_clause_8: ;
+	zephir_switch_0_clause_9: ;
+	zephir_switch_0_clause_10: ;
+	zephir_switch_0_clause_11: ;
+	zephir_switch_0_clause_12: ;
+	zephir_switch_0_clause_13: ;
+	zephir_switch_0_clause_14: ;
+	zephir_switch_0_clause_15: ;
+	zephir_switch_0_clause_16: ;
+	zephir_switch_0_clause_17: ;
+	zephir_switch_0_clause_18: ;
+	zephir_switch_0_clause_19: ;
+		zephir_array_update_zval(&localOverrides, &key_zv, value, PH_COPY | PH_SEPARATE);
+		zephir_update_static_property_ce(phalcon_support_settings_ce, ZEND_STRL("overrides"), &localOverrides);
+		goto zephir_switch_0_end;
+	zephir_switch_0_clause_20: ;
+		goto zephir_switch_0_end;
+	zephir_switch_0_end: ;
 
 	ZEPHIR_MM_RESTORE();
 }

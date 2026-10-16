@@ -71,6 +71,11 @@ PHP_METHOD(Phalcon_Annotations_Adapter_Stream, __construct)
 
 	ZVAL_UNDEF(&options);
 	ZVAL_UNDEF(&annotationsDir);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("annotationsDir", 14, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		ZEPHIR_Z_PARAM_ARRAY(options, options_param)
@@ -86,7 +91,7 @@ PHP_METHOD(Phalcon_Annotations_Adapter_Stream, __construct)
 	}
 	zephir_memory_observe(&annotationsDir);
 	if (zephir_array_isset_string_fetch(&annotationsDir, &options, SL("annotationsDir"), 0)) {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("annotationsDir"), &annotationsDir);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 269, &annotationsDir);
 	}
 	ZEPHIR_MM_RESTORE();
 }
@@ -120,20 +125,34 @@ PHP_METHOD(Phalcon_Annotations_Adapter_Stream, read)
 	ZVAL_UNDEF(&_9$$6);
 	ZVAL_UNDEF(&_10$$6);
 	ZVAL_UNDEF(&path);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("annotationsDir", 14, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(key)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("annotationsDir"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 269, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "_");
 	zephir_prepare_virtual_path(&_1, &key_zv, &_2);
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_CONCAT_VVS(&_3, &_0, &_1, ".php");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_get_strval(&path, &_3);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	if (!((zephir_file_exists(&path) == SUCCESS))) {
 		RETURN_MM_BOOL(0);
 	}
@@ -166,7 +185,7 @@ PHP_METHOD(Phalcon_Annotations_Adapter_Stream, read)
 		ZEPHIR_CALL_FUNCTION(NULL, "set_error_handler", NULL, 138, &_9$$6, &_10$$6);
 		zephir_check_call_status();
 	}
-	ZEPHIR_CALL_FUNCTION(&_11, "unserialize", NULL, 16, &contents);
+	ZEPHIR_CALL_FUNCTION(&_11, "unserialize", NULL, 15, &contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&contents, &_11);
 	ZEPHIR_CALL_FUNCTION(NULL, "restore_error_handler", NULL, 139);
@@ -199,6 +218,11 @@ PHP_METHOD(Phalcon_Annotations_Adapter_Stream, write)
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&path);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("annotationsDir", 14, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(key)
 		Z_PARAM_OBJECT_OF_CLASS(data, phalcon_annotations_reflection_ce)
@@ -206,16 +230,25 @@ PHP_METHOD(Phalcon_Annotations_Adapter_Stream, write)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	data = ZEND_CALL_ARG(execute_data, 2);
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("annotationsDir"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 269, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "_");
 	zephir_prepare_virtual_path(&_1, &key_zv, &_2);
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_CONCAT_VVS(&_3, &_0, &_1, ".php");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_get_strval(&path, &_3);
-	ZEPHIR_CALL_FUNCTION(&code, "serialize", NULL, 15, data);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
+	ZEPHIR_CALL_FUNCTION(&code, "serialize", NULL, 14, data);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_4);
 	zephir_file_put_contents(&_4, &path, &code);

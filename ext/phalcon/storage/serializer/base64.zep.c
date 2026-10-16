@@ -49,17 +49,21 @@ PHP_METHOD(Phalcon_Storage_Serializer_Base64, serialize)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("data", 4, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&_0);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("data"), PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 952, PH_NOISY_CC);
 	if (Z_TYPE_P(&_0) != IS_STRING) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Data for the serializer must of type string", "phalcon/Storage/Serializer/Base64.zep", 27);
 		return;
 	}
-	zephir_read_property(&_1, this_ptr, ZEND_STRL("data"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_RETURN_CALL_FUNCTION("base64_encode", NULL, 234, &_1);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 952, PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_RETURN_CALL_FUNCTION("base64_encode", NULL, 261, &_1);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -85,6 +89,15 @@ PHP_METHOD(Phalcon_Storage_Serializer_Base64, unserialize)
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("isSuccess", 9, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("data", 4, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(data)
 	ZEND_PARSE_PARAMETERS_END();
@@ -98,24 +111,24 @@ PHP_METHOD(Phalcon_Storage_Serializer_Base64, unserialize)
 		return;
 	}
 	ZVAL_BOOL(&_1, 1);
-	ZEPHIR_CALL_METHOD(&result, this_ptr, "phpbase64decode", NULL, 0, data, &_1);
+	ZEPHIR_CALL_METHOD(&result, this_ptr, "phpBase64Decode", NULL, 0, data, &_1);
 	zephir_check_call_status();
 	if (UNEXPECTED(ZEPHIR_IS_FALSE_IDENTICAL(&result))) {
 		if (0) {
-			zephir_update_property_zval(this_ptr, ZEND_STRL("isSuccess"), &__$true);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 953, &__$true);
 		} else {
-			zephir_update_property_zval(this_ptr, ZEND_STRL("isSuccess"), &__$false);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 953, &__$false);
 		}
 		ZEPHIR_INIT_NVAR(&result);
 		ZVAL_STRING(&result, "");
 	} else {
 		if (1) {
-			zephir_update_property_zval(this_ptr, ZEND_STRL("isSuccess"), &__$true);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 953, &__$true);
 		} else {
-			zephir_update_property_zval(this_ptr, ZEND_STRL("isSuccess"), &__$false);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 953, &__$false);
 		}
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("data"), &result);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 952, &result);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -147,13 +160,14 @@ PHP_METHOD(Phalcon_Storage_Serializer_Base64, phpBase64Decode)
 	if (ZEND_NUM_ARGS() > 1) {
 		strict_param = ZEND_CALL_ARG(execute_data, 2);
 	}
+	zephir_memory_observe(&input_zv);
 	ZVAL_STR_COPY(&input_zv, input);
 	if (!strict_param) {
 		strict = 0;
 	} else {
 		}
 	ZVAL_BOOL(&_0, (strict ? 1 : 0));
-	ZEPHIR_RETURN_CALL_FUNCTION("base64_decode", NULL, 233, &input_zv, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("base64_decode", NULL, 260, &input_zv, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -1,0 +1,5 @@
+
+extern zend_class_entry *phalcon_container_exception_containerthrowable_ce;
+
+ZEPHIR_INIT_CLASS(Phalcon_Container_Exception_ContainerThrowable);
+

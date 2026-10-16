@@ -58,7 +58,9 @@ PHP_METHOD(Phalcon_Support_Helper_Str_Includes, __invoke)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&haystack_zv);
 	ZVAL_STR_COPY(&haystack_zv, haystack);
+	zephir_memory_observe(&needle_zv);
 	ZVAL_STR_COPY(&needle_zv, needle);
 	ZEPHIR_CALL_FUNCTION(&_0, "mb_strpos", NULL, 94, &haystack_zv, &needle_zv);
 	zephir_check_call_status();

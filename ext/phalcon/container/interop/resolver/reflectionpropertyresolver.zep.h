@@ -1,0 +1,16 @@
+
+extern zend_class_entry *phalcon_container_interop_resolver_reflectionpropertyresolver_ce;
+
+ZEPHIR_INIT_CLASS(Phalcon_Container_Interop_Resolver_ReflectionPropertyResolver);
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_container_interop_resolver_reflectionpropertyresolver_resolveproperty, 0, 3, IS_VOID, 0)
+
+	ZEND_ARG_INFO(0, ioc)
+	ZEND_ARG_INFO(0, property)
+	ZEND_ARG_INFO(0, obj)
+ZEND_END_ARG_INFO()
+
+ZEPHIR_INIT_FUNCS(phalcon_container_interop_resolver_reflectionpropertyresolver_method_entry) {
+	PHP_ABSTRACT_ME(Phalcon_Container_Interop_Resolver_ReflectionPropertyResolver, resolveProperty, arginfo_phalcon_container_interop_resolver_reflectionpropertyresolver_resolveproperty)
+	PHP_FE_END
+};

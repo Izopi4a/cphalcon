@@ -39,26 +39,59 @@ ZEPHIR_INIT_CLASS(Phalcon_Html_Helper_Doctype)
 	 * @var int
 	 */
 	zend_declare_property_null(phalcon_html_helper_doctype_ce, SL("type"), ZEND_ACC_PRIVATE);
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("HTML32"), 1);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("HTML401_STRICT"), 2);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("HTML401_TRANSITIONAL"), 3);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("HTML401_FRAMESET"), 4);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("HTML5"), 5);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("XHTML10_STRICT"), 6);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("XHTML10_TRANSITIONAL"), 7);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("XHTML10_FRAMESET"), 8);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("XHTML11"), 9);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("XHTML20"), 10);
 
+	/**
+	 * @var int
+	 */
 	zephir_declare_class_constant_long(phalcon_html_helper_doctype_ce, SL("XHTML5"), 11);
 
 	return SUCCESS;
@@ -72,15 +105,23 @@ PHP_METHOD(Phalcon_Html_Helper_Doctype, __construct)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("type", 4, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("delimiter", 9, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 5);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("type"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 558, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_GET_CONSTANT(&_1, "PHP_EOL");
-	zephir_update_property_zval(this_ptr, ZEND_STRL("delimiter"), &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 559, &_1);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -100,6 +141,15 @@ PHP_METHOD(Phalcon_Html_Helper_Doctype, __invoke)
 
 	ZVAL_UNDEF(&delimiter_zv);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("type", 4, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("delimiter", 9, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(0, 2)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(type)
@@ -116,14 +166,16 @@ PHP_METHOD(Phalcon_Html_Helper_Doctype, __invoke)
 		}
 	if (!delimiter) {
 		delimiter = zend_string_init(ZEND_STRL("\n"), 0);
+		zephir_memory_observe(&delimiter_zv);
 		ZVAL_STR(&delimiter_zv, delimiter);
 	} else {
-		ZVAL_STR_COPY(&delimiter_zv, delimiter);
+		zephir_memory_observe(&delimiter_zv);
+	ZVAL_STR_COPY(&delimiter_zv, delimiter);
 	}
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, type);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("type"), &_0);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("delimiter"), &delimiter_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 558, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 559, &delimiter_zv);
 	RETURN_THIS();
 }
 
@@ -154,65 +206,103 @@ PHP_METHOD(Phalcon_Html_Helper_Doctype, __toString)
 	ZVAL_UNDEF(&_15$$10);
 	ZVAL_UNDEF(&_16$$11);
 	ZVAL_UNDEF(&_17$$11);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("type"), PH_NOISY_CC | PH_READONLY);
-	do {
-		if (ZEPHIR_IS_LONG(&_0, 1)) {
-			zephir_read_property(&_1$$3, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">", &_1$$3);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("type", 4, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("delimiter", 9, 1);
+	}
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 558, PH_NOISY_CC | PH_READONLY);
+	if (ZEPHIR_IS_LONG(&_0, 1)) { goto zephir_switch_0_clause_0; }
+	if (ZEPHIR_IS_LONG(&_0, 2)) { goto zephir_switch_0_clause_1; }
+	if (ZEPHIR_IS_LONG(&_0, 3)) { goto zephir_switch_0_clause_2; }
+	if (ZEPHIR_IS_LONG(&_0, 4)) { goto zephir_switch_0_clause_3; }
+	if (ZEPHIR_IS_LONG(&_0, 6)) { goto zephir_switch_0_clause_4; }
+	if (ZEPHIR_IS_LONG(&_0, 7)) { goto zephir_switch_0_clause_5; }
+	if (ZEPHIR_IS_LONG(&_0, 8)) { goto zephir_switch_0_clause_6; }
+	if (ZEPHIR_IS_LONG(&_0, 9)) { goto zephir_switch_0_clause_7; }
+	if (ZEPHIR_IS_LONG(&_0, 10)) { goto zephir_switch_0_clause_8; }
+	goto zephir_switch_0_end;
+	zephir_switch_0_clause_0: ;
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">", &_1$$3);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-		if (ZEPHIR_IS_LONG(&_0, 2)) {
-			zephir_read_property(&_2$$4, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_3$$4, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\"", &_2$$4, "\t\"http://www.w3.org/TR/html4/strict.dtd\">", &_3$$4);
+		return;
+	zephir_switch_0_clause_1: ;
+		zephir_read_property_cached(&_2$$4, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$4, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\"", &_2$$4, "\t\"http://www.w3.org/TR/html4/strict.dtd\">", &_3$$4);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-		if (ZEPHIR_IS_LONG(&_0, 3)) {
-			zephir_read_property(&_4$$5, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_5$$5, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"", &_4$$5, "\t\"http://www.w3.org/TR/html4/loose.dtd\">", &_5$$5);
+		return;
+	zephir_switch_0_clause_2: ;
+		zephir_read_property_cached(&_4$$5, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_5$$5, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"", &_4$$5, "\t\"http://www.w3.org/TR/html4/loose.dtd\">", &_5$$5);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-		if (ZEPHIR_IS_LONG(&_0, 4)) {
-			zephir_read_property(&_6$$6, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_7$$6, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\"", &_6$$6, "\t\"http://www.w3.org/TR/html4/frameset.dtd\">", &_7$$6);
+		return;
+	zephir_switch_0_clause_3: ;
+		zephir_read_property_cached(&_6$$6, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_7$$6, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\"", &_6$$6, "\t\"http://www.w3.org/TR/html4/frameset.dtd\">", &_7$$6);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-		if (ZEPHIR_IS_LONG(&_0, 6)) {
-			zephir_read_property(&_8$$7, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_9$$7, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"", &_8$$7, "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">", &_9$$7);
+		return;
+	zephir_switch_0_clause_4: ;
+		zephir_read_property_cached(&_8$$7, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_9$$7, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"", &_8$$7, "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">", &_9$$7);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-		if (ZEPHIR_IS_LONG(&_0, 7)) {
-			zephir_read_property(&_10$$8, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_11$$8, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"", &_10$$8, "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">", &_11$$8);
+		return;
+	zephir_switch_0_clause_5: ;
+		zephir_read_property_cached(&_10$$8, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_11$$8, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"", &_10$$8, "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">", &_11$$8);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-		if (ZEPHIR_IS_LONG(&_0, 8)) {
-			zephir_read_property(&_12$$9, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_13$$9, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\"", &_12$$9, "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">", &_13$$9);
+		return;
+	zephir_switch_0_clause_6: ;
+		zephir_read_property_cached(&_12$$9, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_13$$9, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\"", &_12$$9, "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">", &_13$$9);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-		if (ZEPHIR_IS_LONG(&_0, 9)) {
-			zephir_read_property(&_14$$10, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_15$$10, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"", &_14$$10, "\t\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">", &_15$$10);
+		return;
+	zephir_switch_0_clause_7: ;
+		zephir_read_property_cached(&_14$$10, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_15$$10, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"", &_14$$10, "\t\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">", &_15$$10);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-		if (ZEPHIR_IS_LONG(&_0, 10)) {
-			zephir_read_property(&_16$$11, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			zephir_read_property(&_17$$11, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
-			ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 2.0//EN\"", &_16$$11, "\t\"http://www.w3.org/MarkUp/DTD/xhtml2.dtd\">", &_17$$11);
+		return;
+	zephir_switch_0_clause_8: ;
+		zephir_read_property_cached(&_16$$11, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_17$$11, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
+		ZEPHIR_CONCAT_SVSV(return_value, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 2.0//EN\"", &_16$$11, "\t\"http://www.w3.org/MarkUp/DTD/xhtml2.dtd\">", &_17$$11);
+		if (UNEXPECTED(EG(exception))) {
 			return;
 		}
-	} while(0);
+		return;
+	zephir_switch_0_end: ;
 
-	zephir_read_property(&_18, this_ptr, ZEND_STRL("delimiter"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_18, this_ptr, _zephir_prop_1, 559, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CONCAT_SV(return_value, "<!DOCTYPE html>", &_18);
+	if (UNEXPECTED(EG(exception))) {
+		return;
+	}
 	return;
 }
 
@@ -222,6 +312,6 @@ PHP_METHOD(Phalcon_Html_Helper_Doctype, __toString)
 PHP_METHOD(Phalcon_Html_Helper_Doctype, getType)
 {
 
-	RETURN_MEMBER(getThis(), "type");
+	RETURN_MEMBER_TYPED(getThis(), "type", IS_LONG);
 }
 

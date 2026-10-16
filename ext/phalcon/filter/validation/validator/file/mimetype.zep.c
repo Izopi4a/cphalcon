@@ -120,16 +120,17 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_File_MimeType, validate)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &validation, &field);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkupload", NULL, 0, validation, field);
+	ZEPHIR_INIT_VAR(&mime);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkUpload", NULL, 0, validation, field);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_FALSE_IDENTICAL(&_0)) {
 		RETURN_MM_BOOL(0);
 	}
-	ZEPHIR_CALL_METHOD(&value, validation, "getvalue", NULL, 0, field);
+	ZEPHIR_CALL_METHOD(&value, validation, "getValue", NULL, 0, field);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "types");
-	ZEPHIR_CALL_METHOD(&types, this_ptr, "getoption", NULL, 0, &_1);
+	ZEPHIR_CALL_METHOD(&types, this_ptr, "getOption", NULL, 0, &_1);
 	zephir_check_call_status();
 	zephir_memory_observe(&fieldTypes);
 	if (zephir_array_isset_fetch(&fieldTypes, &types, field, 0)) {
@@ -141,13 +142,14 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_File_MimeType, validate)
 	}
 	if ((zephir_function_exists_ex(ZEND_STRL("finfo_open")) == SUCCESS)) {
 		ZVAL_LONG(&_2$$6, 16);
-		ZEPHIR_CALL_FUNCTION(&tmp, "finfo_open", NULL, 311, &_2$$6);
+		ZEPHIR_CALL_FUNCTION(&tmp, "finfo_open", NULL, 337, &_2$$6);
 		zephir_check_call_status();
 		if (zephir_is_true(&tmp)) {
-			zephir_array_fetch_string(&_3$$7, &value, SL("tmp_name"), PH_NOISY | PH_READONLY, "phalcon/Filter/Validation/Validator/File/MimeType.zep", 102);
-			ZEPHIR_CALL_FUNCTION(&mime, "finfo_file", NULL, 312, &tmp, &_3$$7);
+			zephir_memory_observe(&_3$$7);
+			zephir_array_fetch_string(&_3$$7, &value, SL("tmp_name"), PH_NOISY, "phalcon/Filter/Validation/Validator/File/MimeType.zep", 102);
+			ZEPHIR_CALL_FUNCTION(&mime, "finfo_file", NULL, 338, &tmp, &_3$$7);
 			zephir_check_call_status();
-			ZEPHIR_CALL_FUNCTION(NULL, "finfo_close", NULL, 313, &tmp);
+			ZEPHIR_CALL_FUNCTION(NULL, "finfo_close", NULL, 339, &tmp);
 			zephir_check_call_status();
 		}
 	}
@@ -161,9 +163,9 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_File_MimeType, validate)
 		ZEPHIR_INIT_VAR(&_4$$9);
 		zephir_fast_join_str(&_4$$9, SL(", "), &types);
 		zephir_array_update_string(&replacePairs, SL(":types"), &_4$$9, PH_COPY | PH_SEPARATE);
-		ZEPHIR_CALL_METHOD(&_5$$9, this_ptr, "messagefactory", NULL, 0, validation, field, &replacePairs);
+		ZEPHIR_CALL_METHOD(&_5$$9, this_ptr, "messageFactory", NULL, 0, validation, field, &replacePairs);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, validation, "appendmessage", NULL, 0, &_5$$9);
+		ZEPHIR_CALL_METHOD(NULL, validation, "appendMessage", NULL, 0, &_5$$9);
 		zephir_check_call_status();
 		RETURN_MM_BOOL(0);
 	}

@@ -69,6 +69,7 @@ PHP_METHOD(Phalcon_Html_Helper_Img, __invoke)
 	if (ZEND_NUM_ARGS() > 1) {
 		attributes_param = ZEND_CALL_ARG(execute_data, 2);
 	}
+	zephir_memory_observe(&src_zv);
 	ZVAL_STR_COPY(&src_zv, src);
 	if (!attributes_param) {
 		ZEPHIR_INIT_VAR(&attributes);
@@ -80,12 +81,16 @@ PHP_METHOD(Phalcon_Html_Helper_Img, __invoke)
 	zephir_create_array(&overrides, 1, 0);
 	zephir_array_update_string(&overrides, SL("src"), &src_zv, PH_COPY | PH_SEPARATE);
 	zephir_array_unset_string(&attributes, SL("src"), PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_fast_array_merge(&_0, &overrides, &attributes);
 	ZEPHIR_CPY_WRT(&overrides, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "img");
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "selfclose", NULL, 0, &_0, &overrides);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "selfClose", NULL, 0, &_0, &overrides);
 	zephir_check_call_status();
 	RETURN_MM();
 }

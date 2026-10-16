@@ -64,7 +64,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      */
     public function callActionMethod(handler, string actionMethod, array! params = []) -> var
     {
-        var params;
+
 
         // This is to make sure that the parameters are zero-indexed and
         // their order isn't overriden by any options when we merge the array.

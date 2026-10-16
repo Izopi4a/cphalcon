@@ -221,7 +221,7 @@ class Imagick extends AbstractAdapter
         int blue,
         int opacity
     ) -> void {
-        var background, color, opacity, pixel1, pixel2, result;
+        var background, color, pixel1, pixel2, result;
 
         let opacity    /= 100;
         let color      = sprintf("rgb(%d, %d, %d)", red, green, blue);

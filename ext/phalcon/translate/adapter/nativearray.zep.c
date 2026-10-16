@@ -83,6 +83,15 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, __construct)
 	ZVAL_UNDEF(&data);
 	ZVAL_UNDEF(&error);
 	ZVAL_UNDEF(&options);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("triggerError", 12, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("translate", 9, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT_OF_CLASS(interpolator, phalcon_translate_interpolatorfactory_ce)
 		ZEPHIR_Z_PARAM_ARRAY(options, options_param)
@@ -101,16 +110,16 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, __construct)
 	zephir_memory_observe(&error);
 	if (zephir_array_isset_string_fetch(&error, &options, SL("triggerError"), 0)) {
 		if (zephir_get_boolval(&error)) {
-			zephir_update_property_zval(this_ptr, ZEND_STRL("triggerError"), &__$true);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 976, &__$true);
 		} else {
-			zephir_update_property_zval(this_ptr, ZEND_STRL("triggerError"), &__$false);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 976, &__$false);
 		}
 	}
 	if (UNEXPECTED(Z_TYPE_P(&data) != IS_ARRAY)) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_translate_exception_ce, "Translation data must be an array", "phalcon/Translate/Adapter/NativeArray.zep", 65);
 		return;
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("translate"), &data);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 977, &data);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -136,6 +145,7 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, exists)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&index_zv);
 	ZVAL_STR_COPY(&index_zv, index);
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "has", NULL, 0, &index_zv);
 	zephir_check_call_status();
@@ -157,12 +167,17 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, has)
 
 	ZVAL_UNDEF(&index_zv);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("translate", 9, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&index_zv, index);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("translate"), PH_NOISY_CC | PH_READONLY);
-	RETURN_BOOL(zephir_array_isset(&_0, &index_zv));
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 977, PH_NOISY_CC | PH_READONLY);
+	RETURN_BOOL(zephir_array_isset_value(&_0, &index_zv));
 }
 
 /**
@@ -186,19 +201,29 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, notFound)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("triggerError", 12, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&index_zv);
 	ZVAL_STR_COPY(&index_zv, index);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("triggerError"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 976, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(ZEPHIR_IS_TRUE_IDENTICAL(&_0))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		object_init_ex(&_1$$3, phalcon_translate_exception_ce);
 		ZEPHIR_INIT_VAR(&_2$$3);
 		ZEPHIR_CONCAT_SV(&_2$$3, "Cannot find translation key: ", &index_zv);
-		ZEPHIR_CALL_METHOD(NULL, &_1$$3, "__construct", NULL, 33, &_2$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+		ZEPHIR_CALL_METHOD(NULL, &_1$$3, "__construct", NULL, 32, &_2$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(&_1$$3, "phalcon/Translate/Adapter/NativeArray.zep", 107);
 		ZEPHIR_MM_RESTORE();
@@ -229,6 +254,11 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, query)
 	ZVAL_UNDEF(&translation);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&placeholders);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("translate", 9, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(translateKey)
 		Z_PARAM_OPTIONAL
@@ -239,6 +269,7 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, query)
 	if (ZEND_NUM_ARGS() > 1) {
 		placeholders_param = ZEND_CALL_ARG(execute_data, 2);
 	}
+	zephir_memory_observe(&translateKey_zv);
 	ZVAL_STR_COPY(&translateKey_zv, translateKey);
 	if (!placeholders_param) {
 		ZEPHIR_INIT_VAR(&placeholders);
@@ -247,13 +278,13 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, query)
 		zephir_get_arrval(&placeholders, placeholders_param);
 	}
 	zephir_memory_observe(&translation);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("translate"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 977, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_fetch(&translation, &_0, &translateKey_zv, 0))) {
-		ZEPHIR_RETURN_CALL_METHOD(this_ptr, "notfound", NULL, 0, &translateKey_zv);
+		ZEPHIR_RETURN_CALL_METHOD(this_ptr, "notFound", NULL, 0, &translateKey_zv);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "replaceplaceholders", NULL, 0, &translation, &placeholders);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "replacePlaceholders", NULL, 0, &translation, &placeholders);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -266,7 +297,7 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, query)
 PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, toArray)
 {
 
-	RETURN_MEMBER(getThis(), "translate");
+	RETURN_MEMBER_TYPED(getThis(), "translate", IS_ARRAY);
 }
 
 zend_object *zephir_init_properties_Phalcon_Translate_Adapter_NativeArray(zend_class_entry *class_type)

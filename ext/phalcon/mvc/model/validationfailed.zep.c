@@ -70,6 +70,15 @@ PHP_METHOD(Phalcon_Mvc_Model_ValidationFailed, __construct)
 	ZVAL_UNDEF(&messageStr);
 	ZVAL_UNDEF(&message);
 	ZVAL_UNDEF(&validationMessages);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("model", 5, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("messages", 8, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT_OF_CLASS(model, phalcon_mvc_modelinterface_ce)
 		ZEPHIR_Z_PARAM_ARRAY(validationMessages, validationMessages_param)
@@ -81,14 +90,14 @@ PHP_METHOD(Phalcon_Mvc_Model_ValidationFailed, __construct)
 	if (zephir_fast_count_int(&validationMessages) > 0) {
 		zephir_memory_observe(&message);
 		zephir_array_fetch_long(&message, &validationMessages, 0, PH_NOISY, "phalcon/Mvc/Model/ValidationFailed.zep", 48);
-		ZEPHIR_CALL_METHOD(&messageStr, &message, "getmessage", NULL, 0);
+		ZEPHIR_CALL_METHOD(&messageStr, &message, "getMessage", NULL, 0);
 		zephir_check_call_status();
 	} else {
 		ZEPHIR_INIT_NVAR(&messageStr);
 		ZVAL_STRING(&messageStr, "Validation failed");
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("model"), model);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("messages"), &validationMessages);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 838, model);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 839, &validationMessages);
 	ZEPHIR_CALL_PARENT(NULL, phalcon_mvc_model_validationfailed_ce, getThis(), "__construct", NULL, 0, &messageStr);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
@@ -100,7 +109,7 @@ PHP_METHOD(Phalcon_Mvc_Model_ValidationFailed, __construct)
 PHP_METHOD(Phalcon_Mvc_Model_ValidationFailed, getMessages)
 {
 
-	RETURN_MEMBER(getThis(), "messages");
+	RETURN_MEMBER_TYPED(getThis(), "messages", IS_ARRAY);
 }
 
 /**

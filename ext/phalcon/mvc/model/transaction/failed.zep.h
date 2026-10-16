@@ -9,7 +9,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Transaction_Failed, getRecordMessages);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_mvc_model_transaction_failed___construct, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, message, IS_STRING, 0)
-	ZEND_ARG_OBJ_INFO(0, record, Phalcon\\Mvc\\ModelInterface, 1)
+	ZEND_ARG_OBJ_TYPE_MASK(0, record, Phalcon\\Mvc\\ModelInterface, MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_transaction_failed_getrecord, 0, 0, Phalcon\\Mvc\\ModelInterface, 0)

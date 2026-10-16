@@ -67,11 +67,13 @@ PHP_METHOD(Phalcon_Support_Helper_Str_Camelize, __invoke)
 	if (ZEND_NUM_ARGS() > 2) {
 		lowerFirst_param = ZEND_CALL_ARG(execute_data, 3);
 	}
+	zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	if (!delimiters) {
 		ZEPHIR_INIT_VAR(&delimiters_zv);
 	} else {
-		ZVAL_STR_COPY(&delimiters_zv, delimiters);
+		zephir_memory_observe(&delimiters_zv);
+	ZVAL_STR_COPY(&delimiters_zv, delimiters);
 	}
 	if (!lowerFirst_param) {
 		lowerFirst = 0;

@@ -124,10 +124,10 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_File_Resolution_Max, __construct)
 PHP_METHOD(Phalcon_Filter_Validation_Validator_File_Resolution_Max, validate)
 {
 	double _5$$5, _6$$6;
-	zend_bool result = 0, _7$$7, _8$$8;
+	zend_bool result = 0, _7$$7, _8$$7, _9$$7, _10$$8, _11$$8, _12$$8;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *validation, validation_sub, *field, field_sub, height, maxHeight, maxWidth, resolution, resolutionArray, tmp, value, width, replacePairs, included, _0, _1, _2, _3$$4, _4$$5, _9$$9, _10$$10;
+	zval *validation, validation_sub, *field, field_sub, height, maxHeight, maxWidth, resolution, resolutionArray, tmp, value, width, replacePairs, included, _0, _1, _2, _3$$4, _4$$5, _13$$9, _14$$10;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&validation_sub);
@@ -147,8 +147,8 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_File_Resolution_Max, validate)
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$4);
 	ZVAL_UNDEF(&_4$$5);
-	ZVAL_UNDEF(&_9$$9);
-	ZVAL_UNDEF(&_10$$10);
+	ZVAL_UNDEF(&_13$$9);
+	ZVAL_UNDEF(&_14$$10);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT_OF_CLASS(validation, phalcon_filter_validation_ce)
 		Z_PARAM_ZVAL(field)
@@ -158,15 +158,16 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_File_Resolution_Max, validate)
 	zephir_fetch_params(1, 2, 0, &validation, &field);
 	ZEPHIR_INIT_VAR(&included);
 	ZVAL_BOOL(&included, 0);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkupload", NULL, 0, validation, field);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkUpload", NULL, 0, validation, field);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_FALSE_IDENTICAL(&_0)) {
 		RETURN_MM_BOOL(0);
 	}
-	ZEPHIR_CALL_METHOD(&value, validation, "getvalue", NULL, 0, field);
+	ZEPHIR_CALL_METHOD(&value, validation, "getValue", NULL, 0, field);
 	zephir_check_call_status();
-	zephir_array_fetch_string(&_1, &value, SL("tmp_name"), PH_NOISY | PH_READONLY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 94);
-	ZEPHIR_CALL_FUNCTION(&tmp, "getimagesize", NULL, 314, &_1);
+	zephir_memory_observe(&_1);
+	zephir_array_fetch_string(&_1, &value, SL("tmp_name"), PH_NOISY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 94);
+	ZEPHIR_CALL_FUNCTION(&tmp, "getimagesize", NULL, 340, &_1);
 	zephir_check_call_status();
 	zephir_memory_observe(&width);
 	zephir_array_fetch_long(&width, &tmp, 0, PH_NOISY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 95);
@@ -174,21 +175,26 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_File_Resolution_Max, validate)
 	zephir_array_fetch_long(&height, &tmp, 1, PH_NOISY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 96);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "resolution");
-	ZEPHIR_CALL_METHOD(&resolution, this_ptr, "getoption", NULL, 0, &_2);
+	ZEPHIR_CALL_METHOD(&resolution, this_ptr, "getOption", NULL, 0, &_2);
 	zephir_check_call_status();
 	if (Z_TYPE_P(&resolution) == IS_ARRAY) {
-		zephir_array_fetch(&_3$$4, &resolution, field, PH_NOISY | PH_READONLY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 101);
+		zephir_memory_observe(&_3$$4);
+		zephir_array_fetch(&_3$$4, &resolution, field, PH_NOISY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 101);
 		ZEPHIR_CPY_WRT(&resolution, &_3$$4);
 	}
 	ZEPHIR_INIT_VAR(&resolutionArray);
-	zephir_fast_explode_str(&resolutionArray, SL("x"), &resolution, LONG_MAX);
+	zephir_fast_explode_str(&resolutionArray, SL("x"), &resolution, NULL);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_memory_observe(&maxWidth);
 	zephir_array_fetch_long(&maxWidth, &resolutionArray, 0, PH_NOISY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 105);
 	zephir_memory_observe(&maxHeight);
 	zephir_array_fetch_long(&maxHeight, &resolutionArray, 1, PH_NOISY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 106);
 	ZEPHIR_INIT_NVAR(&_2);
 	ZVAL_STRING(&_2, "included");
-	ZEPHIR_CALL_METHOD(&included, this_ptr, "getoption", NULL, 0, &_2);
+	ZEPHIR_CALL_METHOD(&included, this_ptr, "getOption", NULL, 0, &_2);
 	zephir_check_call_status();
 	if (Z_TYPE_P(&included) == IS_ARRAY) {
 		zephir_memory_observe(&_4$$5);
@@ -203,28 +209,49 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_File_Resolution_Max, validate)
 	}
 	if (zephir_is_true(&included)) {
 		_7$$7 = ZEPHIR_GE(&width, &maxWidth);
-		if (!(_7$$7)) {
-			_7$$7 = ZEPHIR_GE(&height, &maxHeight);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
-		result = _7$$7;
+		_8$$7 = _7$$7;
+		if (!(_8$$7)) {
+			_9$$7 = ZEPHIR_GE(&height, &maxHeight);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			_8$$7 = _9$$7;
+		}
+		result = _8$$7;
 	} else {
-		_8$$8 = ZEPHIR_GT(&width, &maxWidth);
-		if (!(_8$$8)) {
-			_8$$8 = ZEPHIR_GT(&height, &maxHeight);
+		_10$$8 = ZEPHIR_GT(&width, &maxWidth);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
 		}
-		result = _8$$8;
+		_11$$8 = _10$$8;
+		if (!(_11$$8)) {
+			_12$$8 = ZEPHIR_GT(&height, &maxHeight);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			_11$$8 = _12$$8;
+		}
+		result = _11$$8;
 	}
 	if (Z_TYPE_P(&resolution) == IS_ARRAY) {
-		zephir_array_fetch(&_9$$9, &resolution, field, PH_NOISY | PH_READONLY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 123);
-		ZEPHIR_CPY_WRT(&resolution, &_9$$9);
+		zephir_memory_observe(&_13$$9);
+		zephir_array_fetch(&_13$$9, &resolution, field, PH_NOISY, "phalcon/Filter/Validation/Validator/File/Resolution/Max.zep", 123);
+		ZEPHIR_CPY_WRT(&resolution, &_13$$9);
 	}
 	if (result) {
 		ZEPHIR_INIT_VAR(&replacePairs);
 		zephir_create_array(&replacePairs, 1, 0);
 		zephir_array_update_string(&replacePairs, SL(":resolution"), &resolution, PH_COPY | PH_SEPARATE);
-		ZEPHIR_CALL_METHOD(&_10$$10, this_ptr, "messagefactory", NULL, 0, validation, field, &replacePairs);
+		ZEPHIR_CALL_METHOD(&_14$$10, this_ptr, "messageFactory", NULL, 0, validation, field, &replacePairs);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, validation, "appendmessage", NULL, 0, &_10$$10);
+		ZEPHIR_CALL_METHOD(NULL, validation, "appendMessage", NULL, 0, &_14$$10);
 		zephir_check_call_status();
 		RETURN_MM_BOOL(0);
 	}

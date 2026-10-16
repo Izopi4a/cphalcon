@@ -16,7 +16,11 @@ void zephir_concat_ss(zval *result, const char *op1, uint32_t op1_len, const cha
 	int use_copy = 0;
 	size_t offset = 0, length;
 
-	length = op1_len + op2_len;
+	length = op1_len;
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -27,6 +31,9 @@ void zephir_concat_ss(zval *result, const char *op1, uint32_t op1_len, const cha
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -38,6 +45,15 @@ void zephir_concat_ss(zval *result, const char *op1, uint32_t op1_len, const cha
 	memcpy(Z_STRVAL_P(result) + offset + op1_len, op2, op2_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy) {
 	   zval_dtor(&result_copy);
 	}
@@ -85,7 +101,55 @@ void zephir_concat_sssvsvsvsvsvs(zval *result, const char *op1, uint32_t op1_len
 	   }
 	}
 
-	length = op1_len + op2_len + op3_len + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6) + op7_len + Z_STRLEN_P(op8) + op9_len + Z_STRLEN_P(op10) + op11_len + Z_STRLEN_P(op12) + op13_len;
+	length = op1_len;
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(op5_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op5_len;
+	if (UNEXPECTED(Z_STRLEN_P(op6) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op6);
+	if (UNEXPECTED(op7_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op7_len;
+	if (UNEXPECTED(Z_STRLEN_P(op8) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op8);
+	if (UNEXPECTED(op9_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op9_len;
+	if (UNEXPECTED(Z_STRLEN_P(op10) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op10);
+	if (UNEXPECTED(op11_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op11_len;
+	if (UNEXPECTED(Z_STRLEN_P(op12) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op12);
+	if (UNEXPECTED(op13_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op13_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -96,6 +160,9 @@ void zephir_concat_sssvsvsvsvsvs(zval *result, const char *op1, uint32_t op1_len
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -118,6 +185,15 @@ void zephir_concat_sssvsvsvsvsvs(zval *result, const char *op1, uint32_t op1_len
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + op2_len + op3_len + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6) + op7_len + Z_STRLEN_P(op8) + op9_len + Z_STRLEN_P(op10) + op11_len + Z_STRLEN_P(op12), op13, op13_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy4) {
 	   zval_dtor(op4);
 	}
@@ -157,7 +233,15 @@ void zephir_concat_ssv(zval *result, const char *op1, uint32_t op1_len, const ch
 	   }
 	}
 
-	length = op1_len + op2_len + Z_STRLEN_P(op3);
+	length = op1_len;
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -168,6 +252,9 @@ void zephir_concat_ssv(zval *result, const char *op1, uint32_t op1_len, const ch
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -180,6 +267,15 @@ void zephir_concat_ssv(zval *result, const char *op1, uint32_t op1_len, const ch
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + op2_len, Z_STRVAL_P(op3), Z_STRLEN_P(op3));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy3) {
 	   zval_dtor(op3);
 	}
@@ -210,7 +306,27 @@ void zephir_concat_ssvsvs(zval *result, const char *op1, uint32_t op1_len, const
 	   }
 	}
 
-	length = op1_len + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5) + op6_len;
+	length = op1_len;
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -221,6 +337,9 @@ void zephir_concat_ssvsvs(zval *result, const char *op1, uint32_t op1_len, const
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -236,6 +355,15 @@ void zephir_concat_ssvsvs(zval *result, const char *op1, uint32_t op1_len, const
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5), op6, op6_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy3) {
 	   zval_dtor(op3);
 	}
@@ -277,7 +405,35 @@ void zephir_concat_ssvsvsvs(zval *result, const char *op1, uint32_t op1_len, con
 	   }
 	}
 
-	length = op1_len + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5) + op6_len + Z_STRLEN_P(op7) + op8_len;
+	length = op1_len;
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
+	if (UNEXPECTED(op8_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op8_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -288,6 +444,9 @@ void zephir_concat_ssvsvsvs(zval *result, const char *op1, uint32_t op1_len, con
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -305,6 +464,15 @@ void zephir_concat_ssvsvsvs(zval *result, const char *op1, uint32_t op1_len, con
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5) + op6_len + Z_STRLEN_P(op7), op8, op8_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy3) {
 	   zval_dtor(op3);
 	}
@@ -336,7 +504,11 @@ void zephir_concat_sv(zval *result, const char *op1, uint32_t op1_len, zval *op2
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -347,6 +519,9 @@ void zephir_concat_sv(zval *result, const char *op1, uint32_t op1_len, zval *op2
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -358,6 +533,15 @@ void zephir_concat_sv(zval *result, const char *op1, uint32_t op1_len, zval *op2
 	memcpy(Z_STRVAL_P(result) + offset + op1_len, Z_STRVAL_P(op2), Z_STRLEN_P(op2));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -381,7 +565,15 @@ void zephir_concat_svs(zval *result, const char *op1, uint32_t op1_len, zval *op
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -392,6 +584,9 @@ void zephir_concat_svs(zval *result, const char *op1, uint32_t op1_len, zval *op
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -404,6 +599,15 @@ void zephir_concat_svs(zval *result, const char *op1, uint32_t op1_len, zval *op
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2), op3, op3_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -434,7 +638,27 @@ void zephir_concat_svssvs(zval *result, const char *op1, uint32_t op1_len, zval 
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + op4_len + Z_STRLEN_P(op5) + op6_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -445,6 +669,9 @@ void zephir_concat_svssvs(zval *result, const char *op1, uint32_t op1_len, zval 
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -460,6 +687,15 @@ void zephir_concat_svssvs(zval *result, const char *op1, uint32_t op1_len, zval 
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + op4_len + Z_STRLEN_P(op5), op6, op6_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -501,7 +737,35 @@ void zephir_concat_svssvsvs(zval *result, const char *op1, uint32_t op1_len, zva
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + op4_len + Z_STRLEN_P(op5) + op6_len + Z_STRLEN_P(op7) + op8_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
+	if (UNEXPECTED(op8_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op8_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -512,6 +776,9 @@ void zephir_concat_svssvsvs(zval *result, const char *op1, uint32_t op1_len, zva
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -529,6 +796,15 @@ void zephir_concat_svssvsvs(zval *result, const char *op1, uint32_t op1_len, zva
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + op4_len + Z_STRLEN_P(op5) + op6_len + Z_STRLEN_P(op7), op8, op8_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -567,7 +843,19 @@ void zephir_concat_svsv(zval *result, const char *op1, uint32_t op1_len, zval *o
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -578,6 +866,9 @@ void zephir_concat_svsv(zval *result, const char *op1, uint32_t op1_len, zval *o
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -591,6 +882,15 @@ void zephir_concat_svsv(zval *result, const char *op1, uint32_t op1_len, zval *o
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len, Z_STRVAL_P(op4), Z_STRLEN_P(op4));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -625,7 +925,23 @@ void zephir_concat_svsvs(zval *result, const char *op1, uint32_t op1_len, zval *
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(op5_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op5_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -636,6 +952,9 @@ void zephir_concat_svsvs(zval *result, const char *op1, uint32_t op1_len, zval *
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -650,6 +969,15 @@ void zephir_concat_svsvs(zval *result, const char *op1, uint32_t op1_len, zval *
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4), op5, op5_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -698,7 +1026,43 @@ void zephir_concat_svsvssvsvs(zval *result, const char *op1, uint32_t op1_len, z
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len + op6_len + Z_STRLEN_P(op7) + op8_len + Z_STRLEN_P(op9) + op10_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(op5_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op5_len;
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
+	if (UNEXPECTED(op8_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op8_len;
+	if (UNEXPECTED(Z_STRLEN_P(op9) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op9);
+	if (UNEXPECTED(op10_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op10_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -709,6 +1073,9 @@ void zephir_concat_svsvssvsvs(zval *result, const char *op1, uint32_t op1_len, z
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -728,6 +1095,15 @@ void zephir_concat_svsvssvsvs(zval *result, const char *op1, uint32_t op1_len, z
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len + op6_len + Z_STRLEN_P(op7) + op8_len + Z_STRLEN_P(op9), op10, op10_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -777,7 +1153,27 @@ void zephir_concat_svsvsv(zval *result, const char *op1, uint32_t op1_len, zval 
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(op5_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op5_len;
+	if (UNEXPECTED(Z_STRLEN_P(op6) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op6);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -788,6 +1184,9 @@ void zephir_concat_svsvsv(zval *result, const char *op1, uint32_t op1_len, zval 
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -803,6 +1202,15 @@ void zephir_concat_svsvsv(zval *result, const char *op1, uint32_t op1_len, zval 
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len, Z_STRVAL_P(op6), Z_STRLEN_P(op6));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -848,7 +1256,31 @@ void zephir_concat_svsvsvs(zval *result, const char *op1, uint32_t op1_len, zval
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6) + op7_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(op5_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op5_len;
+	if (UNEXPECTED(Z_STRLEN_P(op6) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op6);
+	if (UNEXPECTED(op7_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op7_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -859,6 +1291,9 @@ void zephir_concat_svsvsvs(zval *result, const char *op1, uint32_t op1_len, zval
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -875,6 +1310,15 @@ void zephir_concat_svsvsvs(zval *result, const char *op1, uint32_t op1_len, zval
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6), op7, op7_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -927,7 +1371,39 @@ void zephir_concat_svsvsvsvs(zval *result, const char *op1, uint32_t op1_len, zv
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6) + op7_len + Z_STRLEN_P(op8) + op9_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(op5_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op5_len;
+	if (UNEXPECTED(Z_STRLEN_P(op6) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op6);
+	if (UNEXPECTED(op7_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op7_len;
+	if (UNEXPECTED(Z_STRLEN_P(op8) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op8);
+	if (UNEXPECTED(op9_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op9_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -938,6 +1414,9 @@ void zephir_concat_svsvsvsvs(zval *result, const char *op1, uint32_t op1_len, zv
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -956,6 +1435,15 @@ void zephir_concat_svsvsvsvs(zval *result, const char *op1, uint32_t op1_len, zv
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6) + op7_len + Z_STRLEN_P(op8), op9, op9_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1005,7 +1493,23 @@ void zephir_concat_svsvv(zval *result, const char *op1, uint32_t op1_len, zval *
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1016,6 +1520,9 @@ void zephir_concat_svsvv(zval *result, const char *op1, uint32_t op1_len, zval *
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1030,6 +1537,15 @@ void zephir_concat_svsvv(zval *result, const char *op1, uint32_t op1_len, zval *
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4), Z_STRVAL_P(op5), Z_STRLEN_P(op5));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1082,7 +1598,31 @@ void zephir_concat_svsvvsv(zval *result, const char *op1, uint32_t op1_len, zval
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + op6_len + Z_STRLEN_P(op7);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1093,6 +1633,9 @@ void zephir_concat_svsvvsv(zval *result, const char *op1, uint32_t op1_len, zval
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1109,6 +1652,15 @@ void zephir_concat_svsvvsv(zval *result, const char *op1, uint32_t op1_len, zval
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + op6_len, Z_STRVAL_P(op7), Z_STRLEN_P(op7));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1165,7 +1717,35 @@ void zephir_concat_svsvvsvs(zval *result, const char *op1, uint32_t op1_len, zva
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + op6_len + Z_STRLEN_P(op7) + op8_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
+	if (UNEXPECTED(op8_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op8_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1176,6 +1756,9 @@ void zephir_concat_svsvvsvs(zval *result, const char *op1, uint32_t op1_len, zva
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1193,6 +1776,15 @@ void zephir_concat_svsvvsvs(zval *result, const char *op1, uint32_t op1_len, zva
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + op6_len + Z_STRLEN_P(op7), op8, op8_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1249,7 +1841,27 @@ void zephir_concat_svsvvv(zval *result, const char *op1, uint32_t op1_len, zval 
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + Z_STRLEN_P(op6);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(Z_STRLEN_P(op6) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op6);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1260,6 +1872,9 @@ void zephir_concat_svsvvv(zval *result, const char *op1, uint32_t op1_len, zval 
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1275,6 +1890,15 @@ void zephir_concat_svsvvv(zval *result, const char *op1, uint32_t op1_len, zval 
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5), Z_STRVAL_P(op6), Z_STRLEN_P(op6));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1338,7 +1962,31 @@ void zephir_concat_svsvvvv(zval *result, const char *op1, uint32_t op1_len, zval
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + Z_STRLEN_P(op6) + Z_STRLEN_P(op7);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(Z_STRLEN_P(op6) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op6);
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1349,6 +1997,9 @@ void zephir_concat_svsvvvv(zval *result, const char *op1, uint32_t op1_len, zval
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1365,6 +2016,15 @@ void zephir_concat_svsvvvv(zval *result, const char *op1, uint32_t op1_len, zval
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + Z_STRLEN_P(op6), Z_STRVAL_P(op7), Z_STRLEN_P(op7));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1411,7 +2071,15 @@ void zephir_concat_svv(zval *result, const char *op1, uint32_t op1_len, zval *op
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + Z_STRLEN_P(op3);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1422,6 +2090,9 @@ void zephir_concat_svv(zval *result, const char *op1, uint32_t op1_len, zval *op
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1434,6 +2105,15 @@ void zephir_concat_svv(zval *result, const char *op1, uint32_t op1_len, zval *op
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2), Z_STRVAL_P(op3), Z_STRLEN_P(op3));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1468,7 +2148,19 @@ void zephir_concat_svvs(zval *result, const char *op1, uint32_t op1_len, zval *o
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + op4_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1479,6 +2171,9 @@ void zephir_concat_svvs(zval *result, const char *op1, uint32_t op1_len, zval *o
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1492,6 +2187,15 @@ void zephir_concat_svvs(zval *result, const char *op1, uint32_t op1_len, zval *o
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + Z_STRLEN_P(op3), op4, op4_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1533,7 +2237,23 @@ void zephir_concat_svvvs(zval *result, const char *op1, uint32_t op1_len, zval *
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4) + op5_len;
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(op5_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op5_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1544,6 +2264,9 @@ void zephir_concat_svvvs(zval *result, const char *op1, uint32_t op1_len, zval *
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1558,6 +2281,15 @@ void zephir_concat_svvvs(zval *result, const char *op1, uint32_t op1_len, zval *
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4), op5, op5_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1652,7 +2384,47 @@ void zephir_concat_svvvvvvvvvv(zval *result, const char *op1, uint32_t op1_len, 
 	   }
 	}
 
-	length = op1_len + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + Z_STRLEN_P(op6) + Z_STRLEN_P(op7) + Z_STRLEN_P(op8) + Z_STRLEN_P(op9) + Z_STRLEN_P(op10) + Z_STRLEN_P(op11);
+	length = op1_len;
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(Z_STRLEN_P(op6) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op6);
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
+	if (UNEXPECTED(Z_STRLEN_P(op8) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op8);
+	if (UNEXPECTED(Z_STRLEN_P(op9) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op9);
+	if (UNEXPECTED(Z_STRLEN_P(op10) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op10);
+	if (UNEXPECTED(Z_STRLEN_P(op11) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op11);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1663,6 +2435,9 @@ void zephir_concat_svvvvvvvvvv(zval *result, const char *op1, uint32_t op1_len, 
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1683,6 +2458,15 @@ void zephir_concat_svvvvvvvvvv(zval *result, const char *op1, uint32_t op1_len, 
 	memcpy(Z_STRVAL_P(result) + offset + op1_len + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4) + Z_STRLEN_P(op5) + Z_STRLEN_P(op6) + Z_STRLEN_P(op7) + Z_STRLEN_P(op8) + Z_STRLEN_P(op9) + Z_STRLEN_P(op10), Z_STRVAL_P(op11), Z_STRLEN_P(op11));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy2) {
 	   zval_dtor(op2);
 	}
@@ -1742,7 +2526,11 @@ void zephir_concat_vs(zval *result, zval *op1, const char *op2, uint32_t op2_len
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + op2_len;
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1753,6 +2541,9 @@ void zephir_concat_vs(zval *result, zval *op1, const char *op2, uint32_t op2_len
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1764,6 +2555,15 @@ void zephir_concat_vs(zval *result, zval *op1, const char *op2, uint32_t op2_len
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1), op2, op2_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -1794,7 +2594,15 @@ void zephir_concat_vsv(zval *result, zval *op1, const char *op2, uint32_t op2_le
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1805,6 +2613,9 @@ void zephir_concat_vsv(zval *result, zval *op1, const char *op2, uint32_t op2_le
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1817,6 +2628,15 @@ void zephir_concat_vsv(zval *result, zval *op1, const char *op2, uint32_t op2_le
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + op2_len, Z_STRVAL_P(op3), Z_STRLEN_P(op3));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -1851,7 +2671,19 @@ void zephir_concat_vsvs(zval *result, zval *op1, const char *op2, uint32_t op2_l
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3) + op4_len;
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1862,6 +2694,9 @@ void zephir_concat_vsvs(zval *result, zval *op1, const char *op2, uint32_t op2_l
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1875,6 +2710,15 @@ void zephir_concat_vsvs(zval *result, zval *op1, const char *op2, uint32_t op2_l
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3), op4, op4_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -1916,7 +2760,23 @@ void zephir_concat_vsvsv(zval *result, zval *op1, const char *op2, uint32_t op2_
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1927,6 +2787,9 @@ void zephir_concat_vsvsv(zval *result, zval *op1, const char *op2, uint32_t op2_
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -1941,6 +2804,15 @@ void zephir_concat_vsvsv(zval *result, zval *op1, const char *op2, uint32_t op2_
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3) + op4_len, Z_STRVAL_P(op5), Z_STRLEN_P(op5));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -1986,7 +2858,27 @@ void zephir_concat_vsvsvs(zval *result, zval *op1, const char *op2, uint32_t op2
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5) + op6_len;
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -1997,6 +2889,9 @@ void zephir_concat_vsvsvs(zval *result, zval *op1, const char *op2, uint32_t op2
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2012,6 +2907,15 @@ void zephir_concat_vsvsvs(zval *result, zval *op1, const char *op2, uint32_t op2
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5), op6, op6_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -2064,7 +2968,31 @@ void zephir_concat_vsvsvsv(zval *result, zval *op1, const char *op2, uint32_t op
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5) + op6_len + Z_STRLEN_P(op7);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(op2_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op2_len;
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(op4_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op4_len;
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
+	if (UNEXPECTED(op6_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op6_len;
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -2075,6 +3003,9 @@ void zephir_concat_vsvsvsv(zval *result, zval *op1, const char *op2, uint32_t op
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2091,6 +3022,15 @@ void zephir_concat_vsvsvsv(zval *result, zval *op1, const char *op2, uint32_t op
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + op2_len + Z_STRLEN_P(op3) + op4_len + Z_STRLEN_P(op5) + op6_len, Z_STRVAL_P(op7), Z_STRLEN_P(op7));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -2133,7 +3073,11 @@ void zephir_concat_vv(zval *result, zval *op1, zval *op2, int self_var){
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + Z_STRLEN_P(op2);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -2144,6 +3088,9 @@ void zephir_concat_vv(zval *result, zval *op1, zval *op2, int self_var){
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2155,6 +3102,15 @@ void zephir_concat_vv(zval *result, zval *op1, zval *op2, int self_var){
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1), Z_STRVAL_P(op2), Z_STRLEN_P(op2));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -2189,7 +3145,15 @@ void zephir_concat_vvs(zval *result, zval *op1, zval *op2, const char *op3, uint
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + op3_len;
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -2200,6 +3164,9 @@ void zephir_concat_vvs(zval *result, zval *op1, zval *op2, const char *op3, uint
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2212,6 +3179,15 @@ void zephir_concat_vvs(zval *result, zval *op1, zval *op2, const char *op3, uint
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + Z_STRLEN_P(op2), op3, op3_len);
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -2253,7 +3229,19 @@ void zephir_concat_vvsv(zval *result, zval *op1, zval *op2, const char *op3, uin
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + op3_len + Z_STRLEN_P(op4);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(op3_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op3_len;
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -2264,6 +3252,9 @@ void zephir_concat_vvsv(zval *result, zval *op1, zval *op2, const char *op3, uin
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2277,6 +3268,15 @@ void zephir_concat_vvsv(zval *result, zval *op1, zval *op2, const char *op3, uin
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + op3_len, Z_STRVAL_P(op4), Z_STRLEN_P(op4));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -2322,7 +3322,15 @@ void zephir_concat_vvv(zval *result, zval *op1, zval *op2, zval *op3, int self_v
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + Z_STRLEN_P(op3);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -2333,6 +3341,9 @@ void zephir_concat_vvv(zval *result, zval *op1, zval *op2, zval *op3, int self_v
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2345,6 +3356,15 @@ void zephir_concat_vvv(zval *result, zval *op1, zval *op2, zval *op3, int self_v
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + Z_STRLEN_P(op2), Z_STRVAL_P(op3), Z_STRLEN_P(op3));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -2397,7 +3417,19 @@ void zephir_concat_vvvv(zval *result, zval *op1, zval *op2, zval *op3, zval *op4
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -2408,6 +3440,9 @@ void zephir_concat_vvvv(zval *result, zval *op1, zval *op2, zval *op3, zval *op4
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2421,6 +3456,15 @@ void zephir_concat_vvvv(zval *result, zval *op1, zval *op2, zval *op3, zval *op4
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + Z_STRLEN_P(op3), Z_STRVAL_P(op4), Z_STRLEN_P(op4));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -2491,7 +3535,31 @@ void zephir_concat_vvvvsvv(zval *result, zval *op1, zval *op2, zval *op3, zval *
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6) + Z_STRLEN_P(op7);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(op5_len > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += op5_len;
+	if (UNEXPECTED(Z_STRLEN_P(op6) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op6);
+	if (UNEXPECTED(Z_STRLEN_P(op7) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op7);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -2502,6 +3570,9 @@ void zephir_concat_vvvvsvv(zval *result, zval *op1, zval *op2, zval *op3, zval *
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2518,6 +3589,15 @@ void zephir_concat_vvvvsvv(zval *result, zval *op1, zval *op2, zval *op3, zval *
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4) + op5_len + Z_STRLEN_P(op6), Z_STRVAL_P(op7), Z_STRLEN_P(op7));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}
@@ -2589,7 +3669,23 @@ void zephir_concat_vvvvv(zval *result, zval *op1, zval *op2, zval *op3, zval *op
 	   }
 	}
 
-	length = Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4) + Z_STRLEN_P(op5);
+	length = Z_STRLEN_P(op1);
+	if (UNEXPECTED(Z_STRLEN_P(op2) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op2);
+	if (UNEXPECTED(Z_STRLEN_P(op3) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op3);
+	if (UNEXPECTED(Z_STRLEN_P(op4) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op4);
+	if (UNEXPECTED(Z_STRLEN_P(op5) > ZSTR_MAX_LEN - length)) {
+		goto zephir_concat_overflow;
+	}
+	length += Z_STRLEN_P(op5);
 	if (self_var) {
 
 		if (Z_TYPE_P(result) != IS_STRING) {
@@ -2600,6 +3696,9 @@ void zephir_concat_vvvvv(zval *result, zval *op1, zval *op2, zval *op3, zval *op
 		}
 
 		offset = Z_STRLEN_P(result);
+		if (UNEXPECTED(offset > ZSTR_MAX_LEN - length)) {
+			goto zephir_concat_overflow;
+		}
 		length += offset;
 		Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);
 
@@ -2614,6 +3713,15 @@ void zephir_concat_vvvvv(zval *result, zval *op1, zval *op2, zval *op3, zval *op
 	memcpy(Z_STRVAL_P(result) + offset + Z_STRLEN_P(op1) + Z_STRLEN_P(op2) + Z_STRLEN_P(op3) + Z_STRLEN_P(op4), Z_STRVAL_P(op5), Z_STRLEN_P(op5));
 	Z_STRVAL_P(result)[length] = 0;
 	zend_string_forget_hash_val(Z_STR_P(result));
+	goto zephir_concat_cleanup;
+
+zephir_concat_overflow:
+	zend_throw_error(NULL, "String size overflow");
+	if (!self_var) {
+		ZVAL_UNDEF(result);
+	}
+
+zephir_concat_cleanup:
 	if (use_copy1) {
 	   zval_dtor(op1);
 	}

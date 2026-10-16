@@ -44,7 +44,7 @@ PHP_METHOD(Phalcon_Mvc_Micro, stop);
 zend_object *zephir_init_properties_Phalcon_Mvc_Micro(zend_class_entry *class_type);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_mvc_micro___construct, 0, 0, 0)
-	ZEND_ARG_OBJ_INFO(0, container, Phalcon\\Di\\DiInterface, 1)
+	ZEND_ARG_OBJ_TYPE_MASK(0, container, Phalcon\\Di\\DiInterface, MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_micro_after, 0, 1, Phalcon\\Mvc\\Micro, 0)

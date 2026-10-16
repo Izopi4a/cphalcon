@@ -142,34 +142,36 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_Callback, validate)
 	zephir_fetch_params(1, 2, 0, &validation, &field);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "callback");
-	ZEPHIR_CALL_METHOD(&callback, this_ptr, "getoption", NULL, 0, &_0);
+	ZEPHIR_CALL_METHOD(&callback, this_ptr, "getOption", NULL, 0, &_0);
 	zephir_check_call_status();
 	if (zephir_is_callable(&callback)) {
-		ZEPHIR_CALL_METHOD(&data, validation, "getentity", NULL, 0);
+		ZEPHIR_CALL_METHOD(&data, validation, "getEntity", NULL, 0);
 		zephir_check_call_status();
 		if (ZEPHIR_IS_EMPTY(&data)) {
-			ZEPHIR_CALL_METHOD(&data, validation, "getdata", NULL, 0);
+			ZEPHIR_CALL_METHOD(&data, validation, "getData", NULL, 0);
 			zephir_check_call_status();
 		}
 		ZEPHIR_CALL_FUNCTION(&returnedValue, "call_user_func", NULL, 191, &callback, &data);
 		zephir_check_call_status();
-		_1$$3 = Z_TYPE_P(&returnedValue) == IS_OBJECT;
-		if (_1$$3) {
-			_1$$3 = zephir_instance_of_ev(&returnedValue, phalcon_filter_validation_validatorinterface_ce);
-		}
 		if (((Z_TYPE_P(&returnedValue) == IS_TRUE || Z_TYPE_P(&returnedValue) == IS_FALSE) == 1)) {
 			if (!(zephir_is_true(&returnedValue))) {
-				ZEPHIR_CALL_METHOD(&_2$$6, this_ptr, "messagefactory", NULL, 0, validation, field);
+				ZEPHIR_CALL_METHOD(&_2$$6, this_ptr, "messageFactory", NULL, 0, validation, field);
 				zephir_check_call_status();
-				ZEPHIR_CALL_METHOD(NULL, validation, "appendmessage", NULL, 0, &_2$$6);
+				ZEPHIR_CALL_METHOD(NULL, validation, "appendMessage", NULL, 0, &_2$$6);
 				zephir_check_call_status();
 				RETURN_MM_BOOL(0);
 			}
 			RETURN_MM_BOOL(1);
-		} else if (_1$$3) {
-			ZEPHIR_RETURN_CALL_METHOD(&returnedValue, "validate", NULL, 0, validation, field);
-			zephir_check_call_status();
-			RETURN_MM();
+		} else {
+			_1$$3 = Z_TYPE_P(&returnedValue) == IS_OBJECT;
+			if (_1$$3) {
+				_1$$3 = zephir_instance_of_ev(&returnedValue, phalcon_filter_validation_validatorinterface_ce);
+			}
+			if (_1$$3) {
+				ZEPHIR_RETURN_CALL_METHOD(&returnedValue, "validate", NULL, 0, validation, field);
+				zephir_check_call_status();
+				RETURN_MM();
+			}
 		}
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_filter_validation_validator_exception_ce, "Callback must return bool or Phalcon\\Filter\\Validation\\Validator object", "phalcon/Filter/Validation/Validator/Callback.zep", 114);
 		return;

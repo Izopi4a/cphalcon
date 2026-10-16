@@ -95,6 +95,19 @@ PHP_METHOD(Phalcon_Db_Index, __construct)
 	ZVAL_UNDEF(&name_zv);
 	ZVAL_UNDEF(&type_zv);
 	ZVAL_UNDEF(&columns);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	static zend_string *_zephir_prop_2 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("name", 4, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("columns", 7, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_2)) {
+		_zephir_prop_2 = zend_string_init("type", 4, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(2, 3)
 		Z_PARAM_STR(name)
 		ZEPHIR_Z_PARAM_ARRAY(columns, columns_param)
@@ -104,17 +117,20 @@ PHP_METHOD(Phalcon_Db_Index, __construct)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	columns_param = ZEND_CALL_ARG(execute_data, 2);
+	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_OBS_COPY_OR_DUP(&columns, columns_param);
 	if (!type) {
 		type = zend_string_init(ZEND_STRL(""), 0);
+		zephir_memory_observe(&type_zv);
 		ZVAL_STR(&type_zv, type);
 	} else {
-		ZVAL_STR_COPY(&type_zv, type);
+		zephir_memory_observe(&type_zv);
+	ZVAL_STR_COPY(&type_zv, type);
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("name"), &name_zv);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("columns"), &columns);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("type"), &type_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 427, &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 428, &columns);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 429, &type_zv);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -124,7 +140,7 @@ PHP_METHOD(Phalcon_Db_Index, __construct)
 PHP_METHOD(Phalcon_Db_Index, getColumns)
 {
 
-	RETURN_MEMBER(getThis(), "columns");
+	RETURN_MEMBER_TYPED(getThis(), "columns", IS_ARRAY);
 }
 
 /**
@@ -133,7 +149,7 @@ PHP_METHOD(Phalcon_Db_Index, getColumns)
 PHP_METHOD(Phalcon_Db_Index, getName)
 {
 
-	RETURN_MEMBER(getThis(), "name");
+	RETURN_MEMBER_TYPED(getThis(), "name", IS_STRING);
 }
 
 /**
@@ -142,6 +158,6 @@ PHP_METHOD(Phalcon_Db_Index, getName)
 PHP_METHOD(Phalcon_Db_Index, getType)
 {
 
-	RETURN_MEMBER(getThis(), "type");
+	RETURN_MEMBER_TYPED(getThis(), "type", IS_STRING);
 }
 

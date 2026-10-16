@@ -56,6 +56,11 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Signer_Hmac, __construct)
 
 	ZVAL_UNDEF(&algo_zv);
 	ZVAL_UNDEF(&supported);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("algorithm", 9, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR(algo)
@@ -64,8 +69,10 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Signer_Hmac, __construct)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	if (!algo) {
 		algo = zend_string_init(ZEND_STRL("sha512"), 0);
+		zephir_memory_observe(&algo_zv);
 		ZVAL_STR(&algo_zv, algo);
 	} else {
+	zephir_memory_observe(&algo_zv);
 	ZVAL_STR_COPY(&algo_zv, algo);
 	}
 	ZEPHIR_INIT_VAR(&supported);
@@ -73,11 +80,11 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Signer_Hmac, __construct)
 	add_assoc_long_ex(&supported, SL("sha512"), 1);
 	add_assoc_long_ex(&supported, SL("sha384"), 1);
 	add_assoc_long_ex(&supported, SL("sha256"), 1);
-	if (!(zephir_array_isset(&supported, &algo_zv))) {
+	if (!(zephir_array_isset_value(&supported, &algo_zv))) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_encryption_security_jwt_exceptions_unsupportedalgorithmexception_ce, "Unsupported HMAC algorithm", "phalcon/Encryption/Security/JWT/Signer/Hmac.zep", 40);
 		return;
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("algorithm"), &algo_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 493, &algo_zv);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -96,17 +103,25 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Signer_Hmac, getAlgHeader)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("algorithm", 9, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_read_property(&_1, this_ptr, ZEND_STRL("algorithm"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 493, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "sha");
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "");
 	zephir_fast_str_replace(&_0, &_2, &_3, &_1);
 	ZEPHIR_CONCAT_SV(return_value, "HS", &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 
@@ -134,9 +149,11 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Signer_Hmac, sign)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&payload_zv);
 	ZVAL_STR_COPY(&payload_zv, payload);
+	zephir_memory_observe(&passphrase_zv);
 	ZVAL_STR_COPY(&passphrase_zv, passphrase);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "gethash", NULL, 263, &payload_zv, &passphrase_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "getHash", NULL, 290, &payload_zv, &passphrase_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -169,10 +186,13 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Signer_Hmac, verify)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&source_zv);
 	ZVAL_STR_COPY(&source_zv, source);
+	zephir_memory_observe(&payload_zv);
 	ZVAL_STR_COPY(&payload_zv, payload);
+	zephir_memory_observe(&passphrase_zv);
 	ZVAL_STR_COPY(&passphrase_zv, passphrase);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "gethash", NULL, 263, &payload_zv, &passphrase_zv);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getHash", NULL, 290, &payload_zv, &passphrase_zv);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(zephir_hash_equals(&source_zv, &_0));
 }
@@ -203,11 +223,13 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Signer_Hmac, getHash)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&payload_zv);
 	ZVAL_STR_COPY(&payload_zv, payload);
+	zephir_memory_observe(&passphrase_zv);
 	ZVAL_STR_COPY(&passphrase_zv, passphrase);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getalgorithm", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getAlgorithm", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_FUNCTION("hash_hmac", NULL, 232, &_0, &payload_zv, &passphrase_zv, &__$true);
+	ZEPHIR_RETURN_CALL_FUNCTION("hash_hmac", NULL, 259, &_0, &payload_zv, &passphrase_zv, &__$true);
 	zephir_check_call_status();
 	RETURN_MM();
 }

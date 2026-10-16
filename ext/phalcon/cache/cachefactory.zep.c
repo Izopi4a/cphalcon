@@ -51,11 +51,16 @@ PHP_METHOD(Phalcon_Cache_CacheFactory, __construct)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&factory_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("adapterFactory", 14, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(factory, phalcon_cache_adapterfactory_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &factory);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("adapterFactory"), factory);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 305, factory);
 }
 
 /**
@@ -107,12 +112,12 @@ PHP_METHOD(Phalcon_Cache_CacheFactory, load)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &config);
 	ZEPHIR_SEPARATE_PARAM(config);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkconfig", NULL, 0, config);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkConfig", NULL, 0, config);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(config, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "adapter");
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkconfigelement", NULL, 0, config, &_1);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkConfigElement", NULL, 0, config, &_1);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(config, &_0);
 	zephir_memory_observe(&name);
@@ -122,7 +127,7 @@ PHP_METHOD(Phalcon_Cache_CacheFactory, load)
 		ZEPHIR_INIT_NVAR(&options);
 		array_init(&options);
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "newinstance", NULL, 0, &name, &options);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "newInstance", NULL, 0, &name, &options);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -168,6 +173,11 @@ PHP_METHOD(Phalcon_Cache_CacheFactory, newInstance)
 	ZVAL_UNDEF(&adapter);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&options);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("adapterFactory", 14, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(name)
 		Z_PARAM_OPTIONAL
@@ -178,6 +188,7 @@ PHP_METHOD(Phalcon_Cache_CacheFactory, newInstance)
 	if (ZEND_NUM_ARGS() > 1) {
 		options_param = ZEND_CALL_ARG(execute_data, 2);
 	}
+	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	if (!options_param) {
 		ZEPHIR_INIT_VAR(&options);
@@ -185,8 +196,8 @@ PHP_METHOD(Phalcon_Cache_CacheFactory, newInstance)
 	} else {
 	ZEPHIR_OBS_COPY_OR_DUP(&options, options_param);
 	}
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("adapterFactory"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_CALL_METHOD(&adapter, &_0, "newinstance", NULL, 0, &name_zv, &options);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 305, PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_CALL_METHOD(&adapter, &_0, "newInstance", NULL, 0, &name_zv, &options);
 	zephir_check_call_status();
 	object_init_ex(return_value, phalcon_cache_cache_ce);
 	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 192, &adapter);

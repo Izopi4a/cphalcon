@@ -1,0 +1,5 @@
+
+extern zend_class_entry *phalcon_container_interop_ioc_iocthrowable_ce;
+
+ZEPHIR_INIT_CLASS(Phalcon_Container_Interop_Ioc_IocThrowable);
+

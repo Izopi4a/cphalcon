@@ -106,7 +106,9 @@ PHP_METHOD(Phalcon_Logger_AdapterFactory, newInstance)
 	if (ZEND_NUM_ARGS() > 2) {
 		options_param = ZEND_CALL_ARG(execute_data, 3);
 	}
+	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
+	zephir_memory_observe(&fileName_zv);
 	ZVAL_STR_COPY(&fileName_zv, fileName);
 	if (!options_param) {
 		ZEPHIR_INIT_VAR(&options);
@@ -114,7 +116,7 @@ PHP_METHOD(Phalcon_Logger_AdapterFactory, newInstance)
 	} else {
 		zephir_get_arrval(&options, options_param);
 	}
-	ZEPHIR_CALL_METHOD(&definition, this_ptr, "getservice", NULL, 0, &name_zv);
+	ZEPHIR_CALL_METHOD(&definition, this_ptr, "getService", NULL, 0, &name_zv);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 2, 0);

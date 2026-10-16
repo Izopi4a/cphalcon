@@ -158,11 +158,16 @@ PHP_METHOD(Phalcon_Domain_Payload_Payload, setException)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&exception_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("exception", 9, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(exception, zend_ce_throwable)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &exception);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("exception"), exception);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 459, exception);
 	RETURN_THISW();
 }
 
@@ -175,11 +180,16 @@ PHP_METHOD(Phalcon_Domain_Payload_Payload, setExtras)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&extras_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("extras", 6, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(extras)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &extras);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("extras"), extras);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 460, extras);
 	RETURN_THISW();
 }
 
@@ -192,11 +202,16 @@ PHP_METHOD(Phalcon_Domain_Payload_Payload, setInput)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&input_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("input", 5, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(input)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &input);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("input"), input);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 461, input);
 	RETURN_THISW();
 }
 
@@ -209,11 +224,16 @@ PHP_METHOD(Phalcon_Domain_Payload_Payload, setMessages)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&messages_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("messages", 8, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(messages)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &messages);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("messages"), messages);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 462, messages);
 	RETURN_THISW();
 }
 
@@ -226,11 +246,16 @@ PHP_METHOD(Phalcon_Domain_Payload_Payload, setOutput)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&output_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("output", 6, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(output)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &output);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("output"), output);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 463, output);
 	RETURN_THISW();
 }
 
@@ -243,11 +268,16 @@ PHP_METHOD(Phalcon_Domain_Payload_Payload, setStatus)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&status_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("status", 6, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(status)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &status);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("status"), status);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 464, status);
 	RETURN_THISW();
 }
 

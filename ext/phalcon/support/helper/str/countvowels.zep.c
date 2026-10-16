@@ -59,6 +59,7 @@ PHP_METHOD(Phalcon_Support_Helper_Str_CountVowels, __invoke)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "/[aeiouy]/i");
@@ -66,7 +67,8 @@ PHP_METHOD(Phalcon_Support_Helper_Str_CountVowels, __invoke)
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "/[aeiouy]/i");
 	zephir_preg_match(&_1, &_2, &text_zv, &matches, 1, 0 , 0 );
-	zephir_array_fetch_long(&_3, &matches, 0, PH_NOISY | PH_READONLY, "phalcon/Support/Helper/Str/CountVowels.zep", 30);
+	zephir_memory_observe(&_3);
+	zephir_array_fetch_long(&_3, &matches, 0, PH_NOISY, "phalcon/Support/Helper/Str/CountVowels.zep", 30);
 	RETURN_MM_LONG(zephir_fast_count_int(&_3));
 }
 

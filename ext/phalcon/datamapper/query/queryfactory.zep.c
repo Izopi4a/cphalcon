@@ -58,6 +58,11 @@ PHP_METHOD(Phalcon_DataMapper_Query_QueryFactory, __construct)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&selectClass);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("selectClass", 11, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(selectClass_param)
@@ -75,7 +80,7 @@ PHP_METHOD(Phalcon_DataMapper_Query_QueryFactory, __construct)
 		ZEPHIR_INIT_NVAR(&selectClass);
 		ZVAL_STRING(&selectClass, "Phalcon\\DataMapper\\Query\\Select");
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("selectClass"), &selectClass);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 398, &selectClass);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -123,9 +128,9 @@ PHP_METHOD(Phalcon_DataMapper_Query_QueryFactory, newDelete)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &connection);
 	object_init_ex(return_value, phalcon_datamapper_query_delete_ce);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "newbind", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "newBind", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 209, connection, &_0);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 236, connection, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -153,9 +158,9 @@ PHP_METHOD(Phalcon_DataMapper_Query_QueryFactory, newInsert)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &connection);
 	object_init_ex(return_value, phalcon_datamapper_query_insert_ce);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "newbind", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "newBind", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 210, connection, &_0);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 237, connection, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -181,22 +186,33 @@ PHP_METHOD(Phalcon_DataMapper_Query_QueryFactory, newSelect)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&selectClass);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("selectClass", 11, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(connection, phalcon_datamapper_pdo_connection_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &connection);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("selectClass"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 398, PH_NOISY_CC | PH_READONLY);
 	zephir_get_strval(&selectClass, &_0);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_fetch_safe_class(&_1, &selectClass);
 	_2 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_1), Z_STRLEN_P(&_1), ZEND_FETCH_CLASS_AUTO);
 	if(!_2) {
 		RETURN_MM_NULL();
 	}
 	object_init_ex(return_value, _2);
+	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(return_value);
+	zephir_check_call_status();
 	if (zephir_has_constructor(return_value)) {
-		ZEPHIR_CALL_METHOD(&_3, this_ptr, "newbind", NULL, 0);
+		ZEPHIR_CALL_METHOD(&_3, this_ptr, "newBind", NULL, 0);
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0, connection, &_3);
 		zephir_check_call_status();
@@ -228,9 +244,9 @@ PHP_METHOD(Phalcon_DataMapper_Query_QueryFactory, newUpdate)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &connection);
 	object_init_ex(return_value, phalcon_datamapper_query_update_ce);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "newbind", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "newBind", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 211, connection, &_0);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 238, connection, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

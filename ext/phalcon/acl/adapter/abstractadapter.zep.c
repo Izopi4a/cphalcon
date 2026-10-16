@@ -102,7 +102,7 @@ PHP_METHOD(Phalcon_Acl_Adapter_AbstractAdapter, getActiveRole)
 PHP_METHOD(Phalcon_Acl_Adapter_AbstractAdapter, getDefaultAction)
 {
 
-	RETURN_MEMBER(getThis(), "defaultAccess");
+	RETURN_MEMBER_TYPED(getThis(), "defaultAccess", IS_LONG);
 }
 
 /**
@@ -115,12 +115,17 @@ PHP_METHOD(Phalcon_Acl_Adapter_AbstractAdapter, setDefaultAction)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("defaultAccess", 13, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(defaultAccess)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &defaultAccess_param);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, defaultAccess);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("defaultAccess"), &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 191, &_0);
 }
 

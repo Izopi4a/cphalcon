@@ -755,7 +755,7 @@ class Crypt implements CryptInterface
         int blockSize,
         string decrypted
     ) -> string {
-        var decrypted, padding;
+        var padding;
 
         if true === this->checkIsMode(["cbc", "ecb"], mode) {
             let padding   = this->padding,

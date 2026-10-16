@@ -66,6 +66,11 @@ PHP_METHOD(Phalcon_Session_Adapter_Redis, __construct)
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&options);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("adapter", 7, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_OBJECT_OF_CLASS(factory, phalcon_storage_adapterfactory_ce)
 		Z_PARAM_OPTIONAL
@@ -84,14 +89,14 @@ PHP_METHOD(Phalcon_Session_Adapter_Redis, __construct)
 	ZVAL_STRING(&_1, "prefix");
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "sess-reds-");
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getarrval", NULL, 0, &options, &_1, &_2);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getArrVal", NULL, 0, &options, &_1, &_2);
 	zephir_check_call_status();
 	zephir_array_update_string(&options, SL("prefix"), &_0, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "redis");
-	ZEPHIR_CALL_METHOD(&_3, factory, "newinstance", NULL, 0, &_1, &options);
+	ZEPHIR_CALL_METHOD(&_3, factory, "newInstance", NULL, 0, &_1, &options);
 	zephir_check_call_status();
-	zephir_update_property_zval(this_ptr, ZEND_STRL("adapter"), &_3);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 940, &_3);
 	ZEPHIR_MM_RESTORE();
 }
 

@@ -17,6 +17,7 @@
 #include "kernel/object.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/main.h"
 
 
 /**
@@ -75,6 +76,15 @@ PHP_METHOD(Phalcon_Html_Helper_Input_AbstractInput, __invoke)
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&attributes);
 	ZVAL_UNDEF(&_0);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("type", 4, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("attributes", 10, 1);
+	}
+
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_STR(name)
@@ -87,11 +97,13 @@ PHP_METHOD(Phalcon_Html_Helper_Input_AbstractInput, __invoke)
 	if (ZEND_NUM_ARGS() > 2) {
 		attributes_param = ZEND_CALL_ARG(execute_data, 3);
 	}
+	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	if (!value) {
 		ZEPHIR_INIT_VAR(&value_zv);
 	} else {
-		ZVAL_STR_COPY(&value_zv, value);
+		zephir_memory_observe(&value_zv);
+	ZVAL_STR_COPY(&value_zv, value);
 	}
 	if (!attributes_param) {
 		ZEPHIR_INIT_VAR(&attributes);
@@ -102,21 +114,21 @@ PHP_METHOD(Phalcon_Html_Helper_Input_AbstractInput, __invoke)
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 2, 0);
 	zephir_memory_observe(&_1);
-	zephir_read_property(&_1, this_ptr, ZEND_STRL("type"), PH_NOISY_CC);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 9, PH_NOISY_CC);
 	zephir_array_update_string(&_0, SL("type"), &_1, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(&_0, SL("name"), &name_zv, PH_COPY | PH_SEPARATE);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("attributes"), &_0);
-	if (!(zephir_array_isset_string(&attributes, SL("id")))) {
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 10, &_0);
+	if (!(zephir_array_isset_value_string(&attributes, SL("id")))) {
 		ZEPHIR_INIT_VAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "id");
 		zephir_update_property_array(this_ptr, SL("attributes"), &_2$$3, &name_zv);
 	}
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "setvalue", NULL, 0, &value_zv);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "setValue", NULL, 0, &value_zv);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_3);
-	zephir_read_property(&_4, this_ptr, ZEND_STRL("attributes"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_4, this_ptr, _zephir_prop_1, 10, PH_NOISY_CC | PH_READONLY);
 	zephir_fast_array_merge(&_3, &_4, &attributes);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("attributes"), &_3);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 10, &_3);
 	RETURN_THIS();
 }
 
@@ -140,18 +152,31 @@ PHP_METHOD(Phalcon_Html_Helper_Input_AbstractInput, __toString)
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("attributes", 10, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("doctype", 7, 1);
+	}
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&closeTag);
 	ZVAL_STRING(&closeTag, "");
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("attributes"), PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 10, PH_NOISY_CC | PH_READONLY);
+	if (UNEXPECTED(Z_TYPE_P(&_0) != IS_ARRAY)) {
+		zephir_throw_variable_type_error(&_0, "attributes", "array");
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_CPY_WRT(&attributes, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	array_init(&_1);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("attributes"), &_1);
-	zephir_read_property(&_2, this_ptr, ZEND_STRL("doctype"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_CALL_METHOD(&_3, &_2, "gettype", NULL, 0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 10, &_1);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 11, PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_CALL_METHOD(&_3, &_2, "getType", NULL, 0);
 	zephir_check_call_status();
 	if (ZEPHIR_GT_LONG(&_3, 5)) {
 		ZEPHIR_INIT_NVAR(&closeTag);
@@ -159,7 +184,7 @@ PHP_METHOD(Phalcon_Html_Helper_Input_AbstractInput, __toString)
 	}
 	ZEPHIR_INIT_VAR(&_4);
 	ZVAL_STRING(&_4, "input");
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "rendertag", NULL, 0, &_4, &attributes, &closeTag);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "renderTag", NULL, 0, &_4, &attributes, &closeTag);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -191,7 +216,8 @@ PHP_METHOD(Phalcon_Html_Helper_Input_AbstractInput, setValue)
 	if (!value) {
 		ZEPHIR_INIT_VAR(&value_zv);
 	} else {
-		ZVAL_STR_COPY(&value_zv, value);
+		zephir_memory_observe(&value_zv);
+	ZVAL_STR_COPY(&value_zv, value);
 	}
 	_0 = zephir_is_numeric(&value_zv);
 	if (!(_0)) {

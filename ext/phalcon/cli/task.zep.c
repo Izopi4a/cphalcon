@@ -74,7 +74,7 @@ PHP_METHOD(Phalcon_Cli_Task, __construct)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	if ((zephir_method_exists_ex(this_ptr, ZEND_STRL("onconstruct")) == SUCCESS)) {
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "onconstruct", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "onConstruct", NULL, 0);
 		zephir_check_call_status();
 	}
 	ZEPHIR_MM_RESTORE();
@@ -98,10 +98,15 @@ PHP_METHOD(Phalcon_Cli_Task, setEventsManager)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&eventsManager_sub);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("eventsManager", 13, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(eventsManager, phalcon_events_managerinterface_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &eventsManager);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("eventsManager"), eventsManager);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 338, eventsManager);
 }
 

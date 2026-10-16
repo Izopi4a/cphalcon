@@ -79,7 +79,9 @@ PHP_METHOD(Phalcon_Html_Helper_Anchor, __invoke)
 	if (ZEND_NUM_ARGS() > 3) {
 		raw_param = ZEND_CALL_ARG(execute_data, 4);
 	}
+	zephir_memory_observe(&href_zv);
 	ZVAL_STR_COPY(&href_zv, href);
+	zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	if (!attributes_param) {
 		ZEPHIR_INIT_VAR(&attributes);
@@ -91,7 +93,7 @@ PHP_METHOD(Phalcon_Html_Helper_Anchor, __invoke)
 		raw = 0;
 	} else {
 		}
-	ZEPHIR_CALL_METHOD(&overrides, this_ptr, "processattributes", NULL, 0, &href_zv, &attributes);
+	ZEPHIR_CALL_METHOD(&overrides, this_ptr, "processAttributes", NULL, 0, &href_zv, &attributes);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "a");
@@ -100,7 +102,7 @@ PHP_METHOD(Phalcon_Html_Helper_Anchor, __invoke)
 	} else {
 		ZVAL_BOOL(&_1, 0);
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "renderfullelement", NULL, 0, &_0, &text_zv, &overrides, &_1);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "renderFullElement", NULL, 0, &_0, &text_zv, &overrides, &_1);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -128,12 +130,17 @@ PHP_METHOD(Phalcon_Html_Helper_Anchor, processAttributes)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	attributes_param = ZEND_CALL_ARG(execute_data, 2);
+	zephir_memory_observe(&href_zv);
 	ZVAL_STR_COPY(&href_zv, href);
 	zephir_get_arrval(&attributes, attributes_param);
 	ZEPHIR_INIT_VAR(&overrides);
 	zephir_create_array(&overrides, 1, 0);
 	zephir_array_update_string(&overrides, SL("href"), &href_zv, PH_COPY | PH_SEPARATE);
 	zephir_array_unset_string(&attributes, SL("href"), PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_fast_array_merge(return_value, &overrides, &attributes);
 	RETURN_MM();
 }

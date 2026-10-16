@@ -124,6 +124,39 @@ PHP_METHOD(Phalcon_Db_Reference, __construct)
 	ZVAL_UNDEF(&onDelete);
 	ZVAL_UNDEF(&onUpdate);
 	ZVAL_UNDEF(&definition);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	static zend_string *_zephir_prop_2 = NULL;
+	static zend_string *_zephir_prop_3 = NULL;
+	static zend_string *_zephir_prop_4 = NULL;
+	static zend_string *_zephir_prop_5 = NULL;
+	static zend_string *_zephir_prop_6 = NULL;
+	static zend_string *_zephir_prop_7 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("name", 4, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("referencedTable", 15, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_2)) {
+		_zephir_prop_2 = zend_string_init("columns", 7, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_3)) {
+		_zephir_prop_3 = zend_string_init("referencedColumns", 17, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_4)) {
+		_zephir_prop_4 = zend_string_init("schemaName", 10, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_5)) {
+		_zephir_prop_5 = zend_string_init("referencedSchema", 16, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_6)) {
+		_zephir_prop_6 = zend_string_init("onDelete", 8, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_7)) {
+		_zephir_prop_7 = zend_string_init("onUpdate", 8, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(name)
 		ZEPHIR_Z_PARAM_ARRAY(definition, definition_param)
@@ -131,42 +164,43 @@ PHP_METHOD(Phalcon_Db_Reference, __construct)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	definition_param = ZEND_CALL_ARG(execute_data, 2);
+	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_OBS_COPY_OR_DUP(&definition, definition_param);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("name"), &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 439, &name_zv);
 	zephir_memory_observe(&referencedTable);
 	if (UNEXPECTED(!(zephir_array_isset_string_fetch(&referencedTable, &definition, SL("referencedTable"), 0)))) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_db_exception_ce, "Referenced table is required", "phalcon/Db/Reference.zep", 103);
 		return;
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("referencedTable"), &referencedTable);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 440, &referencedTable);
 	zephir_memory_observe(&columns);
 	if (UNEXPECTED(!(zephir_array_isset_string_fetch(&columns, &definition, SL("columns"), 0)))) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_db_exception_ce, "Foreign key columns are required", "phalcon/Db/Reference.zep", 109);
 		return;
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("columns"), &columns);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 441, &columns);
 	zephir_memory_observe(&referencedColumns);
 	if (UNEXPECTED(!(zephir_array_isset_string_fetch(&referencedColumns, &definition, SL("referencedColumns"), 0)))) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_db_exception_ce, "Referenced columns of the foreign key are required", "phalcon/Db/Reference.zep", 117);
 		return;
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("referencedColumns"), &referencedColumns);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 442, &referencedColumns);
 	zephir_memory_observe(&schema);
 	if (zephir_array_isset_string_fetch(&schema, &definition, SL("schema"), 0)) {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("schemaName"), &schema);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 443, &schema);
 	}
 	zephir_memory_observe(&referencedSchema);
 	if (zephir_array_isset_string_fetch(&referencedSchema, &definition, SL("referencedSchema"), 0)) {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("referencedSchema"), &referencedSchema);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_5, 444, &referencedSchema);
 	}
 	zephir_memory_observe(&onDelete);
 	if (zephir_array_isset_string_fetch(&onDelete, &definition, SL("onDelete"), 0)) {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("onDelete"), &onDelete);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 445, &onDelete);
 	}
 	zephir_memory_observe(&onUpdate);
 	if (zephir_array_isset_string_fetch(&onUpdate, &definition, SL("onUpdate"), 0)) {
-		zephir_update_property_zval(this_ptr, ZEND_STRL("onUpdate"), &onUpdate);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_7, 446, &onUpdate);
 	}
 	if (UNEXPECTED(zephir_fast_count_int(&columns) != zephir_fast_count_int(&referencedColumns))) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_db_exception_ce, "Number of columns is not equals than the number of columns referenced", "phalcon/Db/Reference.zep", 141);
@@ -181,7 +215,7 @@ PHP_METHOD(Phalcon_Db_Reference, __construct)
 PHP_METHOD(Phalcon_Db_Reference, getColumns)
 {
 
-	RETURN_MEMBER(getThis(), "columns");
+	RETURN_MEMBER_TYPED(getThis(), "columns", IS_ARRAY);
 }
 
 /**
@@ -190,7 +224,7 @@ PHP_METHOD(Phalcon_Db_Reference, getColumns)
 PHP_METHOD(Phalcon_Db_Reference, getName)
 {
 
-	RETURN_MEMBER(getThis(), "name");
+	RETURN_MEMBER_TYPED(getThis(), "name", IS_STRING);
 }
 
 /**
@@ -199,7 +233,7 @@ PHP_METHOD(Phalcon_Db_Reference, getName)
 PHP_METHOD(Phalcon_Db_Reference, getReferencedColumns)
 {
 
-	RETURN_MEMBER(getThis(), "referencedColumns");
+	RETURN_MEMBER_TYPED(getThis(), "referencedColumns", IS_ARRAY);
 }
 
 /**
@@ -208,7 +242,7 @@ PHP_METHOD(Phalcon_Db_Reference, getReferencedColumns)
 PHP_METHOD(Phalcon_Db_Reference, getReferencedSchema)
 {
 
-	RETURN_MEMBER(getThis(), "referencedSchema");
+	RETURN_MEMBER_TYPED(getThis(), "referencedSchema", IS_STRING);
 }
 
 /**
@@ -217,7 +251,7 @@ PHP_METHOD(Phalcon_Db_Reference, getReferencedSchema)
 PHP_METHOD(Phalcon_Db_Reference, getReferencedTable)
 {
 
-	RETURN_MEMBER(getThis(), "referencedTable");
+	RETURN_MEMBER_TYPED(getThis(), "referencedTable", IS_STRING);
 }
 
 /**
@@ -226,7 +260,7 @@ PHP_METHOD(Phalcon_Db_Reference, getReferencedTable)
 PHP_METHOD(Phalcon_Db_Reference, getSchemaName)
 {
 
-	RETURN_MEMBER(getThis(), "schemaName");
+	RETURN_MEMBER_TYPED(getThis(), "schemaName", IS_STRING);
 }
 
 /**
@@ -235,7 +269,7 @@ PHP_METHOD(Phalcon_Db_Reference, getSchemaName)
 PHP_METHOD(Phalcon_Db_Reference, getOnDelete)
 {
 
-	RETURN_MEMBER(getThis(), "onDelete");
+	RETURN_MEMBER_TYPED(getThis(), "onDelete", IS_STRING);
 }
 
 /**
@@ -244,6 +278,6 @@ PHP_METHOD(Phalcon_Db_Reference, getOnDelete)
 PHP_METHOD(Phalcon_Db_Reference, getOnUpdate)
 {
 
-	RETURN_MEMBER(getThis(), "onUpdate");
+	RETURN_MEMBER_TYPED(getThis(), "onUpdate", IS_STRING);
 }
 

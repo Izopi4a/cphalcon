@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
-#include "kernel/concat.h"
 #include "kernel/string.h"
+#include "kernel/concat.h"
 #include "kernel/object.h"
 #include "kernel/operators.h"
 #include "kernel/array.h"
@@ -47,10 +47,11 @@ ZEPHIR_INIT_CLASS(Phalcon_Support_Helper_Str_PascalCase)
  */
 PHP_METHOD(Phalcon_Support_Helper_Str_PascalCase, __invoke)
 {
+	zend_bool _8;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_4 = NULL;
+	zephir_fcall_cache_entry *_5 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval text_zv, delimiters_zv, exploded, output, element, *_0, _1, _2$$3, _3$$3, _5$$3, _6$$4, _7$$4, _8$$4;
+	zval text_zv, delimiters_zv, exploded, output, element, *_0, _1, *_2, _7, _3$$3, _4$$3, _6$$3, _9$$4, _10$$4, _11$$4;
 	zend_string *text = NULL, *delimiters = NULL;
 	zval *this_ptr = getThis();
 
@@ -60,12 +61,13 @@ PHP_METHOD(Phalcon_Support_Helper_Str_PascalCase, __invoke)
 	ZVAL_UNDEF(&output);
 	ZVAL_UNDEF(&element);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2$$3);
+	ZVAL_UNDEF(&_7);
 	ZVAL_UNDEF(&_3$$3);
-	ZVAL_UNDEF(&_5$$3);
-	ZVAL_UNDEF(&_6$$4);
-	ZVAL_UNDEF(&_7$$4);
-	ZVAL_UNDEF(&_8$$4);
+	ZVAL_UNDEF(&_4$$3);
+	ZVAL_UNDEF(&_6$$3);
+	ZVAL_UNDEF(&_9$$4);
+	ZVAL_UNDEF(&_10$$4);
+	ZVAL_UNDEF(&_11$$4);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(text)
@@ -74,50 +76,72 @@ PHP_METHOD(Phalcon_Support_Helper_Str_PascalCase, __invoke)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	if (!delimiters) {
 		ZEPHIR_INIT_VAR(&delimiters_zv);
 	} else {
-		ZVAL_STR_COPY(&delimiters_zv, delimiters);
+		zephir_memory_observe(&delimiters_zv);
+	ZVAL_STR_COPY(&delimiters_zv, delimiters);
 	}
-	ZEPHIR_CALL_METHOD(&exploded, this_ptr, "processarray", NULL, 0, &text_zv, &delimiters_zv);
+	ZEPHIR_CALL_METHOD(&exploded, this_ptr, "processArray", NULL, 0, &text_zv, &delimiters_zv);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&output);
 	ZVAL_STRING(&output, "");
-	zephir_is_iterable(&exploded, 0, "phalcon/Support/Helper/Str/PascalCase.zep", 37);
-	if (Z_TYPE_P(&exploded) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&exploded), _0)
+	if (Z_TYPE_P(&exploded) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_1);
+		zephir_string_to_char_array(&_1, &exploded);
+		_0 = &_1;
+	} else {
+		_0 = &exploded;
+	}
+	zephir_is_iterable(_0, 0, "phalcon/Support/Helper/Str/PascalCase.zep", 37);
+	if (Z_TYPE_P(_0) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_0), _2)
 		{
 			ZEPHIR_INIT_NVAR(&element);
-			ZVAL_COPY(&element, _0);
-			ZEPHIR_INIT_NVAR(&_2$$3);
-			ZEPHIR_CALL_FUNCTION(&_3$$3, "mb_strtolower", &_4, 7, &element);
+			ZVAL_COPY(&element, _2);
+			ZEPHIR_INIT_NVAR(&_3$$3);
+			ZEPHIR_CALL_FUNCTION(&_4$$3, "mb_strtolower", &_5, 7, &element);
 			zephir_check_call_status();
-			zephir_ucfirst(&_2$$3, &_3$$3);
-			ZEPHIR_INIT_NVAR(&_5$$3);
-			ZEPHIR_CONCAT_VV(&_5$$3, &output, &_2$$3);
-			ZEPHIR_CPY_WRT(&output, &_5$$3);
+			zephir_ucfirst(&_3$$3, &_4$$3);
+			ZEPHIR_INIT_NVAR(&_6$$3);
+			ZEPHIR_CONCAT_VV(&_6$$3, &output, &_3$$3);
+			if (UNEXPECTED(EG(exception))) {
+				ZEPHIR_MM_RESTORE();
+				return;
+			}
+			ZEPHIR_CPY_WRT(&output, &_6$$3);
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, &exploded, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, _0, "rewind", NULL, 0);
 		zephir_check_call_status();
+		_8 = 1;
 		while (1) {
-			ZEPHIR_CALL_METHOD(&_1, &exploded, "valid", NULL, 0);
+			if (_8) {
+				_8 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, _0, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_7, _0, "valid", NULL, 0);
 			zephir_check_call_status();
-			if (!zend_is_true(&_1)) {
+			if (!zend_is_true(&_7)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&element, &exploded, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD(&element, _0, "current", NULL, 0);
 			zephir_check_call_status();
-				ZEPHIR_INIT_NVAR(&_6$$4);
-				ZEPHIR_CALL_FUNCTION(&_7$$4, "mb_strtolower", &_4, 7, &element);
+				ZEPHIR_INIT_NVAR(&_9$$4);
+				ZEPHIR_CALL_FUNCTION(&_10$$4, "mb_strtolower", &_5, 7, &element);
 				zephir_check_call_status();
-				zephir_ucfirst(&_6$$4, &_7$$4);
-				ZEPHIR_INIT_NVAR(&_8$$4);
-				ZEPHIR_CONCAT_VV(&_8$$4, &output, &_6$$4);
-				ZEPHIR_CPY_WRT(&output, &_8$$4);
-			ZEPHIR_CALL_METHOD(NULL, &exploded, "next", NULL, 0);
-			zephir_check_call_status();
+				zephir_ucfirst(&_9$$4, &_10$$4);
+				ZEPHIR_INIT_NVAR(&_11$$4);
+				ZEPHIR_CONCAT_VV(&_11$$4, &output, &_9$$4);
+				if (UNEXPECTED(EG(exception))) {
+					ZEPHIR_MM_RESTORE();
+					return;
+				}
+				ZEPHIR_CPY_WRT(&output, &_11$$4);
 		}
 	}
 	ZEPHIR_INIT_NVAR(&element);
@@ -167,6 +191,7 @@ PHP_METHOD(Phalcon_Support_Helper_Str_PascalCase, processArray)
 	if (ZEND_NUM_ARGS() > 1) {
 		delimiters_param = ZEND_CALL_ARG(execute_data, 2);
 	}
+	zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	if (!delimiters_param) {
 		ZEPHIR_INIT_VAR(&delimiters);
@@ -209,15 +234,27 @@ PHP_METHOD(Phalcon_Support_Helper_Str_PascalCase, processArray)
 		zephir_array_fast_append(&_8$$4, &_7$$4);
 		zephir_fast_str_replace(&_5$$4, &_6$$4, &_8$$4, &delimiters);
 		zephir_get_strval(&delimiters, &_5$$4);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_INIT_VAR(&_9$$4);
 		ZEPHIR_CONCAT_SV(&_9$$4, "-", &delimiters);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
 		ZEPHIR_CPY_WRT(&delimiters, &_9$$4);
 	}
 	ZEPHIR_INIT_VAR(&_10);
 	ZEPHIR_CONCAT_SVS(&_10, "/[", &delimiters, "]+/");
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZVAL_LONG(&_11, -1);
 	ZVAL_LONG(&_12, (2 | 1));
-	ZEPHIR_CALL_FUNCTION(&result, "preg_split", NULL, 77, &_10, &text_zv, &_11, &_12);
+	ZEPHIR_CALL_FUNCTION(&result, "preg_split", NULL, 76, &_10, &text_zv, &_11, &_12);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_13);
 	if (ZEPHIR_IS_FALSE_IDENTICAL(&result)) {

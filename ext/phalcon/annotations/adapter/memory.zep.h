@@ -10,7 +10,7 @@ PHP_METHOD(Phalcon_Annotations_Adapter_Memory, write);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_annotations_adapter_memory___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_annotations_adapter_memory_read, 0, 0, 1)
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX(arginfo_phalcon_annotations_adapter_memory_read, 0, 1, Phalcon\\Annotations\\Reflection, MAY_BE_BOOL)
 	ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 

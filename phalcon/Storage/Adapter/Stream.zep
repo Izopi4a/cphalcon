@@ -467,7 +467,7 @@ class Stream extends AbstractAdapter
      */
     private function storePayload(array payload, string key) -> bool
     {
-        var directory, payload;
+        var directory;
 
         let payload   = serialize(payload),
             directory = this->getDir(key);

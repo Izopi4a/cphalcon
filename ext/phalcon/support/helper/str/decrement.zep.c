@@ -67,16 +67,23 @@ PHP_METHOD(Phalcon_Support_Helper_Str_Decrement, __invoke)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	if (!separator) {
 		separator = zend_string_init(ZEND_STRL("_"), 0);
+		zephir_memory_observe(&separator_zv);
 		ZVAL_STR(&separator_zv, separator);
 	} else {
-		ZVAL_STR_COPY(&separator_zv, separator);
+		zephir_memory_observe(&separator_zv);
+	ZVAL_STR_COPY(&separator_zv, separator);
 	}
 	number = 0;
 	ZEPHIR_INIT_VAR(&parts);
-	zephir_fast_explode(&parts, &separator_zv, &text_zv, LONG_MAX);
+	zephir_fast_explode(&parts, &separator_zv, &text_zv, NULL);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_VAR(&_0);
 	if (Z_TYPE_P(&parts) != IS_ARRAY) {
 		ZEPHIR_INIT_NVAR(&_0);
@@ -85,20 +92,26 @@ PHP_METHOD(Phalcon_Support_Helper_Str_Decrement, __invoke)
 		ZEPHIR_CPY_WRT(&_0, &parts);
 	}
 	ZEPHIR_CPY_WRT(&parts, &_0);
-	if (1 == zephir_array_isset_long(&parts, 1)) {
+	if (1 == zephir_array_isset_value_long(&parts, 1)) {
 		zephir_memory_observe(&_1$$3);
 		zephir_array_fetch_long(&_1$$3, &parts, 1, PH_NOISY, "phalcon/Support/Helper/Str/Decrement.zep", 36);
 		number = zephir_get_intval(&_1$$3);
 		number--;
 		if (number <= 0) {
-			zephir_array_fetch_long(&_2$$4, &parts, 0, PH_NOISY | PH_READONLY, "phalcon/Support/Helper/Str/Decrement.zep", 39);
-			RETURN_CTOR(&_2$$4);
+			zephir_memory_observe(&_2$$4);
+			zephir_array_fetch_long(&_2$$4, &parts, 0, PH_NOISY, "phalcon/Support/Helper/Str/Decrement.zep", 39);
+			RETURN_CCTOR(&_2$$4);
 		}
 	}
-	zephir_array_fetch_long(&_3, &parts, 0, PH_NOISY | PH_READONLY, "phalcon/Support/Helper/Str/Decrement.zep", 43);
+	zephir_memory_observe(&_3);
+	zephir_array_fetch_long(&_3, &parts, 0, PH_NOISY, "phalcon/Support/Helper/Str/Decrement.zep", 43);
 	ZEPHIR_INIT_VAR(&_4);
 	ZVAL_LONG(&_4, number);
 	ZEPHIR_CONCAT_VVV(return_value, &_3, &separator_zv, &_4);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	RETURN_MM();
 }
 

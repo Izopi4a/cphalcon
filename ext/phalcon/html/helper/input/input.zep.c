@@ -47,11 +47,16 @@ PHP_METHOD(Phalcon_Html_Helper_Input_Input, setType)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&type_zv);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("type", 4, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(type)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&type_zv, type);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("type"), &type_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 561, &type_zv);
 	RETURN_THISW();
 }
 

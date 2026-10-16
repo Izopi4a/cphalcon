@@ -17,6 +17,7 @@
 #include "kernel/fcall.h"
 #include "kernel/exception.h"
 #include "kernel/concat.h"
+#include "kernel/string.h"
 #include "kernel/operators.h"
 
 
@@ -51,7 +52,7 @@ ZEPHIR_INIT_CLASS(Phalcon_Filter_Validation_AbstractValidatorComposite)
 PHP_METHOD(Phalcon_Filter_Validation_AbstractValidatorComposite, getValidators)
 {
 
-	RETURN_MEMBER(getThis(), "validators");
+	RETURN_MEMBER_TYPED(getThis(), "validators", IS_ARRAY);
 }
 
 /**
@@ -59,9 +60,10 @@ PHP_METHOD(Phalcon_Filter_Validation_AbstractValidatorComposite, getValidators)
  */
 PHP_METHOD(Phalcon_Filter_Validation_AbstractValidatorComposite, validate)
 {
+	zend_bool _10;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *validation, validation_sub, *field, field_sub, validator, _0, _4, *_5, _6, _1$$3, _2$$3, _3$$3, _7$$4, _8$$6;
+	zval *validation, validation_sub, *field, field_sub, validator, _0, _4, *_5, _6, *_7, _9, _1$$3, _2$$3, _3$$3, _8$$4, _11$$6;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&validation_sub);
@@ -70,11 +72,12 @@ PHP_METHOD(Phalcon_Filter_Validation_AbstractValidatorComposite, validate)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_6);
+	ZVAL_UNDEF(&_9);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);
-	ZVAL_UNDEF(&_7$$4);
-	ZVAL_UNDEF(&_8$$6);
+	ZVAL_UNDEF(&_8$$4);
+	ZVAL_UNDEF(&_11$$6);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT_OF_CLASS(validation, phalcon_filter_validation_ce)
 		Z_PARAM_ZVAL(field)
@@ -82,7 +85,7 @@ PHP_METHOD(Phalcon_Filter_Validation_AbstractValidatorComposite, validate)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &validation, &field);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getvalidators", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getValidators", NULL, 0);
 	zephir_check_call_status();
 	if (UNEXPECTED(zephir_fast_count_int(&_0) == 0)) {
 		ZEPHIR_INIT_VAR(&_1$$3);
@@ -91,44 +94,60 @@ PHP_METHOD(Phalcon_Filter_Validation_AbstractValidatorComposite, validate)
 		zephir_get_class(&_2$$3, this_ptr, 0);
 		ZEPHIR_INIT_VAR(&_3$$3);
 		ZEPHIR_CONCAT_VS(&_3$$3, &_2$$3, " does not have any validator added");
-		ZEPHIR_CALL_METHOD(NULL, &_1$$3, "__construct", NULL, 33, &_3$$3);
+		if (UNEXPECTED(EG(exception))) {
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+		ZEPHIR_CALL_METHOD(NULL, &_1$$3, "__construct", NULL, 32, &_3$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(&_1$$3, "phalcon/Filter/Validation/AbstractValidatorComposite.zep", 41);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_METHOD(&_4, this_ptr, "getvalidators", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_4, this_ptr, "getValidators", NULL, 0);
 	zephir_check_call_status();
-	zephir_is_iterable(&_4, 0, "phalcon/Filter/Validation/AbstractValidatorComposite.zep", 50);
-	if (Z_TYPE_P(&_4) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_4), _5)
+	if (Z_TYPE_P(&_4) == IS_STRING) {
+		ZEPHIR_INIT_VAR(&_6);
+		zephir_string_to_char_array(&_6, &_4);
+		_5 = &_6;
+	} else {
+		_5 = &_4;
+	}
+	zephir_is_iterable(_5, 0, "phalcon/Filter/Validation/AbstractValidatorComposite.zep", 50);
+	if (Z_TYPE_P(_5) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(_5), _7)
 		{
 			ZEPHIR_INIT_NVAR(&validator);
-			ZVAL_COPY(&validator, _5);
-			ZEPHIR_CALL_METHOD(&_7$$4, &validator, "validate", NULL, 0, validation, field);
+			ZVAL_COPY(&validator, _7);
+			ZEPHIR_CALL_METHOD(&_8$$4, &validator, "validate", NULL, 0, validation, field);
 			zephir_check_call_status();
-			if (ZEPHIR_IS_FALSE_IDENTICAL(&_7$$4)) {
+			if (ZEPHIR_IS_FALSE_IDENTICAL(&_8$$4)) {
 				RETURN_MM_BOOL(0);
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEPHIR_CALL_METHOD(NULL, &_4, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, _5, "rewind", NULL, 0);
 		zephir_check_call_status();
+		_10 = 1;
 		while (1) {
-			ZEPHIR_CALL_METHOD(&_6, &_4, "valid", NULL, 0);
+			if (_10) {
+				_10 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, _5, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_9, _5, "valid", NULL, 0);
 			zephir_check_call_status();
-			if (!zend_is_true(&_6)) {
+			if (!zend_is_true(&_9)) {
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&validator, &_4, "current", NULL, 0);
+			ZEPHIR_CALL_METHOD(&validator, _5, "current", NULL, 0);
 			zephir_check_call_status();
-				ZEPHIR_CALL_METHOD(&_8$$6, &validator, "validate", NULL, 0, validation, field);
+				ZEPHIR_CALL_METHOD(&_11$$6, &validator, "validate", NULL, 0, validation, field);
 				zephir_check_call_status();
-				if (ZEPHIR_IS_FALSE_IDENTICAL(&_8$$6)) {
+				if (ZEPHIR_IS_FALSE_IDENTICAL(&_11$$6)) {
 					RETURN_MM_BOOL(0);
 				}
-			ZEPHIR_CALL_METHOD(NULL, &_4, "next", NULL, 0);
-			zephir_check_call_status();
 		}
 	}
 	ZEPHIR_INIT_NVAR(&validator);

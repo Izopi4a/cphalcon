@@ -634,7 +634,7 @@ class Loader extends AbstractEventsAware
         string className,
         bool isDirectory = false
     ) -> bool {
-        var className, dirSeparator, directory, extension, extensions,
+        var dirSeparator, directory, extension, extensions,
             filePath, fixedDirectory, nsSeparator;
 
         let dirSeparator = DIRECTORY_SEPARATOR,

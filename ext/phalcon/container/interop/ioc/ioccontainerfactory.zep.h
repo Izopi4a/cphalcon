@@ -1,0 +1,12 @@
+
+extern zend_class_entry *phalcon_container_interop_ioc_ioccontainerfactory_ce;
+
+ZEPHIR_INIT_CLASS(Phalcon_Container_Interop_Ioc_IocContainerFactory);
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_container_interop_ioc_ioccontainerfactory_newcontainer, 0, 0, Phalcon\\Container\\Interop\\Ioc\\IocContainer, 0)
+ZEND_END_ARG_INFO()
+
+ZEPHIR_INIT_FUNCS(phalcon_container_interop_ioc_ioccontainerfactory_method_entry) {
+	PHP_ABSTRACT_ME(Phalcon_Container_Interop_Ioc_IocContainerFactory, newContainer, arginfo_phalcon_container_interop_ioc_ioccontainerfactory_newcontainer)
+	PHP_FE_END
+};

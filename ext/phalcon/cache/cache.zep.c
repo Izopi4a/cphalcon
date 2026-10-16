@@ -48,7 +48,7 @@ PHP_METHOD(Phalcon_Cache_Cache, clear)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doclear", NULL, 0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doClear", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -78,8 +78,9 @@ PHP_METHOD(Phalcon_Cache_Cache, delete)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "dodelete", NULL, 0, &key_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doDelete", NULL, 0, &key_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -101,7 +102,7 @@ PHP_METHOD(Phalcon_Cache_Cache, deleteMultiple)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &keys);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "dodeletemultiple", NULL, 0, keys);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doDeleteMultiple", NULL, 0, keys);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -140,12 +141,13 @@ PHP_METHOD(Phalcon_Cache_Cache, get)
 	if (ZEND_NUM_ARGS() > 1) {
 		defaultValue = ZEND_CALL_ARG(execute_data, 2);
 	}
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
 	if (!defaultValue) {
 		defaultValue = &defaultValue_sub;
 		defaultValue = &__$null;
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doget", NULL, 0, &key_zv, defaultValue);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doGet", NULL, 0, &key_zv, defaultValue);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -176,7 +178,7 @@ PHP_METHOD(Phalcon_Cache_Cache, getMultiple)
 		defaultValue = &defaultValue_sub;
 		defaultValue = &__$null;
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "dogetmultiple", NULL, 0, keys, defaultValue);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doGetMultiple", NULL, 0, keys, defaultValue);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -205,8 +207,9 @@ PHP_METHOD(Phalcon_Cache_Cache, has)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "dohas", NULL, 0, &key_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doHas", NULL, 0, &key_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -254,12 +257,13 @@ PHP_METHOD(Phalcon_Cache_Cache, set)
 	if (ZEND_NUM_ARGS() > 2) {
 		ttl = ZEND_CALL_ARG(execute_data, 3);
 	}
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
 	if (!ttl) {
 		ttl = &ttl_sub;
 		ttl = &__$null;
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doset", NULL, 0, &key_zv, value, ttl);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doSet", NULL, 0, &key_zv, value, ttl);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -290,7 +294,7 @@ PHP_METHOD(Phalcon_Cache_Cache, setMultiple)
 		ttl = &ttl_sub;
 		ttl = &__$null;
 	}
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "dosetmultiple", NULL, 0, values, ttl);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "doSetMultiple", NULL, 0, values, ttl);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -63,6 +63,11 @@ PHP_METHOD(Phalcon_Html_Helper_Ol, add)
 	ZVAL_UNDEF(&attributes);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
+	static zend_string *_zephir_prop_0 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("elementTag", 10, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_STR(text)
 		Z_PARAM_OPTIONAL
@@ -77,6 +82,7 @@ PHP_METHOD(Phalcon_Html_Helper_Ol, add)
 	if (ZEND_NUM_ARGS() > 2) {
 		raw_param = ZEND_CALL_ARG(execute_data, 3);
 	}
+	zephir_memory_observe(&text_zv);
 	ZVAL_STR_COPY(&text_zv, text);
 	if (!attributes_param) {
 		ZEPHIR_INIT_VAR(&attributes);
@@ -96,7 +102,7 @@ PHP_METHOD(Phalcon_Html_Helper_Ol, add)
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_create_array(&_2, 4, 0);
 	zephir_memory_observe(&_3);
-	zephir_read_property(&_3, this_ptr, ZEND_STRL("elementTag"), PH_NOISY_CC);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 197, PH_NOISY_CC);
 	zephir_array_fast_append(&_2, &_3);
 	zephir_array_fast_append(&_2, &text_zv);
 	zephir_array_fast_append(&_2, &attributes);

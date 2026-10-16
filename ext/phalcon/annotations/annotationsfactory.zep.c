@@ -101,17 +101,21 @@ PHP_METHOD(Phalcon_Annotations_AnnotationsFactory, load)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &config);
 	ZEPHIR_SEPARATE_PARAM(config);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkconfig", NULL, 0, config);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkConfig", NULL, 0, config);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(config, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "adapter");
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkconfigelement", NULL, 0, config, &_1);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkConfigElement", NULL, 0, config, &_1);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(config, &_0);
 	zephir_memory_observe(&name);
 	zephir_array_fetch_string(&name, config, SL("adapter"), PH_NOISY, "phalcon/Annotations/AnnotationsFactory.zep", 48);
 	zephir_array_unset_string(config, SL("adapter"), PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_INIT_NVAR(&_1);
 	object_init_ex(&_1, phalcon_support_helper_arr_get_ce);
 	if (zephir_has_constructor(&_1)) {
@@ -125,7 +129,7 @@ PHP_METHOD(Phalcon_Annotations_AnnotationsFactory, load)
 	ZVAL_STRING(&_3, "options");
 	ZEPHIR_CALL_METHOD(&options, &_1, "__invoke", NULL, 162, config, &_3, &_2);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "newinstance", NULL, 0, &name, &options);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "newInstance", NULL, 0, &name, &options);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -162,6 +166,7 @@ PHP_METHOD(Phalcon_Annotations_AnnotationsFactory, newInstance)
 	if (ZEND_NUM_ARGS() > 1) {
 		options_param = ZEND_CALL_ARG(execute_data, 2);
 	}
+	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	if (!options_param) {
 		ZEPHIR_INIT_VAR(&options);
@@ -169,7 +174,7 @@ PHP_METHOD(Phalcon_Annotations_AnnotationsFactory, newInstance)
 	} else {
 	ZEPHIR_OBS_COPY_OR_DUP(&options, options_param);
 	}
-	ZEPHIR_CALL_METHOD(&definition, this_ptr, "getservice", NULL, 0, &name_zv);
+	ZEPHIR_CALL_METHOD(&definition, this_ptr, "getService", NULL, 0, &name_zv);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 1, 0);

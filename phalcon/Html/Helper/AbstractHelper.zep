@@ -225,7 +225,7 @@ abstract class AbstractHelper
         array attributes = [],
         string close = ""
     ) -> string {
-        var attrs, close, escapedAttrs;
+        var attrs, escapedAttrs;
 
         let escapedAttrs = "";
         if (true !== empty(attributes)) {

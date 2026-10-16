@@ -23,6 +23,7 @@
 #include "kernel/string.h"
 #include "kernel/operators.h"
 
+#include "Zend/zend_exceptions.h"
 #include "Zend/zend_operators.h"
 
 /**
@@ -63,6 +64,21 @@ void zephir_concat_self(zval *left, zval *right)
 
 	left_length = Z_STRLEN_P(left);
 	right_length = Z_STRLEN_P(right);
+
+	if (UNEXPECTED(right_length > ZSTR_MAX_LEN - left_length)) {
+		zend_throw_error(NULL, "String size overflow");
+
+		if (use_copy_left) {
+			zval_dtor(&left_copy);
+		}
+
+		if (use_copy_right) {
+			zval_dtor(&right_copy);
+		}
+
+		return;
+	}
+
 	length = left_length + right_length;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
 	ZVAL_NEW_STR(left, target);
@@ -85,7 +101,8 @@ void zephir_concat_self(zval *left, zval *right)
 void zephir_concat_self_char(zval *left, unsigned char right)
 {
 	zval left_copy;
-	int use_copy = 0, length;
+	int use_copy = 0;
+	size_t length;
 	zend_string *target;
 
 	if (Z_TYPE_P(left) == IS_NULL) {
@@ -104,6 +121,16 @@ void zephir_concat_self_char(zval *left, unsigned char right)
 	}
 
 	SEPARATE_ZVAL_NOREF(left);
+
+	if (UNEXPECTED(Z_STRLEN_P(left) >= ZSTR_MAX_LEN)) {
+		zend_throw_error(NULL, "String size overflow");
+
+		if (use_copy) {
+			zval_dtor(&left_copy);
+		}
+
+		return;
+	}
 
 	length = Z_STRLEN_P(left) + 1;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
@@ -140,6 +167,17 @@ void zephir_concat_self_str(zval *left, const char *right, int right_length)
 
 	SEPARATE_ZVAL_NOREF(left);
 	left_length = Z_STRLEN_P(left);
+
+	if (UNEXPECTED((size_t) right_length > ZSTR_MAX_LEN - left_length)) {
+		zend_throw_error(NULL, "String size overflow");
+
+		if (use_copy) {
+			zval_dtor(&left_copy);
+		}
+
+		return;
+	}
+
 	length = left_length + right_length;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
 	ZVAL_NEW_STR(left, target);
@@ -152,9 +190,63 @@ void zephir_concat_self_str(zval *left, const char *right, int right_length)
 }
 
 /**
+ * Appends the decimal representation of the right operator to the left operator.
+ *
+ * Mirrors what PHP does for `$s .= $n` with an `IS_LONG` right operand:
+ * `concat_function()` renders it through `zend_long_to_str()`.
+ */
+void zephir_concat_self_long(zval *left, const zend_long right)
+{
+	zend_string *right_str = zend_long_to_str(right);
+
+	/* `zend_long_to_str()` yields at most MAX_LENGTH_OF_LONG bytes, so the
+	   narrowing to `int` cannot lose data. */
+	zephir_concat_self_str(left, ZSTR_VAL(right_str), (int) ZSTR_LEN(right_str));
+
+	/* Small values come back interned (`ZSTR_CHAR`); `zend_string_release()`
+	   knows to leave those alone. */
+	zend_string_release(right_str);
+}
+
+/**
+ * Appends the string form of the right operator to the left operator.
+ *
+ * Mirrors what PHP does for `$s .= $d` with an `IS_DOUBLE` right operand:
+ * `concat_function()` renders it through `zval_get_string()`, which reads
+ * `EG(precision)` at run time. Rendering the value here with `printf()` would
+ * freeze that precision at build time, and `zend_double_to_str()` reaches the
+ * conversion directly but only exists on PHP 8.1 and later. Boxing the operand
+ * and letting `zephir_concat_self()` call `zephir_make_printable_zval()` is the
+ * same conversion on every supported version.
+ */
+void zephir_concat_self_double(zval *left, const double right)
+{
+	zval right_zv;
+
+	ZVAL_DOUBLE(&right_zv, right);
+	zephir_concat_self(left, &right_zv);
+}
+
+/**
+ * Appends the string form of a boolean right operator to the left operator.
+ *
+ * PHP renders `true` as "1" and `false` as the empty string. Appending nothing
+ * is not the same as doing nothing: `$v = 5; $v .= false;` leaves PHP holding
+ * the *string* "5", so `false` goes through the same conversion rather than
+ * returning early.
+ */
+void zephir_concat_self_bool(zval *left, const zend_bool right)
+{
+	zval right_zv;
+
+	ZVAL_BOOL(&right_zv, right);
+	zephir_concat_self(left, &right_zv);
+}
+
+/**
  * Natural compare with long operandus on right
  */
-int zephir_compare_strict_long(zval *op1, long op2)
+int zephir_compare_strict_long(zval *op1, zend_long op2)
 {
 	switch (Z_TYPE_P(op1)) {
 		case IS_LONG:
@@ -239,32 +331,18 @@ int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length)
 	return 0;
 }
 
-void zephir_negate(zval *z)
+/**
+ * PHP's `-$x`, which the engine compiles to `$x * -1` (zend_compile_unary_pm()
+ * in Zend/zend_compile.c), so every operand type, warning, TypeError, integer
+ * overflow and operator overload behaves the same. The operand is untouched.
+ */
+int zephir_negate(zval *result, zval *op)
 {
-	while (1) {
-		switch (Z_TYPE_P(z)) {
-			case IS_LONG:
-				ZVAL_LONG(z, -Z_LVAL_P(z));
-				return;
+	zval minus_one;
 
-			case IS_TRUE:
-				ZVAL_LONG(z, -1);
-				return;
+	ZVAL_LONG(&minus_one, -1);
 
-			case IS_DOUBLE:
-				ZVAL_DOUBLE(z, -Z_DVAL_P(z));
-				return;
-
-			case IS_NULL:
-			case IS_FALSE:
-				ZVAL_LONG(z, 0);
-				return;
-
-			default:
-				convert_scalar_to_number(z);
-				assert(Z_TYPE_P(z) == IS_LONG || Z_TYPE_P(z) == IS_DOUBLE);
-		}
-	}
+	return mul_function(result, op, &minus_one);
 }
 
 void zephir_convert_to_object(zval *op)
@@ -273,55 +351,16 @@ void zephir_convert_to_object(zval *op)
 }
 
 /**
- * Returns the long value of a zval
+ * Returns the long value of a zval, as PHP's (int) cast does: an object runs
+ * its cast_object handler or warns, a float string saturates. See #2746.
  */
-long zephir_get_intval_ex(const zval *op)
+zend_long zephir_get_intval_ex(const zval *op)
 {
-    int type;
-    double double_value = 0;
-    zend_long long_value = 0;
-
-	switch (Z_TYPE_P(op)) {
-		case IS_ARRAY:
-			return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
-
-		case IS_RESOURCE:
-			return (zend_long)Z_RES_HANDLE_P(op);
-
-		case IS_CALLABLE:
-		case IS_OBJECT:
-			return 1;
-
-		case IS_LONG:
-			return Z_LVAL_P(op);
-
-		case IS_TRUE:
-			return 1;
-
-		case IS_FALSE:
-			return 0;
-
-		case IS_DOUBLE:
-			return (long) Z_DVAL_P(op);
-
-		case IS_STRING: {
-			ASSUME(Z_STRVAL_P(op) != NULL);
-
-			type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 1);
-            switch (type) {
-                case IS_LONG:
-                    return long_value;
-
-                case IS_DOUBLE:
-                    return (long) double_value;
-            }
-		}
-	}
-
-	return 0;
+	/* PHP 8.0 declares the parameter non-const */
+	return zval_get_long((zval *) op);
 }
 
-long zephir_get_charval_ex(const zval *op)
+zend_long zephir_get_charval_ex(const zval *op)
 {
 	switch (Z_TYPE_P(op)) {
         case IS_ARRAY:
@@ -340,7 +379,7 @@ long zephir_get_charval_ex(const zval *op)
 			return 0;
 
 		case IS_DOUBLE:
-			return (long) Z_DVAL_P(op);
+			return zend_dval_to_lval(Z_DVAL_P(op));
 
 		case IS_STRING: {
 			if (Z_STRLEN_P(op) > 0) {
@@ -354,47 +393,17 @@ long zephir_get_charval_ex(const zval *op)
 }
 
 /**
- * Returns the long value of a zval
+ * Returns the double value of a zval, as PHP's (float) cast does. See #2746.
  */
 double zephir_get_doubleval_ex(const zval *op)
 {
-	int type;
-    double double_value = 0;
-    zend_long long_value = 0;
-
-	switch (Z_TYPE_P(op)) {
-        case IS_ARRAY:
-            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (double) 1 : 0;
-
-	    case IS_CALLABLE:
-	    case IS_RESOURCE:
-	    case IS_OBJECT:
-	        return (double) 1;
-
-		case IS_LONG:
-			return (double) Z_LVAL_P(op);
-
-		case IS_TRUE:
-			return (double) 1;
-
-		case IS_FALSE:
-			return (double) 0;
-
-		case IS_DOUBLE:
-			return Z_DVAL_P(op);
-
-		case IS_STRING:
-		    type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 1);
-            switch (type) {
-                case IS_LONG:
-                    return (double) long_value;
-
-                case IS_DOUBLE:
-                    return double_value;
-            }
+	/* zval_get_double() has no IS_UNDEF case: an unassigned variable reads as 0 */
+	if (Z_TYPE_P(op) == IS_UNDEF) {
+		return 0;
 	}
 
-	return 0;
+	/* PHP 8.0 declares the parameter non-const */
+	return zval_get_double((zval *) op);
 }
 
 /**
@@ -497,6 +506,22 @@ int zephir_bitwise_or_function(zval *result, zval *op1, zval *op2)
 }
 
 /**
+ * Do shift_left function
+ */
+int zephir_shift_left_function(zval *result, zval *op1, zval *op2)
+{
+	return shift_left_function(result, op1, op2);
+}
+
+/**
+ * Do shift_right function
+ */
+int zephir_shift_right_function(zval *result, zval *op1, zval *op2)
+{
+	return shift_right_function(result, op1, op2);
+}
+
+/**
  * Do bitwise_xor function
  */
 int zephir_bitwise_xor_function(zval *result, zval *op1, zval *op2)
@@ -519,7 +544,7 @@ int zephir_less_equal(zval *op1, zval *op2)
 /**
  * Check if a zval is less than a long value
  */
-int zephir_less_long(zval *op1, long op2)
+int zephir_less_long(zval *op1, zend_long op2)
 {
 	zval result, op2_zval;
 	ZVAL_LONG(&op2_zval, op2);
@@ -537,7 +562,7 @@ int zephir_less_double(zval *op1, double op2)
 	return Z_TYPE(result) == IS_TRUE;
 }
 
-int zephir_less_equal_long(zval *op1, long op2)
+int zephir_less_equal_long(zval *op1, zend_long op2)
 {
 	zval result, op2_zval;
 	ZVAL_LONG(&op2_zval, op2);
@@ -549,7 +574,7 @@ int zephir_less_equal_long(zval *op1, long op2)
 /**
  * Check if a zval is greater than a long value
  */
-int zephir_greater_long(zval *op1, long op2)
+int zephir_greater_long(zval *op1, zend_long op2)
 {
 	zval result, op2_zval;
 	ZVAL_LONG(&op2_zval, op2);
@@ -580,7 +605,7 @@ int zephir_greater_equal(zval *op1, zval *op2)
 /**
  * Check for greater/equal
  */
-int zephir_greater_equal_long(zval *op1, long op2)
+int zephir_greater_equal_long(zval *op1, zend_long op2)
 {
 	zval result, op2_zval;
 	ZVAL_LONG(&op2_zval, op2);
@@ -589,57 +614,139 @@ int zephir_greater_equal_long(zval *op1, long op2)
 }
 
 /**
- * Do safe divisions between two longs
+ * A zero divisor is a DivisionByZeroError in PHP 8, thrown by
+ * div_function_base()/mod_function() in Zend/zend_operators.c.
+ *
+ * These helpers return a value and have no way to abort their caller, so the
+ * generated code checks EG(exception) right after the call and leaves the
+ * method, or jumps to the enclosing try, as PHP stops at the operator.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2666
  */
-double zephir_safe_div_long_long(long op1, long op2)
+static double zephir_throw_division_by_zero(void)
+{
+	zend_throw_exception(zend_ce_division_by_zero_error, "Division by zero", 0);
+	return 0;
+}
+
+static zend_long zephir_throw_modulo_by_zero(void)
+{
+	zend_throw_exception(zend_ce_division_by_zero_error, "Modulo by zero", 0);
+	return 0;
+}
+
+/**
+ * PHP's `/` for two integers, from div_function_base() in
+ * Zend/zend_operators.c: an exact quotient is an int, anything else a float.
+ * `ZEND_LONG_MIN / -1` overflows a zend_long and raises SIGFPE on x86, so it
+ * is computed as a double first, as php-src does.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2675
+ */
+void zephir_div_long_long(zval *result, zend_long op1, zend_long op2)
 {
 	if (!op2) {
-		zend_error(E_WARNING, "Division by zero");
-		return 0;
+		zephir_throw_division_by_zero();
+		ZVAL_LONG(result, 0);
+		return;
 	}
-	return (double) op1 / (double) op2;
+
+	if (op2 == -1 && op1 == ZEND_LONG_MIN) {
+		ZVAL_DOUBLE(result, (double) ZEND_LONG_MIN / -1);
+		return;
+	}
+
+	if (op1 % op2 == 0) {
+		ZVAL_LONG(result, op1 / op2);
+		return;
+	}
+
+	ZVAL_DOUBLE(result, ((double) op1) / op2);
+}
+
+/**
+ * A zval operand can be anything, so the division is PHP's own div_function():
+ * the TypeError for an array or a non-numeric string, the "non-numeric value"
+ * warning, bool and null coercion and the int narrowing all come from it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2676
+ */
+void zephir_div_zval_long(zval *result, zval *op1, zend_long op2)
+{
+	zval divisor;
+
+	ZVAL_LONG(&divisor, op2);
+	div_function(result, op1, &divisor);
+}
+
+void zephir_div_long_zval(zval *result, zend_long op1, zval *op2)
+{
+	zval dividend;
+
+	ZVAL_LONG(&dividend, op1);
+	div_function(result, &dividend, op2);
+}
+
+void zephir_div_zval_double(zval *result, zval *op1, double op2)
+{
+	zval divisor;
+
+	ZVAL_DOUBLE(&divisor, op2);
+	div_function(result, op1, &divisor);
+}
+
+void zephir_div_double_zval(zval *result, double op1, zval *op2)
+{
+	zval dividend;
+
+	ZVAL_DOUBLE(&dividend, op1);
+	div_function(result, &dividend, op2);
+}
+
+/**
+ * Two integers divided for a C double consumer (a `double` local or a
+ * `-> double` return). PHP coerces the int quotient to float there, so an
+ * exact quotient is computed as an integer first: `(double) op1 / op2` would
+ * round the dividend before dividing and miss above 2^53.
+ */
+double zephir_safe_div_long_long(zend_long op1, zend_long op2)
+{
+	if (!op2) {
+		return zephir_throw_division_by_zero();
+	}
+
+	if (op2 == -1 && op1 == ZEND_LONG_MIN) {
+		return (double) ZEND_LONG_MIN / -1;
+	}
+
+	if (op1 % op2 == 0) {
+		return (double) (op1 / op2);
+	}
+
+	return ((double) op1) / op2;
 }
 
 /**
  * Do safe divisions between two long/double
  */
-double zephir_safe_div_long_double(long op1, double op2)
+double zephir_safe_div_long_double(zend_long op1, double op2)
 {
 	if (!op2) {
-		zend_error(E_WARNING, "Division by zero");
-		return 0;
+		return zephir_throw_division_by_zero();
 	}
-	return (double) op1 / op2;
-}
 
-/**
- * Do safe divisions between two double/zval
- */
-double zephir_safe_div_double_zval(double op1, zval *op2)
-{
-	if (!zephir_get_numberval(op2)) {
-		zend_error(E_WARNING, "Division by zero");
-		return 0;
-	}
-	switch (Z_TYPE_P(op2)) {
-		case IS_ARRAY:
-		case IS_OBJECT:
-		case IS_RESOURCE:
-			zend_error(E_WARNING, "Unsupported operand types");
-			break;
-	}
-	return op1 / ((double) zephir_get_numberval(op2));
+	return (double) op1 / op2;
 }
 
 /**
  * Do safe divisions between two double/long
  */
-double zephir_safe_div_double_long(double op1, long op2)
+double zephir_safe_div_double_long(double op1, zend_long op2)
 {
 	if (!op2) {
-		zend_error(E_WARNING, "Division by zero");
-		return 0;
+		return zephir_throw_division_by_zero();
 	}
+
 	return op1 / (double) op2;
 }
 
@@ -649,96 +756,134 @@ double zephir_safe_div_double_long(double op1, long op2)
 double zephir_safe_div_double_double(double op1, double op2)
 {
 	if (!op2) {
-		zend_error(E_WARNING, "Division by zero");
-		return 0;
+		return zephir_throw_division_by_zero();
 	}
+
 	return op1 / op2;
 }
 
 /**
- * Do safe divisions between two zval/long
+ * Do safe modulo between two longs.
+ *
+ * Every other modulo helper funnels through here, so the two guards PHP's
+ * mod_function() applies live in one place: a zero divisor throws, and a `-1`
+ * divisor short-circuits to 0 because PHP_INT_MIN % -1 overflows and raises
+ * SIGFPE on x86.
  */
-double zephir_safe_div_zval_long(zval *op1, long op2)
+/**
+ * `op1 << op2` and `op1 >> op2` on native integers, as shift_left_function()
+ * and shift_right_function() in Zend/zend_operators.c: a count of the integer
+ * width or more yields 0 (or -1 for a negative `>>`), and a negative count
+ * throws ArithmeticError. A C shift is undefined for both.
+ */
+zend_long zephir_safe_shift_left_long(zend_long op1, zend_long op2)
 {
-	if (!op2) {
-		zend_error(E_WARNING, "Division by zero");
+	if (UNEXPECTED((zend_ulong) op2 >= SIZEOF_ZEND_LONG * 8)) {
+		if (EXPECTED(op2 > 0)) {
+			return 0;
+		}
+
+		zend_throw_exception_ex(zend_ce_arithmetic_error, 0, "Bit shift by negative number");
 		return 0;
 	}
-	switch (Z_TYPE_P(op1)) {
-		case IS_ARRAY:
-		case IS_OBJECT:
-		case IS_RESOURCE:
-			zend_error(E_WARNING, "Unsupported operand types");
-			break;
-	}
-	return ((double) zephir_get_numberval(op1)) / (double) op2;
+
+	return (zend_long) ((zend_ulong) op1 << op2);
 }
 
-/**
- * Do safe divisions between two long/zval
- */
-double zephir_safe_div_long_zval(long op1, zval *op2)
+zend_long zephir_safe_shift_right_long(zend_long op1, zend_long op2)
 {
-	if (!zephir_get_numberval(op2)) {
-		zend_error(E_WARNING, "Division by zero");
+	if (UNEXPECTED((zend_ulong) op2 >= SIZEOF_ZEND_LONG * 8)) {
+		if (EXPECTED(op2 > 0)) {
+			return (op1 < 0) ? -1 : 0;
+		}
+
+		zend_throw_exception_ex(zend_ce_arithmetic_error, 0, "Bit shift by negative number");
 		return 0;
 	}
-	switch (Z_TYPE_P(op2)) {
-		case IS_ARRAY:
-		case IS_OBJECT:
-		case IS_RESOURCE:
-			zend_error(E_WARNING, "Unsupported operand types");
-			break;
-	}
-	return (double) op1 / ((double) zephir_get_numberval(op2));
+
+	return op1 >> op2;
 }
 
-/**
- * Do safe divisions between two zval/double
- */
-double zephir_safe_div_zval_double(zval *op1, double op2)
+zend_long zephir_safe_mod_long_long(zend_long op1, zend_long op2)
 {
 	if (!op2) {
-		zend_error(E_WARNING, "Division by zero");
-		return 0;
+		return zephir_throw_modulo_by_zero();
 	}
-	switch (Z_TYPE_P(op1)) {
-		case IS_ARRAY:
-		case IS_OBJECT:
-		case IS_RESOURCE:
-			zend_error(E_WARNING, "Unsupported operand types");
-			break;
-	}
-	return ((double) zephir_get_numberval(op1)) / op2;
-}
 
-/**
- * Do safe divisions between two longs
- */
-long zephir_safe_mod_long_long(long op1, long op2)
-{
-	if (!op2) {
-		zend_error(E_WARNING, "Division by zero");
+	if (op2 == -1) {
 		return 0;
 	}
+
 	return op1 % op2;
 }
 
 /**
- * Do safe divisions between two zval/long
+ * Do safe modulo between two long/double
  */
-long zephir_safe_mod_zval_long(zval *op1, long op2)
+zend_long zephir_safe_mod_long_double(zend_long op1, double op2)
 {
-	if (!op2) {
-		zend_error(E_WARNING, "Division by zero");
-		return 0;
-	}
-	switch (Z_TYPE_P(op1)) {
-		case IS_ARRAY:
-		case IS_OBJECT:
-		case IS_RESOURCE:
-			zend_error(E_WARNING, "Unsupported operand types");
-			break;
-	}
-	return ((long) zephir_get_numberval(op1)) % (long) op2;
+	zend_long divisor = ZEPHIR_DVAL_TO_LVAL(op2);
+
+	return zephir_safe_mod_long_long(op1, divisor);
+}
+
+/**
+ * Do safe modulo between two double/long
+ */
+zend_long zephir_safe_mod_double_long(double op1, zend_long op2)
+{
+	zend_long dividend = ZEPHIR_DVAL_TO_LVAL(op1);
+
+	return zephir_safe_mod_long_long(dividend, op2);
+}
+
+/**
+ * Do safe modulo between two doubles
+ */
+zend_long zephir_safe_mod_double_double(double op1, double op2)
+{
+	zend_long dividend = ZEPHIR_DVAL_TO_LVAL(op1);
+	zend_long divisor  = ZEPHIR_DVAL_TO_LVAL(op2);
+
+	return zephir_safe_mod_long_long(dividend, divisor);
+}
+
+/**
+ * A zval operand can be anything, so the modulo is PHP's own mod_function():
+ * the TypeError for an array or a non-numeric string, the "non-numeric value"
+ * warning, bool and null coercion and an overloaded object's result all come
+ * from it.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/2676
+ */
+void zephir_mod_zval_long(zval *result, zval *op1, zend_long op2)
+{
+	zval divisor;
+
+	ZVAL_LONG(&divisor, op2);
+	mod_function(result, op1, &divisor);
+}
+
+void zephir_mod_long_zval(zval *result, zend_long op1, zval *op2)
+{
+	zval dividend;
+
+	ZVAL_LONG(&dividend, op1);
+	mod_function(result, &dividend, op2);
+}
+
+void zephir_mod_zval_double(zval *result, zval *op1, double op2)
+{
+	zval divisor;
+
+	ZVAL_DOUBLE(&divisor, op2);
+	mod_function(result, op1, &divisor);
+}
+
+void zephir_mod_double_zval(zval *result, double op1, zval *op2)
+{
+	zval dividend;
+
+	ZVAL_DOUBLE(&dividend, op1);
+	mod_function(result, &dividend, op2);
 }

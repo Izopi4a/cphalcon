@@ -71,6 +71,7 @@ PHP_METHOD(Phalcon_Html_Helper_Script, add)
 	if (ZEND_NUM_ARGS() > 1) {
 		attributes_param = ZEND_CALL_ARG(execute_data, 2);
 	}
+	zephir_memory_observe(&url_zv);
 	ZVAL_STR_COPY(&url_zv, url);
 	if (!attributes_param) {
 		ZEPHIR_INIT_VAR(&attributes);
@@ -85,13 +86,13 @@ PHP_METHOD(Phalcon_Html_Helper_Script, add)
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_create_array(&_2, 3, 0);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "gettag", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "getTag", NULL, 0);
 	zephir_check_call_status();
 	zephir_array_fast_append(&_2, &_3);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "");
 	zephir_array_fast_append(&_2, &_1);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "getattributes", NULL, 0, &url_zv, &attributes);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "getAttributes", NULL, 0, &url_zv, &attributes);
 	zephir_check_call_status();
 	zephir_array_fast_append(&_2, &_3);
 	zephir_array_fast_append(&_0, &_2);
@@ -127,6 +128,7 @@ PHP_METHOD(Phalcon_Html_Helper_Script, getAttributes)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	attributes_param = ZEND_CALL_ARG(execute_data, 2);
+	zephir_memory_observe(&url_zv);
 	ZVAL_STR_COPY(&url_zv, url);
 	zephir_get_arrval(&attributes, attributes_param);
 	ZEPHIR_INIT_VAR(&required);
@@ -134,6 +136,10 @@ PHP_METHOD(Phalcon_Html_Helper_Script, getAttributes)
 	zephir_array_update_string(&required, SL("src"), &url_zv, PH_COPY | PH_SEPARATE);
 	add_assoc_stringl_ex(&required, SL("type"), SL("application/javascript"));
 	zephir_array_unset_string(&attributes, SL("src"), PH_SEPARATE);
+	if (UNEXPECTED(EG(exception))) {
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_fast_array_merge(return_value, &required, &attributes);
 	RETURN_MM();
 }

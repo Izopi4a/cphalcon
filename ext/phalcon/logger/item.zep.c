@@ -89,6 +89,27 @@ PHP_METHOD(Phalcon_Logger_Item, __construct)
 	ZVAL_UNDEF(&dateTime_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&context);
+	static zend_string *_zephir_prop_0 = NULL;
+	static zend_string *_zephir_prop_1 = NULL;
+	static zend_string *_zephir_prop_2 = NULL;
+	static zend_string *_zephir_prop_3 = NULL;
+	static zend_string *_zephir_prop_4 = NULL;
+	if (UNEXPECTED(!_zephir_prop_0)) {
+		_zephir_prop_0 = zend_string_init("message", 7, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_1)) {
+		_zephir_prop_1 = zend_string_init("levelName", 9, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_2)) {
+		_zephir_prop_2 = zend_string_init("level", 5, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_3)) {
+		_zephir_prop_3 = zend_string_init("dateTime", 8, 1);
+	}
+	if (UNEXPECTED(!_zephir_prop_4)) {
+		_zephir_prop_4 = zend_string_init("context", 7, 1);
+	}
+
 	ZEND_PARSE_PARAMETERS_START(4, 5)
 		Z_PARAM_STR(message)
 		Z_PARAM_STR(levelName)
@@ -112,13 +133,13 @@ PHP_METHOD(Phalcon_Logger_Item, __construct)
 	} else {
 		zephir_get_arrval(&context, context_param);
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message_zv);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("levelName"), &levelName_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 658, &message_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 659, &levelName_zv);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, level);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("level"), &_0);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("dateTime"), dateTime);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("context"), &context);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 660, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 661, dateTime);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_4, 662, &context);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -128,7 +149,7 @@ PHP_METHOD(Phalcon_Logger_Item, __construct)
 PHP_METHOD(Phalcon_Logger_Item, getContext)
 {
 
-	RETURN_MEMBER(getThis(), "context");
+	RETURN_MEMBER_TYPED(getThis(), "context", IS_ARRAY);
 }
 
 /**
@@ -146,7 +167,7 @@ PHP_METHOD(Phalcon_Logger_Item, getDateTime)
 PHP_METHOD(Phalcon_Logger_Item, getMessage)
 {
 
-	RETURN_MEMBER(getThis(), "message");
+	RETURN_MEMBER_TYPED(getThis(), "message", IS_STRING);
 }
 
 /**
@@ -155,7 +176,7 @@ PHP_METHOD(Phalcon_Logger_Item, getMessage)
 PHP_METHOD(Phalcon_Logger_Item, getLevel)
 {
 
-	RETURN_MEMBER(getThis(), "level");
+	RETURN_MEMBER_TYPED(getThis(), "level", IS_LONG);
 }
 
 /**
@@ -164,7 +185,7 @@ PHP_METHOD(Phalcon_Logger_Item, getLevel)
 PHP_METHOD(Phalcon_Logger_Item, getLevelName)
 {
 
-	RETURN_MEMBER(getThis(), "levelName");
+	RETURN_MEMBER_TYPED(getThis(), "levelName", IS_STRING);
 }
 
 zend_object *zephir_init_properties_Phalcon_Logger_Item(zend_class_entry *class_type)

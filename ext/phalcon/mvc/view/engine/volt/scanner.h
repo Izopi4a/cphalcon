@@ -164,6 +164,26 @@
 #define PHVOLT_T_DEFAULT 413
 #define PHVOLT_T_ENDSWITCH 414
 
+/* {% set name %}...{% endset %} */
+#define PHVOLT_T_ENDSET 425
+#define PHVOLT_T_SET_CAPTURE 426
+
+/* {% embed %}...{% endembed %} */
+#define PHVOLT_T_EMBED 423
+#define PHVOLT_T_ENDEMBED 424
+
+/* a?.b */
+#define PHVOLT_T_NULLSAFE 421
+
+/* a ?? b */
+#define PHVOLT_T_COALESCE 420
+
+/* "is not": a negated test, distinct from != */
+#define PHVOLT_T_ISNOT 422
+
+/* a // b: floor division (was compiled as modulo) */
+#define PHVOLT_T_FLOORDIV 427
+
 /* List of tokens and their names */
 typedef struct _phvolt_token_names { /* {{{ */
 	char *name;

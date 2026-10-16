@@ -77,7 +77,7 @@ PHP_METHOD(Phalcon_Html_Helper_Preload, __construct)
 	}
 	ZEPHIR_CALL_PARENT(NULL, phalcon_html_helper_preload_ce, getThis(), "__construct", NULL, 0, escaper);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 572, response);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 575, response);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -165,7 +165,7 @@ PHP_METHOD(Phalcon_Html_Helper_Preload, __invoke)
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_fast_array_merge(&_0, &overrides, &attributes);
 	ZEPHIR_CPY_WRT(&overrides, &_0);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 572, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 575, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_1) != IS_NULL) {
 		ZEPHIR_INIT_VAR(&link);
 		object_init_ex(&link, phalcon_html_link_link_ce);
@@ -174,7 +174,7 @@ PHP_METHOD(Phalcon_Html_Helper_Preload, __invoke)
 		zephir_array_update_string(&_2$$3, SL("as"), &type_zv, PH_COPY | PH_SEPARATE);
 		ZEPHIR_INIT_VAR(&_3$$3);
 		ZVAL_STRING(&_3$$3, "preload");
-		ZEPHIR_CALL_METHOD(NULL, &link, "__construct", NULL, 364, &_3$$3, &href_zv, &_2$$3);
+		ZEPHIR_CALL_METHOD(NULL, &link, "__construct", NULL, 367, &_3$$3, &href_zv, &_2$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_3$$3);
 		object_init_ex(&_3$$3, phalcon_html_link_serializer_header_ce);
@@ -186,7 +186,7 @@ PHP_METHOD(Phalcon_Html_Helper_Preload, __invoke)
 		ZEPHIR_INIT_VAR(&_5$$3);
 		zephir_create_array(&_5$$3, 1, 0);
 		zephir_array_fast_append(&_5$$3, &link);
-		ZEPHIR_CALL_METHOD(&_4$$3, &_3$$3, "serialize", NULL, 365, &_5$$3);
+		ZEPHIR_CALL_METHOD(&_4$$3, &_3$$3, "serialize", NULL, 368, &_5$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&header);
 		ZEPHIR_CONCAT_SV(&header, "Link: ", &_4$$3);
@@ -194,7 +194,7 @@ PHP_METHOD(Phalcon_Html_Helper_Preload, __invoke)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		zephir_read_property_cached(&_6$$3, this_ptr, _zephir_prop_0, 572, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_6$$3, this_ptr, _zephir_prop_0, 575, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_METHOD(NULL, &_6$$3, "setRawHeader", NULL, 0, &header);
 		zephir_check_call_status();
 	}

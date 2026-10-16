@@ -74,7 +74,7 @@ PHP_METHOD(Phalcon_Html_Helper_Input_Select_ArrayData, __construct)
 	} else {
 		zephir_get_arrval(&data, data_param);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 567, &data);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 570, &data);
 	ZEPHIR_MM_RESTORE();
 }
 

@@ -1,0 +1,1 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html lang="en"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" href="style.css" /><title> - My Webpage</title></head><body><div id="content"></div><div id="footer">&copy; Copyright 2012 by <a href="http://domain.invalid/">you</a>.</div></body>

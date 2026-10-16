@@ -73,7 +73,7 @@ PHP_METHOD(Phalcon_Container_Resolver_Lazy_Call, __construct)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_ce_type_error, "Argument 'callableObject' must be callable", "phalcon/Container/Resolver/Lazy/Call.zep", 43);
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 365, callableObject);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 368, callableObject);
 }
 
 PHP_METHOD(Phalcon_Container_Resolver_Lazy_Call, resolve)
@@ -97,7 +97,7 @@ PHP_METHOD(Phalcon_Container_Resolver_Lazy_Call, resolve)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &container);
 	zephir_memory_observe(&localContainer);
-	zephir_read_property_cached(&localContainer, this_ptr, _zephir_prop_0, 365, PH_NOISY_CC);
+	zephir_read_property_cached(&localContainer, this_ptr, _zephir_prop_0, 368, PH_NOISY_CC);
 	ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(&localContainer, NULL, 0, container);
 	zephir_check_call_status();
 	RETURN_MM();

@@ -1,0 +1,1 @@
+<?= $date->getTimeStamp() ?>%<?= $this->callMacro('strtotime', ['now']) ?>%<?= $this->callMacro('strtotime', [$date->format('Y-m-d H:i:s')]) ?>

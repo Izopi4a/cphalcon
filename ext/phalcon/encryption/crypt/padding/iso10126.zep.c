@@ -83,9 +83,9 @@ PHP_METHOD(Phalcon_Encryption_Crypt_Padding_Iso10126, pad)
 			}
 			ZEPHIR_INIT_NVAR(&counter);
 			ZVAL_LONG(&counter, _1);
-			ZEPHIR_CALL_FUNCTION(&_3$$3, "rand", &_4, 275);
+			ZEPHIR_CALL_FUNCTION(&_3$$3, "rand", &_4, 278);
 			zephir_check_call_status();
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "chr", &_6, 273, &_3$$3);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "chr", &_6, 276, &_3$$3);
 			zephir_check_call_status();
 			zephir_concat_self(&padding, &_5$$3);
 			if (UNEXPECTED(EG(exception))) {
@@ -95,7 +95,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt_Padding_Iso10126, pad)
 		}
 	}
 	ZVAL_LONG(&_7, paddingSize);
-	ZEPHIR_CALL_FUNCTION(&_8, "chr", &_6, 273, &_7);
+	ZEPHIR_CALL_FUNCTION(&_8, "chr", &_6, 276, &_7);
 	zephir_check_call_status();
 	zephir_concat_self(&padding, &_8);
 	if (UNEXPECTED(EG(exception))) {
@@ -146,7 +146,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt_Padding_Iso10126, unpad)
 	ZVAL_LONG(&_2, 1);
 	ZEPHIR_INIT_VAR(&last);
 	zephir_substr(&last, &input_zv, zephir_get_intval(&_1), 1 , 0);
-	ZEPHIR_RETURN_CALL_FUNCTION("ord", NULL, 274, &last);
+	ZEPHIR_RETURN_CALL_FUNCTION("ord", NULL, 277, &last);
 	zephir_check_call_status();
 	RETURN_MM();
 }

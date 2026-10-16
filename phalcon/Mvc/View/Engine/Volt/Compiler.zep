@@ -36,6 +36,8 @@ use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltFilterType;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltStatement;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\VoltDirectoryNotWritable;
 use Phalcon\Mvc\ViewBaseInterface;
+use Phalcon\Mvc\View\Engine\Volt\Runtime\Registry;
+use Phalcon\Mvc\View\Engine\Volt\Runtime\VoltCallable;
 use Phalcon\Tag;
 use Phalcon\Traits\Php\FileTrait;
 
@@ -156,6 +158,28 @@ class Compiler implements InjectionAwareInterface
      * @phpstan-var array<string, string>
      */
     protected array virtualPaths = [];
+
+    /**
+     * Files inlined into the template being compiled: path => mtime
+     *
+     * @var array
+     */
+    protected array dependencies = [];
+
+    /**
+     * Parent template for a child compiled against a parent chosen at render
+     * time ({% extends layoutVar %})
+     *
+     * @var string|null
+     */
+    protected extendsOverride = null;
+
+    /**
+     * Runtime functions, filters and tests (shared with the engine)
+     *
+     * @var Registry|null
+     */
+    protected registry = null;
 
     /**
      * Phalcon\Mvc\View\Engine\Volt\Compiler
@@ -515,6 +539,21 @@ class Compiler implements InjectionAwareInterface
             }
         }
 
+        /**
+         * The template itself is fresh: with stat on, also check what was
+         * inlined into it (parents, embeds, includes) and the compiler
+         * configuration
+         */
+        if compilation === null && !extendsMode && stat !== false && typeof compiledTemplatePath == "string" {
+            if this->phpFileExists(compiledTemplatePath) && Dependencies::staleReason(compiledTemplatePath, this->getSignature()) !== null {
+                let compilation = this->compileFile(
+                    templatePath,
+                    compiledTemplatePath,
+                    extendsMode
+                );
+            }
+        }
+
         let this->compiledTemplatePath = compiledTemplatePath;
 
         return compilation;
@@ -567,8 +606,37 @@ class Compiler implements InjectionAwareInterface
      */
     public function compileCall(array statement, bool extendsMode) -> string
     {
-        // Not implemented?
-        return "";
+        var name, arguments, caller, macroName, argumentsCode;
+
+        if unlikely !fetch name, statement["name"] {
+            throw new CorruptedStatement();
+        }
+
+        if unlikely typeof name != "array" || !isset name["type"] || name["type"] != PHVOLT_T_IDENTIFIER {
+            throw new Exception(
+                "{% call %} needs a macro name in " . statement["file"] . " on line " . statement["line"]
+            );
+        }
+
+        let macroName = name["value"];
+
+        if fetch arguments, statement["arguments"] {
+            let argumentsCode = this->expression(arguments);
+        } else {
+            let argumentsCode = "";
+        }
+
+        if !fetch caller, statement["caller"] || typeof caller != "array" {
+            let caller = [];
+        }
+
+        /**
+         * The body becomes the macro's caller(): a closure that sees the
+         * variables of the calling template
+         */
+        return "<?php $this->pushMacroCaller((function (array $__volt_vars) { return function () use ($__volt_vars) { extract($__volt_vars); ?>"
+            . this->statementList(caller, extendsMode)
+            . "<?php }; })(get_defined_vars())); $this->callMacro('" . macroName . "', [" . argumentsCode . "]); $this->popMacroCaller(); ?>";
     }
 
     /**
@@ -670,9 +738,11 @@ class Compiler implements InjectionAwareInterface
         }
 
         /**
-         * Echo statement
+         * Echo statement. Output that is already HTML (raw, escaping filters,
+         * content(), partial(), safe runtime functions and filters) is not
+         * escaped a second time
          */
-        if this->autoescape {
+        if this->autoescape && !this->isSafeExpression(expr) {
             return "<?= $this->escaper->html(" . exprCode . ") ?>";
         }
 
@@ -747,7 +817,8 @@ class Compiler implements InjectionAwareInterface
             throw new TemplateFileNotOpenable(path);
         }
 
-        let this->currentPath = path;
+        let this->currentPath  = path,
+            this->dependencies = [];
 
         let compilation = this->compileSource(viewCode, extendsMode);
 
@@ -766,6 +837,10 @@ class Compiler implements InjectionAwareInterface
          */
         if unlikely this->phpFilePutContents(compiledPath, finalCompilation) === false {
             throw new VoltDirectoryNotWritable();
+        }
+
+        if typeof compilation == "string" {
+            Dependencies::write(compiledPath, this->dependencies, this->getSignature());
         }
 
         return compilation;
@@ -1006,7 +1081,8 @@ class Compiler implements InjectionAwareInterface
      */
     public function compileInclude(array statement) -> string
     {
-        var pathExpr, path, subCompiler, finalPath, compilation, params;
+        var pathExpr, subCompiler, finalPath, compilation, params, dependencies,
+            files, file, mtime, path;
 
         /**
          * Include statement
@@ -1017,22 +1093,13 @@ class Compiler implements InjectionAwareInterface
         }
 
         /**
-         * Check if the expression is a string
-         * If the path is an string try to make an static compilation
+         * A string literal naming a Volt template (with or without ".volt")
+         * is compiled into the template. Anything else is a runtime partial.
          */
         if pathExpr["type"] == 260 {
-            /**
-             * Static compilation cannot be performed if the user passed extra
-             * parameters
-             */
-            if !isset statement["params"]  {
-                /**
-                 * Get the static path
-                 */
-                let path = pathExpr["value"];
+            let finalPath = this->findTemplate(pathExpr["value"]);
 
-                let finalPath = this->getFinalPath(path);
-
+            if finalPath !== null {
                 /**
                  * Clone the original compiler
                  * Perform a sub-compilation of the included file
@@ -1051,7 +1118,30 @@ class Compiler implements InjectionAwareInterface
                     );
                 }
 
-                return compilation;
+                /**
+                 * The included file and everything inlined into it
+                 */
+                this->addDependency(finalPath);
+
+                let dependencies = Dependencies::read(subCompiler->getCompiledTemplatePath());
+
+                if typeof dependencies == "array" && fetch files, dependencies["files"] {
+                    for file, mtime in files {
+                        let this->dependencies[file] = mtime;
+                    }
+                }
+
+                if !fetch params, statement["params"] {
+                    return compilation;
+                }
+
+                /**
+                 * include ... with [...]: the current variables plus the
+                 * parameters, in a scope of its own
+                 */
+                return "<?php (function (array $__volt_scope) { extract($__volt_scope); ?>"
+                    . compilation
+                    . "<?php })(array_merge(get_defined_vars(), " . this->expression(params) . ")); ?>";
             }
         }
 
@@ -1469,11 +1559,21 @@ class Compiler implements InjectionAwareInterface
             /**
              * Operator "is" also needs special handling
              */
-            if type == PHVOLT_T_IS {
-                let exprCode = this->resolveTest(
-                    expr["right"],
-                    leftCode
+            if type == PHVOLT_T_IS || type == PHVOLT_T_ISNOT {
+                let exprCode = this->compileTestExpression(
+                    expr,
+                    leftCode,
+                    type == PHVOLT_T_ISNOT
                 );
+
+                break;
+            }
+
+            /**
+             * a?.b: the right side is a member name, not a variable
+             */
+            if type == PHVOLT_T_NULLSAFE {
+                let exprCode = this->compileNullsafe(expr, leftCode);
 
                 break;
             }
@@ -1769,6 +1869,14 @@ class Compiler implements InjectionAwareInterface
                     let exprCode = expr["value"];
                     break;
 
+                case PHVOLT_T_COALESCE:
+                    let exprCode = "(" . leftCode . " ?? " . rightCode . ")";
+                    break;
+
+                case PHVOLT_T_FLOORDIV:
+                    let exprCode = "(int) floor((" . leftCode . ") / (" . rightCode . "))";
+                    break;
+
                 default:
                     throw new UnknownVoltExpression((int) type, (string) expr["file"], (int) expr["line"]);
             }
@@ -1830,7 +1938,7 @@ class Compiler implements InjectionAwareInterface
     {
         var arguments, arrayHelpers, block, currentBlock, definition, escapedCode,
             exprLevel, extendedBlocks, extensions, functions, method, name,
-            nameExpr, nameType, tagService,
+            nameExpr, nameType, tagService, runtime,
             code          = null,
             funcArguments = null;
         let nameExpr      = expr["name"],
@@ -1871,6 +1979,19 @@ class Compiler implements InjectionAwareInterface
                 if typeof code == "string" {
                     return code;
                 }
+            }
+
+            /**
+             * A runtime function (Volt::addFunction(new VoltFunction(...)))
+             */
+            let runtime = this->getRuntime("function", name);
+
+            if runtime !== null {
+                return this->compileRuntimeCall(
+                    "function",
+                    runtime,
+                    this->runtimeArguments(funcArguments)
+                );
             }
 
             /**
@@ -2066,6 +2187,13 @@ class Compiler implements InjectionAwareInterface
             /**
              * By default it tries to call a macro
              */
+            /**
+             * The body of the {% call %} that called the current macro
+             */
+            if name == "caller" {
+                return "$this->renderMacroCaller()";
+            }
+
             return "$this->callMacro('" . name . "', [" . arguments . "])";
         }
 
@@ -2320,6 +2448,453 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
+     * Records a file inlined into the template being compiled
+     */
+    public function addDependency(string path) -> void
+    {
+        clearstatcache(true, path);
+
+        let this->dependencies[path] = (int) filemtime(path);
+    }
+
+    /**
+     * Compiles a child template against a parent chosen at render time
+     * ({% extends layoutVar %}): one compiled file per (child, parent) pair
+     */
+    public function compileVariant(string childPath, string parentName) -> string
+    {
+        var parentPath, options, compiledPath, variant, always, stat, subCompiler;
+        bool stale;
+
+        let parentPath = this->resolveTemplatePath(parentName, childPath),
+            options    = this->options;
+
+        if !fetch compiledPath, options["path"] || typeof compiledPath != "string" || compiledPath === "" {
+            let compiledPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
+        }
+
+        let variant = compiledPath . "variant%%" . sha1(childPath . "|" . parentPath) . ".php";
+
+        if !fetch always, options["always"] {
+            let always = false;
+        }
+
+        if !fetch stat, options["stat"] {
+            let stat = true;
+        }
+
+        clearstatcache();
+
+        let stale = !this->phpFileExists(variant) || always;
+
+        if !stale && stat !== false {
+            let stale = filemtime(childPath) >= filemtime(variant)
+                || Dependencies::staleReason(variant, this->getSignature()) !== null;
+        }
+
+        if stale {
+            let subCompiler = clone this;
+            subCompiler->setExtendsOverride(parentPath);
+            subCompiler->compileFile(childPath, variant);
+        }
+
+        return variant;
+    }
+
+    /**
+     * The registry of runtime functions, filters and tests
+     */
+    public function getRegistry() -> <Registry>
+    {
+        if this->registry === null {
+            let this->registry = new Registry();
+        }
+
+        return this->registry;
+    }
+
+    /**
+     * What the compiled output depends on besides files: the runtime
+     * registry, autoescape and strict tests
+     */
+    public function getSignature() -> string
+    {
+        var autoescape, registrySignature;
+
+        if !fetch autoescape, this->options["autoescape"] {
+            let autoescape = false;
+        }
+
+        if this->registry === null {
+            let registrySignature = "";
+        } else {
+            let registrySignature = this->registry->getSignature();
+        }
+
+        return "volt-2|" . registrySignature
+            . "|autoescape=" . (autoescape ? "true" : "false")
+            . "|strictTests=" . (this->isStrictTests() ? "true" : "false");
+    }
+
+    /**
+     * Unknown "is" tests are a compile error instead of compiling to "=="
+     * (option "strictTests", default true)
+     */
+    public function isStrictTests() -> bool
+    {
+        var strictTests;
+
+        if fetch strictTests, this->options["strictTests"] {
+            return (bool) strictTests;
+        }
+
+        return true;
+    }
+
+    /**
+     * Parses a template file used by the resolver (parent, embedded) and
+     * records it as a dependency
+     */
+    public function parseFile(string path) -> array
+    {
+        var viewCode, intermediate;
+
+        if unlikely !this->phpFileExists(path) {
+            throw new TemplateFileNotFound(path);
+        }
+
+        this->addDependency(path);
+
+        let viewCode = this->phpFileGetContents(path);
+
+        if unlikely viewCode === false {
+            throw new TemplateFileNotOpenable(path);
+        }
+
+        let intermediate = phvolt_parse_view(viewCode, path);
+
+        if unlikely typeof intermediate != "array" {
+            throw new InvalidIntermediateRepresentation();
+        }
+
+        return intermediate;
+    }
+
+    /**
+     * The path of a template named in extends/embed, relative to the
+     * template that names it
+     */
+    public function resolveTemplatePath(string name, string relativeTo) -> string
+    {
+        var saved, finalPath;
+
+        let saved             = this->currentPath,
+            this->currentPath = relativeTo;
+
+        let finalPath = this->getFinalPath(name);
+
+        let this->currentPath = saved;
+
+        if this->phpFileExists(finalPath) {
+            return finalPath;
+        }
+
+        if !ends_with(name, ".volt") && this->phpFileExists(finalPath . ".volt") {
+            return finalPath . ".volt";
+        }
+
+        throw new TemplateFileNotFound(finalPath);
+    }
+
+    /**
+     * The parent a dynamic-extends variant is compiled against
+     */
+    public function setExtendsOverride(var path) -> <static>
+    {
+        let this->extendsOverride = path;
+
+        return this;
+    }
+
+    /**
+     * Shares the runtime registry (the engine owns it)
+     */
+    public function setRegistry(<Registry> registry) -> <static>
+    {
+        let this->registry = registry;
+
+        return this;
+    }
+
+    /**
+     * Returns and clears the parent override of a dynamic-extends variant
+     */
+    public function takeExtendsOverride() -> string | null
+    {
+        var override;
+
+        let override              = this->extendsOverride,
+            this->extendsOverride = null;
+
+        return override;
+    }
+
+    /**
+     * a?.b / a?.b(...): only a member name can follow "?."
+     */
+    protected function compileNullsafe(array expr, string leftCode) -> string
+    {
+        var right;
+
+        if !fetch right, expr["right"] || typeof right != "array" || !isset right["type"] || right["type"] != PHVOLT_T_IDENTIFIER {
+            throw new Exception(
+                "Only a property or method name can follow \"?.\" in "
+                . expr["file"] . " on line " . expr["line"]
+            );
+        }
+
+        return leftCode . "?->" . right["value"];
+    }
+
+    /**
+     * A call to a runtime function, filter or test: a direct call for
+     * functions and static methods, otherwise a lookup memoized on the engine
+     */
+    protected function compileRuntimeCall(string kind, <VoltCallable> handler, array arguments) -> string
+    {
+        var staticCode, method, name;
+
+        if handler->needsContext() {
+            let arguments = array_merge(["get_defined_vars()"], arguments);
+        }
+
+        let staticCode = handler->getStaticCallCode();
+
+        if staticCode !== null {
+            return staticCode . "(" . implode(", ", arguments) . ")";
+        }
+
+        if kind == "filter" {
+            let method = "getRuntimeFilter";
+        } elseif kind == "test" {
+            let method = "getRuntimeTest";
+        } else {
+            let method = "getRuntimeFunction";
+        }
+
+        let name = handler->getName();
+
+        return "($this->runtime[" . var_export(kind . ":" . name, true) . "] ??= $this->"
+            . method . "(" . var_export(name, true) . "))(" . implode(", ", arguments) . ")";
+    }
+
+    /**
+     * {% set name %}...{% endset %}: the rendered body in a variable
+     */
+    protected function compileSetCapture(array statement, bool extendsMode) -> string
+    {
+        var statements;
+
+        if !fetch statements, statement["block_statements"] || typeof statements != "array" {
+            let statements = [];
+        }
+
+        return "<?php ob_start(); ?>"
+            . this->statementList(statements, extendsMode)
+            . "<?php $" . statement["name"] . " = ob_get_clean(); ?>";
+    }
+
+    /**
+     * value is name / value is name(args) / value is not ...
+     */
+    protected function compileTestExpression(array expr, string leftCode, bool negate) -> string
+    {
+        var right, type, name, nameNode, test, testArguments, code;
+
+        let right = expr["right"],
+            type  = right["type"],
+            name  = null;
+
+        if type == PHVOLT_T_IDENTIFIER {
+            let name = right["value"];
+        } elseif type == PHVOLT_T_FCALL {
+            if fetch nameNode, right["name"] {
+                if typeof nameNode == "array" && isset nameNode["value"] {
+                    let name = nameNode["value"];
+                }
+            }
+        } elseif type == PHVOLT_T_NULL {
+            /**
+             * "null" is a keyword: the parser gives a NULL literal
+             */
+            let name = "null";
+        }
+
+        let test = null;
+
+        if name !== null {
+            let test = this->getRuntime("test", name);
+        }
+
+        if test !== null {
+            if !fetch testArguments, right["arguments"] {
+                let testArguments = null;
+            }
+
+            let code = this->compileRuntimeCall(
+                "test",
+                test,
+                array_merge([leftCode], this->runtimeArguments(testArguments))
+            );
+        } elseif name === "null" || name === "none" {
+            let code = "(" . leftCode . " === null)";
+        } elseif name !== null && type == PHVOLT_T_IDENTIFIER && in_array(name, ["empty", "even", "odd", "numeric", "scalar", "iterable"]) {
+            let code = this->resolveTest(right, leftCode);
+        } elseif name !== null && type == PHVOLT_T_FCALL && in_array(name, ["divisibleby", "sameas", "type"]) {
+            let code = this->resolveTest(right, leftCode);
+        } elseif name !== null && this->isStrictTests() {
+            throw new Exception(
+                "Unknown test \"" . name . "\" in " . expr["file"] . " on line " . expr["line"]
+                . " (register it with Volt::addTest(), or set the 'strictTests' option to false)"
+            );
+        } else {
+            /**
+             * Not a test name (a literal, an expression), or strict tests
+             * off: compare, as before
+             */
+            let code = this->resolveTest(right, leftCode);
+        }
+
+        if negate {
+            return "!(" . code . ")";
+        }
+
+        return code;
+    }
+
+    /**
+     * A template named by a string literal in include: with or without
+     * ".volt", or null when it is not a file
+     */
+    protected function findTemplate(string name) -> string | null
+    {
+        var finalPath;
+
+        let finalPath = this->getFinalPath(name);
+
+        if this->phpFileExists(finalPath) {
+            return finalPath;
+        }
+
+        if !ends_with(name, ".volt") && this->phpFileExists(finalPath . ".volt") {
+            return finalPath . ".volt";
+        }
+
+        return null;
+    }
+
+    /**
+     * A registered runtime function, filter or test, or null
+     */
+    protected function getRuntime(string kind, string name) -> <VoltCallable> | null
+    {
+        if this->registry === null {
+            return null;
+        }
+
+        return this->registry->get(kind, name);
+    }
+
+    /**
+     * An expression whose result must not be HTML-escaped again by autoescape
+     */
+    protected function isSafeExpression(array expr) -> bool
+    {
+        var type, filter, filterName, nameNode, name, runtime;
+
+        if !fetch type, expr["type"] {
+            return false;
+        }
+
+        if type == 124 {
+            let filter = expr["right"],
+                filterName = null;
+
+            if filter["type"] == PHVOLT_T_FCALL {
+                if fetch nameNode, filter["name"] {
+                    if typeof nameNode == "array" && isset nameNode["value"] {
+                        let filterName = nameNode["value"];
+                    }
+                }
+            } elseif isset filter["value"] {
+                let filterName = filter["value"];
+            }
+
+            if typeof filterName != "string" {
+                return false;
+            }
+
+            if in_array(filterName, ["raw", "e", "escape", "escape_js", "escape_css", "escape_attr", "url_encode"]) {
+                return true;
+            }
+
+            let runtime = this->getRuntime("filter", filterName);
+
+            return runtime !== null && runtime->isSafe();
+        }
+
+        if type == PHVOLT_T_FCALL && fetch nameNode, expr["name"] {
+            if typeof nameNode != "array" || !isset nameNode["type"] || nameNode["type"] != PHVOLT_T_IDENTIFIER {
+                return false;
+            }
+
+            let name = nameNode["value"];
+
+            if in_array(name, ["content", "get_content", "partial"]) {
+                return true;
+            }
+
+            let runtime = this->getRuntime("function", name);
+
+            return runtime !== null && runtime->isSafe();
+        }
+
+        return false;
+    }
+
+    /**
+     * Compiled arguments of a runtime call; 'name': value becomes a PHP named
+     * argument
+     */
+    protected function runtimeArguments(var exprArgs) -> array
+    {
+        var argument, code, name;
+        array items;
+
+        let items = [];
+
+        if typeof exprArgs != "array" {
+            return items;
+        }
+
+        for argument in exprArgs {
+            let code = this->expression(argument["expr"]);
+
+            if fetch name, argument["name"] {
+                if unlikely !preg_match("/^[A-Za-z_][A-Za-z0-9_]*$/", name) {
+                    throw new Exception("Invalid argument name '" . name . "'");
+                }
+
+                let code = name . ": " . code;
+            }
+
+            let items[] = code;
+        }
+
+        return items;
+    }
+
+    /**
      * Compiles a Volt source code returning a PHP plain version
      *
      * @phpstan-return array<array-key, mixed>|string
@@ -2370,6 +2945,12 @@ class Compiler implements InjectionAwareInterface
         if unlikely typeof intermediate != "array" {
             throw new InvalidIntermediateRepresentation();
         }
+
+        /**
+         * Inheritance (extends, nested blocks, block(), embed) is resolved on
+         * the AST; statementList() sees a flat statement list
+         */
+        let intermediate = (new Resolver(this))->resolve(intermediate, (string) currentPath);
 
         let compilation = this->statementList(intermediate, extendsMode);
 
@@ -2527,7 +3108,7 @@ class Compiler implements InjectionAwareInterface
     final protected function resolveFilter(array filter, string left) -> string
     {
         var code, type, functionName, name, file, line, extensions, filters,
-            funcArguments, arguments, definition;
+            funcArguments, arguments, definition, runtime, runtimeArguments;
 
         let code = null,
             type = filter["type"];
@@ -2635,6 +3216,31 @@ class Compiler implements InjectionAwareInterface
              * Invalid filter definition throw an exception
              */
             throw new InvalidUserFilterDefinition((string) name, (string) filter["file"], (int) filter["line"]);
+        }
+
+        /**
+         * A runtime filter (Volt::addFilter(new VoltFilter(...))): the value
+         * first, then the filter's own arguments
+         */
+        let runtime = this->getRuntime("filter", name);
+
+        if runtime !== null {
+            if !fetch runtimeArguments, filter["arguments"] {
+                let runtimeArguments = null;
+            }
+
+            return this->compileRuntimeCall(
+                "filter",
+                runtime,
+                array_merge([left], this->runtimeArguments(runtimeArguments))
+            );
+        }
+
+        /**
+         * raw: the value as it is, never escaped by autoescape
+         */
+        if name == "raw" {
+            return left;
         }
 
         switch (name) {
@@ -2786,9 +3392,33 @@ class Compiler implements InjectionAwareInterface
             let type = statement["type"];
 
             /**
+             * Raw PHP emitted by the inheritance resolver (embed scopes,
+             * dynamic extends)
+             */
+            if type === Resolver::PHP_NODE {
+                let compilation .= statement["code"];
+
+                continue;
+            }
+
+            /**
              * Compile the statement according to the statement's type
              */
             switch type {
+
+                case PHVOLT_T_SET_CAPTURE:
+                    /**
+                     * {% set name %}...{% endset %}
+                     */
+                    let compilation .= this->compileSetCapture(statement, extendsMode);
+
+                    break;
+
+                case PHVOLT_T_CACHE:
+                    throw new Exception(
+                        "{% cache %} was removed in Phalcon 4; use the view cache or a partial in "
+                        . statement["file"] . " on line " . statement["line"]
+                    );
 
                 case PHVOLT_T_RAW_FRAGMENT:
                     if isset statement["value"] {

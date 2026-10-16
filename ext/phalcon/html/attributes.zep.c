@@ -186,7 +186,7 @@ PHP_METHOD(Phalcon_Html_Attributes, renderAttributes)
 			ZVAL_LONG(&_11$$4, 3);
 			ZEPHIR_INIT_NVAR(&_12$$4);
 			ZVAL_STRING(&_12$$4, "utf-8");
-			ZEPHIR_CALL_FUNCTION(&_13$$4, "htmlspecialchars", &_14, 317, &value, &_11$$4, &_12$$4, &__$true);
+			ZEPHIR_CALL_FUNCTION(&_13$$4, "htmlspecialchars", &_14, 320, &value, &_11$$4, &_12$$4, &__$true);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(&_15$$4);
 			ZEPHIR_CONCAT_VSVS(&_15$$4, &key, "=\"", &_13$$4, "\" ");

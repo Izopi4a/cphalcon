@@ -90,8 +90,8 @@ PHP_METHOD(Phalcon_Acl_Component, __construct)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_acl_exception_ce, "Component name cannot be '*'", "phalcon/Acl/Component.zep", 38);
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 263, &name_zv);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 264, &description_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 266, &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 267, &description_zv);
 	ZEPHIR_MM_RESTORE();
 }
 

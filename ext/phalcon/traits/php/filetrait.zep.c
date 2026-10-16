@@ -296,7 +296,7 @@ PHP_METHOD(Phalcon_Traits_Php_FileTrait, phpFilePutContents)
 		context = &__$null;
 	}
 	ZVAL_LONG(&_0, flags);
-	ZEPHIR_RETURN_CALL_FUNCTION("file_put_contents", NULL, 142, &filename_zv, data, &_0, context);
+	ZEPHIR_RETURN_CALL_FUNCTION("file_put_contents", NULL, 145, &filename_zv, data, &_0, context);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -353,7 +353,7 @@ PHP_METHOD(Phalcon_Traits_Php_FileTrait, phpFopen)
 		context = &__$null;
 	}
 	ZVAL_BOOL(&_0, (useIncludePath ? 1 : 0));
-	ZEPHIR_RETURN_CALL_FUNCTION("fopen", NULL, 143, &filename_zv, &mode_zv, &_0, context);
+	ZEPHIR_RETURN_CALL_FUNCTION("fopen", NULL, 146, &filename_zv, &mode_zv, &_0, context);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -432,7 +432,7 @@ PHP_METHOD(Phalcon_Traits_Php_FileTrait, phpIsDir)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&filename_zv);
 	ZVAL_STR_COPY(&filename_zv, filename);
-	ZEPHIR_RETURN_CALL_FUNCTION("is_dir", NULL, 140, &filename_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("is_dir", NULL, 143, &filename_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -526,7 +526,7 @@ PHP_METHOD(Phalcon_Traits_Php_FileTrait, phpMkdir)
 	}
 	ZVAL_LONG(&_0, permissions);
 	ZVAL_BOOL(&_1, (recursive ? 1 : 0));
-	ZEPHIR_RETURN_CALL_FUNCTION("mkdir", NULL, 141, &directory_zv, &_0, &_1, context);
+	ZEPHIR_RETURN_CALL_FUNCTION("mkdir", NULL, 144, &directory_zv, &_0, &_1, context);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -566,7 +566,7 @@ PHP_METHOD(Phalcon_Traits_Php_FileTrait, phpUnlink)
 		context = &context_sub;
 		context = &__$null;
 	}
-	ZEPHIR_RETURN_CALL_FUNCTION("unlink", NULL, 128, &filename_zv, context);
+	ZEPHIR_RETURN_CALL_FUNCTION("unlink", NULL, 131, &filename_zv, context);
 	zephir_check_call_status();
 	RETURN_MM();
 }

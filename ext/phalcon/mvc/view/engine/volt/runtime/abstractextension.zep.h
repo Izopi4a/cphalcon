@@ -1,0 +1,24 @@
+
+extern zend_class_entry *phalcon_mvc_view_engine_volt_runtime_abstractextension_ce;
+
+ZEPHIR_INIT_CLASS(Phalcon_Mvc_View_Engine_Volt_Runtime_AbstractExtension);
+
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_AbstractExtension, getFilters);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_AbstractExtension, getFunctions);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_AbstractExtension, getTests);
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_abstractextension_getfilters, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_abstractextension_getfunctions, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_abstractextension_gettests, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEPHIR_INIT_FUNCS(phalcon_mvc_view_engine_volt_runtime_abstractextension_method_entry) {
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_AbstractExtension, getFilters, arginfo_phalcon_mvc_view_engine_volt_runtime_abstractextension_getfilters, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_AbstractExtension, getFunctions, arginfo_phalcon_mvc_view_engine_volt_runtime_abstractextension_getfunctions, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_AbstractExtension, getTests, arginfo_phalcon_mvc_view_engine_volt_runtime_abstractextension_gettests, ZEND_ACC_PUBLIC)
+	PHP_FE_END
+};

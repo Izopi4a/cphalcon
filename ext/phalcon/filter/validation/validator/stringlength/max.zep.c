@@ -168,7 +168,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_StringLength_Max, validate)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_CALL_FUNCTION(&length, "mb_strlen", NULL, 276, &_1$$4);
+		ZEPHIR_CALL_FUNCTION(&length, "mb_strlen", NULL, 279, &_1$$4);
 		zephir_check_call_status();
 	} else {
 		zephir_cast_to_string(&_2$$5, &value);

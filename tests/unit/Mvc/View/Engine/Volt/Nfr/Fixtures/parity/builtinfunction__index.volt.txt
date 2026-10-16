@@ -1,0 +1,16 @@
+Length Array: <?= $this->length($arr) ?>
+Length Object: <?= $this->length($obj) ?>
+Length String: <?= $this->length($str) ?>
+Length No String: <?= $this->length($no_str) ?>
+Slice Array: <?= join(',', $this->slice($arr, 0, null)) ?>
+Slice Array: <?= join(',', $this->slice($arr, 1, 2)) ?>
+Slice Array: <?= join(',', $this->slice($arr, 0, 2)) ?>
+Slice Object: <?= join(',', $this->slice($obj, 1, null)) ?>
+Slice Object: <?= join(',', $this->slice($obj, 1, 2)) ?>
+Slice Object: <?= join(',', $this->slice($obj, 0, 1)) ?>
+Slice String: <?= $this->slice('hello', 0, 2) ?>
+Slice String: <?= $this->slice('hello', 1, 2) ?>
+Slice String: <?= $this->slice('hello', 2, null) ?>
+Slice No String: <?= $this->slice(1234, 0, 2) ?>
+Slice No String: <?= $this->slice(1234, 1, 2) ?>
+Slice No String: <?= $this->slice(1234, 2, null) ?>

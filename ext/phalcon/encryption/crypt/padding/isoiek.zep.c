@@ -63,10 +63,10 @@ PHP_METHOD(Phalcon_Encryption_Crypt_Padding_IsoIek, pad)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &paddingSize_param);
 	ZVAL_LONG(&_0, 0x80);
-	ZEPHIR_CALL_FUNCTION(&_1, "chr", NULL, 273, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "chr", NULL, 276, &_0);
 	zephir_check_call_status();
 	ZVAL_LONG(&_0, 0);
-	ZEPHIR_CALL_FUNCTION(&_2, "chr", NULL, 273, &_0);
+	ZEPHIR_CALL_FUNCTION(&_2, "chr", NULL, 276, &_0);
 	zephir_check_call_status();
 	ZVAL_LONG(&_0, (paddingSize - 1));
 	ZEPHIR_CALL_FUNCTION(&_3, "str_repeat", NULL, 1, &_2, &_0);
@@ -114,9 +114,9 @@ PHP_METHOD(Phalcon_Encryption_Crypt_Padding_IsoIek, unpad)
 	zephir_memory_observe(&input_zv);
 	ZVAL_STR_COPY(&input_zv, input);
 	paddingSize = 0;
-	ZEPHIR_CALL_FUNCTION(&length, "mb_strlen", NULL, 276, &input_zv);
+	ZEPHIR_CALL_FUNCTION(&length, "mb_strlen", NULL, 279, &input_zv);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(&inputArray, "str_split", NULL, 96, &input_zv);
+	ZEPHIR_CALL_FUNCTION(&inputArray, "str_split", NULL, 99, &input_zv);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1);
@@ -133,7 +133,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt_Padding_IsoIek, unpad)
 			ZEPHIR_OBS_NVAR(&_3);
 			zephir_array_fetch_long(&_3, &inputArray, counter, PH_NOISY, "phalcon/Encryption/Crypt/Padding/IsoIek.zep", 48);
 			ZVAL_LONG(&_4, 0);
-			ZEPHIR_CALL_FUNCTION(&_5, "chr", &_6, 273, &_4);
+			ZEPHIR_CALL_FUNCTION(&_5, "chr", &_6, 276, &_4);
 			zephir_check_call_status();
 			_2 = ZEPHIR_IS_IDENTICAL(&_3, &_5);
 		}
@@ -150,7 +150,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt_Padding_IsoIek, unpad)
 	zephir_memory_observe(&_8);
 	zephir_array_fetch_long(&_8, &inputArray, counter, PH_NOISY, "phalcon/Encryption/Crypt/Padding/IsoIek.zep", 55);
 	ZVAL_LONG(&_4, 0x80);
-	ZEPHIR_CALL_FUNCTION(&_9, "chr", &_6, 273, &_4);
+	ZEPHIR_CALL_FUNCTION(&_9, "chr", &_6, 276, &_4);
 	zephir_check_call_status();
 	_10 = ZEPHIR_IS_EQUAL(&_8, &_9);
 	if (UNEXPECTED(EG(exception))) {

@@ -96,8 +96,8 @@ PHP_METHOD(Phalcon_Translate_Adapter_AbstractAdapter, __construct)
 		ZEPHIR_INIT_NVAR(&value);
 		ZVAL_STRING(&value, "associativeArray");
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 99, &value);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 100, interpolator);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 102, &value);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 103, interpolator);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -330,8 +330,8 @@ PHP_METHOD(Phalcon_Translate_Adapter_AbstractAdapter, replacePlaceholders)
 	} else {
 		zephir_get_arrval(&placeholders, placeholders_param);
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 100, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 99, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 103, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 102, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&interpolator, &_0, "newInstance", NULL, 0, &_1);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(&interpolator, "replacePlaceholders", NULL, 0, &translation_zv, &placeholders);

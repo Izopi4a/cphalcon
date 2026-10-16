@@ -56,7 +56,7 @@ PHP_METHOD(Phalcon_Html_Helper_Input_Input, setType)
 		Z_PARAM_STR(type)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&type_zv, type);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 562, &type_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 565, &type_zv);
 	RETURN_THISW();
 }
 

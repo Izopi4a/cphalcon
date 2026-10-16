@@ -283,8 +283,8 @@ class CompileStringTest extends AbstractUnitTestCase
                 '<?php if ($a != $b) { ?> hello <?php } ?>',
             ],
             [
-                '{% if a is not b %} hello {% endif %}',
-                '<?php if ($a != $b) { ?> hello <?php } ?>',
+                '{% if a is not 1 %} hello {% endif %}',
+                '<?php if (!($a == 1)) { ?> hello <?php } ?>',
             ],
             [
                 '{% if a<b %} hello {% endif %}',

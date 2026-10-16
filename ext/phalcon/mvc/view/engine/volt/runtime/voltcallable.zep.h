@@ -1,0 +1,56 @@
+
+extern zend_class_entry *phalcon_mvc_view_engine_volt_runtime_voltcallable_ce;
+
+ZEPHIR_INIT_CLASS(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable);
+
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, __construct);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getCallable);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getName);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getOptions);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getSignature);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getStaticCallCode);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, isSafe);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, needsContext);
+zend_object *zephir_init_properties_Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable(zend_class_entry *class_type);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable___construct, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	ZEND_ARG_INFO(0, handler)
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, options, IS_ARRAY, 0, "[]")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getcallable, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getname, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getoptions, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getsignature, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getstaticcallcode, 0, 0, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_issafe, 0, 0, _IS_BOOL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_needscontext, 0, 0, _IS_BOOL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_zephir_init_properties_phalcon_mvc_view_engine_volt_runtime_voltcallable, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEPHIR_INIT_FUNCS(phalcon_mvc_view_engine_volt_runtime_voltcallable_method_entry) {
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, __construct, arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getCallable, arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getcallable, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getName, arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getname, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getOptions, arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getoptions, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getSignature, arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getsignature, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, getStaticCallCode, arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_getstaticcallcode, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, isSafe, arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_issafe, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt_Runtime_VoltCallable, needsContext, arginfo_phalcon_mvc_view_engine_volt_runtime_voltcallable_needscontext, ZEND_ACC_PUBLIC)
+	PHP_FE_END
+};

@@ -69,6 +69,12 @@ const phvolt_token_names phvolt_tokens[] =
   { SL("++"),            PHVOLT_T_INCR },
   { SL("--"),            PHVOLT_T_DECR },
   { SL("BLOCK"),         PHVOLT_T_BLOCK },
+  { SL("ENDSET"),        PHVOLT_T_ENDSET },
+  { SL("EMBED"),         PHVOLT_T_EMBED },
+  { SL("ENDEMBED"),      PHVOLT_T_ENDEMBED },
+  { SL("?."),            PHVOLT_T_NULLSAFE },
+  { SL("??"),            PHVOLT_T_COALESCE },
+  { SL("IS NOT"),        PHVOLT_T_ISNOT },
   { SL("ENDBLOCK"),      PHVOLT_T_ENDBLOCK },
   { SL("CACHE"),         PHVOLT_T_CACHE },
   { SL("ENDCACHE"),      PHVOLT_T_ENDCACHE },
@@ -652,19 +658,61 @@ int phvolt_internal_parse_view(zval **result, zval *view_code, zval *template_pa
 				break;
 
 			case PHVOLT_T_BLOCK:
-				if (state->block_level > 0) {
-					phvolt_create_error_msg(parser_status, "Embedding blocks into other blocks is not supported");
-					parser_status->status = PHVOLT_PARSING_FAILED;
+				/*
+				 * "block" opens a {% block %} statement only right after the
+				 * opening delimiter; anywhere else ({{ block("title") }},
+				 * article.block) it is a plain identifier, like "default"
+				 */
+				if (prev_token != PHVOLT_T_OPEN_DELIMITER) {
+					phvolt_parse_with_token(phvolt_parser, PHVOLT_T_IDENTIFIER, PHVOLT_IDENTIFIER, &token, parser_status);
 					break;
-				} else {
-					state->block_level++;
 				}
+
+				efree(token.value);
+
+				/*
+				 * Blocks may nest, and may sit inside if/for/switch: the
+				 * compiler resolves inheritance on the AST
+				 */
+				state->block_level++;
 				phvolt_(phvolt_parser, PHVOLT_BLOCK, NULL, parser_status);
 				break;
 
 			case PHVOLT_T_ENDBLOCK:
 				state->block_level--;
 				phvolt_(phvolt_parser, PHVOLT_ENDBLOCK, NULL, parser_status);
+				break;
+
+			case PHVOLT_T_ISNOT:
+				phvolt_(phvolt_parser, PHVOLT_ISNOT, NULL, parser_status);
+				break;
+
+			case PHVOLT_T_COALESCE:
+				phvolt_(phvolt_parser, PHVOLT_COALESCE, NULL, parser_status);
+				break;
+
+			case PHVOLT_T_NULLSAFE:
+				phvolt_(phvolt_parser, PHVOLT_NULLSAFE, NULL, parser_status);
+				break;
+
+			case PHVOLT_T_EMBED:
+				if (state->extends_mode == 1 && state->block_level == 0) {
+					phvolt_create_error_msg(parser_status, "Child templates only may contain blocks");
+					parser_status->status = PHVOLT_PARSING_FAILED;
+					break;
+				}
+
+				state->block_level++;
+				phvolt_(phvolt_parser, PHVOLT_EMBED, NULL, parser_status);
+				break;
+
+			case PHVOLT_T_ENDEMBED:
+				state->block_level--;
+				phvolt_(phvolt_parser, PHVOLT_ENDEMBED, NULL, parser_status);
+				break;
+
+			case PHVOLT_T_ENDSET:
+				phvolt_(phvolt_parser, PHVOLT_ENDSET, NULL, parser_status);
 				break;
 
 			case PHVOLT_T_MACRO:

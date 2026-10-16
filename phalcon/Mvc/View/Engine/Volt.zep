@@ -10,6 +10,7 @@
 
 namespace Phalcon\Mvc\View\Engine;
 
+use Closure;
 use Countable;
 use Iterator;
 use Phalcon\Di\DiInterface;
@@ -21,6 +22,11 @@ use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidHaystack;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MacroNotFound;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MbstringRequired;
+use Phalcon\Mvc\View\Engine\Volt\Runtime\ExtensionInterface;
+use Phalcon\Mvc\View\Engine\Volt\Runtime\Registry;
+use Phalcon\Mvc\View\Engine\Volt\Runtime\VoltFilter;
+use Phalcon\Mvc\View\Engine\Volt\Runtime\VoltFunction;
+use Phalcon\Mvc\View\Engine\Volt\Runtime\VoltTest;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Traits\Php\InfoTrait;
 
@@ -47,6 +53,180 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      * @phpstan-var array<string, mixed>
      */
     protected array options = [];
+
+    /**
+     * Bodies of the {% call %} statements being rendered (caller())
+     *
+     * @var array
+     */
+    protected array macroCallers = [];
+
+    /**
+     * Runtime functions, filters and tests
+     *
+     * @var Registry|null
+     */
+    protected registry = null;
+
+    /**
+     * Resolved runtime callables, read by compiled templates:
+     * ($this->runtime['function:money'] ??= $this->getRuntimeFunction('money'))(...)
+     *
+     * @var array
+     */
+    public array runtime = [];
+
+    /**
+     * Registers a bundle of runtime functions, filters and tests
+     */
+    public function addExtension(<ExtensionInterface> extension) -> <static>
+    {
+        this->getRegistry()->addExtension(extension);
+
+        let this->runtime = [];
+
+        return this;
+    }
+
+    /**
+     * Registers a filter that runs at render time
+     *
+     *```php
+     * $volt->addFilter(new VoltFilter("money", Money::format(...)));
+     *```
+     */
+    public function addFilter(<VoltFilter> filter) -> <static>
+    {
+        this->getRegistry()->add(filter);
+
+        let this->runtime = [];
+
+        return this;
+    }
+
+    /**
+     * Registers a function that runs at render time
+     *
+     *```php
+     * $volt->addFunction(new VoltFunction("price", ["prices", "format"]));
+     * $volt->addFunction(new VoltFunction("stars", $closure, ["safe" => true]));
+     *```
+     */
+    public function addFunction(<VoltFunction> voltFunction) -> <static>
+    {
+        this->getRegistry()->add(voltFunction);
+
+        let this->runtime = [];
+
+        return this;
+    }
+
+    /**
+     * Registers a test that runs at render time: {% if user is premium %}
+     */
+    public function addTest(<VoltTest> test) -> <static>
+    {
+        this->getRegistry()->add(test);
+
+        let this->runtime = [];
+
+        return this;
+    }
+
+    /**
+     * The registry of runtime functions, filters and tests
+     */
+    public function getRegistry() -> <Registry>
+    {
+        if this->registry === null {
+            let this->registry = new Registry();
+        }
+
+        return this->registry;
+    }
+
+    /**
+     * Called from compiled templates
+     */
+    public function getRuntimeFilter(string name) -> <Closure>
+    {
+        return this->getRegistry()->resolve("filter", name, this->container);
+    }
+
+    /**
+     * Called from compiled templates
+     */
+    public function getRuntimeFunction(string name) -> <Closure>
+    {
+        return this->getRegistry()->resolve("function", name, this->container);
+    }
+
+    /**
+     * Called from compiled templates
+     */
+    public function getRuntimeTest(string name) -> <Closure>
+    {
+        return this->getRegistry()->resolve("test", name, this->container);
+    }
+
+    /**
+     * Called from compiled templates: the {% call %} statement ended
+     */
+    public function popMacroCaller() -> void
+    {
+        array_pop(this->macroCallers);
+    }
+
+    /**
+     * Called from compiled templates: a {% call %} statement starts
+     */
+    public function pushMacroCaller(<Closure> caller) -> void
+    {
+        let this->macroCallers[] = caller;
+    }
+
+    /**
+     * {% extends layoutVar %}: compiles the child against that parent (once
+     * per pair) and runs it with the template's variables
+     */
+    public function renderDynamicExtends(var parent, string child, array variables) -> void
+    {
+        var compiledTemplatePath, key, value;
+
+        if unlikely typeof parent != "string" || parent === "" {
+            throw new Exception(
+                "extends: the parent template name must be a non-empty string"
+            );
+        }
+
+        let compiledTemplatePath = this->getCompiler()->compileVariant(child, parent);
+
+        for key, value in variables {
+            if key !== "this" {
+                let {key} = value;
+            }
+        }
+
+        require compiledTemplatePath;
+    }
+
+    /**
+     * Called from compiled templates: {{ caller() }} inside a macro
+     */
+    public function renderMacroCaller() -> string
+    {
+        var caller;
+
+        let caller = end(this->macroCallers);
+
+        if unlikely caller === false {
+            throw new Exception("caller() can only be used in a macro called with {% call %}");
+        }
+
+        {caller}();
+
+        return "";
+    }
 
     /**
      * Checks if a macro is defined and calls it
@@ -112,6 +292,8 @@ class Volt extends AbstractEngine implements EventsAwareInterface
             if typeof options == "array" {
                 compiler->setOptions(options);
             }
+
+            compiler->setRegistry(this->getRegistry());
 
             let this->compiler = compiler;
         }

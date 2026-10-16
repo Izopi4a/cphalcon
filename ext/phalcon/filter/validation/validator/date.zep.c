@@ -158,7 +158,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_Date, validate)
 		ZEPHIR_INIT_NVAR(&format);
 		ZVAL_STRING(&format, "Y-m-d");
 	}
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checkDate", NULL, 329, &value, &format);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checkDate", NULL, 332, &value, &format);
 	zephir_check_call_status();
 	if (!(zephir_is_true(&_3))) {
 		ZEPHIR_CALL_METHOD(&_4$$6, this_ptr, "messageFactory", NULL, 0, validation, field);

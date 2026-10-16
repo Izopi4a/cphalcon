@@ -320,6 +320,51 @@ static void phvolt_ret_include_statement(zval *ret, zval *path, zval *params, ph
 }
 /* }}} */
 
+/* {{{ phvolt_ret_embed_statement */
+static void phvolt_ret_embed_statement(zval *ret, zval *path, zval *params, zval *block_statements,
+	phvolt_scanner_state *state)
+{
+	array_init(ret);
+
+	add_assoc_long(ret, "type", PHVOLT_T_EMBED);
+
+	add_assoc_zval(ret, "path", path);
+	if (params) {
+		add_assoc_zval(ret, "params", params);
+	}
+
+	if (block_statements) {
+		add_assoc_zval(ret, "block_statements", block_statements);
+	}
+
+	Z_TRY_ADDREF_P(state->active_file);
+	add_assoc_zval(ret, "file", state->active_file);
+	add_assoc_long(ret, "line", state->active_line);
+}
+/* }}} */
+
+/* {{{ phvolt_ret_set_capture_statement */
+static void phvolt_ret_set_capture_statement(zval *ret, phvolt_parser_token *name, zval *block_statements,
+	phvolt_scanner_state *state)
+{
+	array_init(ret);
+
+	add_assoc_long(ret, "type", PHVOLT_T_SET_CAPTURE);
+
+	phvolt_add_assoc_stringl(ret, "name", name->token, name->token_len, 0);
+	efree(name->token);
+	efree(name);
+
+	if (block_statements) {
+		add_assoc_zval(ret, "block_statements", block_statements);
+	}
+
+	Z_TRY_ADDREF_P(state->active_file);
+	add_assoc_zval(ret, "file", state->active_file);
+	add_assoc_long(ret, "line", state->active_line);
+}
+/* }}} */
+
 /* {{{ phvolt_ret_do_statement */
 static void phvolt_ret_do_statement(zval *ret, zval *expr, phvolt_scanner_state *state)
 {

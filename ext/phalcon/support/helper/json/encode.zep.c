@@ -118,7 +118,7 @@ PHP_METHOD(Phalcon_Support_Helper_Json_Encode, __invoke)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_CALL_METHOD(NULL, &_3$$3, "__construct", NULL, 230, &_4$$3, &error);
+		ZEPHIR_CALL_METHOD(NULL, &_3$$3, "__construct", NULL, 233, &_4$$3, &error);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(&_3$$3, "phalcon/Support/Helper/Json/Encode.zep", 64);
 		ZEPHIR_MM_RESTORE();

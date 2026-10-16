@@ -100,12 +100,12 @@ PHP_METHOD(Phalcon_Filter_Sanitize_Ip, __invoke)
 		zephir_array_fetch_long(&mask, &parts, 1, PH_NOISY, "phalcon/Filter/Sanitize/Ip.zep", 35);
 		ZVAL_LONG(&_1$$3, 275);
 		ZVAL_LONG(&_2$$3, filter);
-		ZEPHIR_CALL_FUNCTION(&filtered, "filter_var", NULL, 313, &ip, &_1$$3, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&filtered, "filter_var", NULL, 316, &ip, &_1$$3, &_2$$3);
 		zephir_check_call_status();
 		if (ZEPHIR_IS_FALSE_IDENTICAL(&filtered)) {
 			RETURN_MM_BOOL(0);
 		}
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "ctype_digit", NULL, 315, &mask);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "ctype_digit", NULL, 318, &mask);
 		zephir_check_call_status();
 		if (!zephir_is_true(&_3$$3)) {
 			RETURN_MM_BOOL(0);
@@ -133,7 +133,7 @@ PHP_METHOD(Phalcon_Filter_Sanitize_Ip, __invoke)
 	}
 	ZVAL_LONG(&_6, 275);
 	ZVAL_LONG(&_7, filter);
-	ZEPHIR_RETURN_CALL_FUNCTION("filter_var", NULL, 313, &ipInput, &_6, &_7);
+	ZEPHIR_RETURN_CALL_FUNCTION("filter_var", NULL, 316, &ipInput, &_6, &_7);
 	zephir_check_call_status();
 	RETURN_MM();
 }

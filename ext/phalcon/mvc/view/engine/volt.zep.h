@@ -3,6 +3,18 @@ extern zend_class_entry *phalcon_mvc_view_engine_volt_ce;
 
 ZEPHIR_INIT_CLASS(Phalcon_Mvc_View_Engine_Volt);
 
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, addExtension);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, addFilter);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, addFunction);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, addTest);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, getRegistry);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, getRuntimeFilter);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, getRuntimeFunction);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, getRuntimeTest);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, popMacroCaller);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, pushMacroCaller);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, renderDynamicExtends);
+PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, renderMacroCaller);
 PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, callMacro);
 PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, convertEncoding);
 PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, getCompiler);
@@ -18,6 +30,55 @@ PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, slice);
 PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, sort);
 PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, phpExtensionLoaded);
 PHP_METHOD(Phalcon_Mvc_View_Engine_Volt, phpFunctionExists);
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_phalcon_mvc_view_engine_volt_addextension, 0, 1, MAY_BE_STATIC)
+	ZEND_ARG_OBJ_INFO(0, extension, Phalcon\\Mvc\\View\\Engine\\Volt\\Runtime\\ExtensionInterface, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_phalcon_mvc_view_engine_volt_addfilter, 0, 1, MAY_BE_STATIC)
+	ZEND_ARG_OBJ_INFO(0, filter, Phalcon\\Mvc\\View\\Engine\\Volt\\Runtime\\VoltFilter, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_phalcon_mvc_view_engine_volt_addfunction, 0, 1, MAY_BE_STATIC)
+	ZEND_ARG_OBJ_INFO(0, voltFunction, Phalcon\\Mvc\\View\\Engine\\Volt\\Runtime\\VoltFunction, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_phalcon_mvc_view_engine_volt_addtest, 0, 1, MAY_BE_STATIC)
+	ZEND_ARG_OBJ_INFO(0, test, Phalcon\\Mvc\\View\\Engine\\Volt\\Runtime\\VoltTest, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_getregistry, 0, 0, Phalcon\\Mvc\\View\\Engine\\Volt\\Runtime\\Registry, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_getruntimefilter, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_getruntimefunction, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_getruntimetest, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_popmacrocaller, 0, 0, IS_VOID, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_pushmacrocaller, 0, 1, IS_VOID, 0)
+
+	ZEND_ARG_OBJ_INFO(0, caller, Closure, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_renderdynamicextends, 0, 3, IS_VOID, 0)
+
+	ZEND_ARG_INFO(0, parent)
+	ZEND_ARG_TYPE_INFO(0, child, IS_STRING, 0)
+	ZEND_ARG_ARRAY_INFO(0, variables, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_rendermacrocaller, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_callmacro, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
@@ -86,6 +147,18 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_view_engine_volt_php
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(phalcon_mvc_view_engine_volt_method_entry) {
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, addExtension, arginfo_phalcon_mvc_view_engine_volt_addextension, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, addFilter, arginfo_phalcon_mvc_view_engine_volt_addfilter, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, addFunction, arginfo_phalcon_mvc_view_engine_volt_addfunction, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, addTest, arginfo_phalcon_mvc_view_engine_volt_addtest, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, getRegistry, arginfo_phalcon_mvc_view_engine_volt_getregistry, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, getRuntimeFilter, arginfo_phalcon_mvc_view_engine_volt_getruntimefilter, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, getRuntimeFunction, arginfo_phalcon_mvc_view_engine_volt_getruntimefunction, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, getRuntimeTest, arginfo_phalcon_mvc_view_engine_volt_getruntimetest, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, popMacroCaller, arginfo_phalcon_mvc_view_engine_volt_popmacrocaller, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, pushMacroCaller, arginfo_phalcon_mvc_view_engine_volt_pushmacrocaller, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, renderDynamicExtends, arginfo_phalcon_mvc_view_engine_volt_renderdynamicextends, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_View_Engine_Volt, renderMacroCaller, arginfo_phalcon_mvc_view_engine_volt_rendermacrocaller, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_View_Engine_Volt, callMacro, arginfo_phalcon_mvc_view_engine_volt_callmacro, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_View_Engine_Volt, convertEncoding, arginfo_phalcon_mvc_view_engine_volt_convertencoding, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_View_Engine_Volt, getCompiler, arginfo_phalcon_mvc_view_engine_volt_getcompiler, ZEND_ACC_PUBLIC)

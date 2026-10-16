@@ -128,11 +128,11 @@ PHP_METHOD(Phalcon_DataMapper_Pdo_Profiler_Profiler, __construct)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "{method} ({duration}s): {statement} {backtrace}");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 387, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 390, &_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_LONG(&_1, 7);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 388, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 389, logger);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 391, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 392, logger);
 	ZEPHIR_INIT_NVAR(&_0);
 	object_init_ex(&_0, phalcon_support_helper_json_encode_ce);
 	if (zephir_has_constructor(&_0)) {
@@ -140,7 +140,7 @@ PHP_METHOD(Phalcon_DataMapper_Pdo_Profiler_Profiler, __construct)
 		zephir_check_call_status();
 	}
 
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 390, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 393, &_0);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -228,20 +228,20 @@ PHP_METHOD(Phalcon_DataMapper_Pdo_Profiler_Profiler, finish)
 	} else {
 		zephir_get_arrval(&values, values_param);
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 391, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 394, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(zephir_is_true(&_0))) {
 		ZEPHIR_INIT_VAR(&ex);
 		object_init_ex(&ex, phalcon_datamapper_pdo_exception_exception_ce);
 		ZEPHIR_CALL_METHOD(NULL, &ex, "__construct", NULL, 32);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&finish, "hrtime", NULL, 233, &__$true);
+		ZEPHIR_CALL_FUNCTION(&finish, "hrtime", NULL, 236, &__$true);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(&_1$$3, &ex, "getTraceAsString", NULL, 234);
+		ZEPHIR_CALL_METHOD(&_1$$3, &ex, "getTraceAsString", NULL, 237);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "backtrace");
 		zephir_update_property_array(this_ptr, SL("context"), &_2$$3, &_1$$3);
-		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_1, 392, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_1, 395, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&_4$$3);
 		zephir_array_fetch_string(&_4$$3, &_3$$3, SL("start"), PH_NOISY, "phalcon/DataMapper/Pdo/Profiler/Profiler.zep", 91);
 		ZEPHIR_INIT_VAR(&_5$$3);
@@ -264,22 +264,22 @@ PHP_METHOD(Phalcon_DataMapper_Pdo_Profiler_Profiler, finish)
 			ZEPHIR_INIT_NVAR(&_5$$3);
 			ZVAL_STRING(&_5$$3, "");
 		} else {
-			zephir_read_property_cached(&_9$$3, this_ptr, _zephir_prop_2, 390, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_9$$3, this_ptr, _zephir_prop_2, 393, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_CALL_METHOD(&_5$$3, &_9$$3, "__invoke", NULL, 0, &values);
 			zephir_check_call_status();
 		}
 		ZEPHIR_INIT_VAR(&_10$$3);
 		ZVAL_STRING(&_10$$3, "values");
 		zephir_update_property_array(this_ptr, SL("context"), &_10$$3, &_5$$3);
-		zephir_read_property_cached(&_11$$3, this_ptr, _zephir_prop_3, 389, PH_NOISY_CC | PH_READONLY);
-		zephir_read_property_cached(&_12$$3, this_ptr, _zephir_prop_4, 388, PH_NOISY_CC | PH_READONLY);
-		zephir_read_property_cached(&_13$$3, this_ptr, _zephir_prop_5, 387, PH_NOISY_CC | PH_READONLY);
-		zephir_read_property_cached(&_14$$3, this_ptr, _zephir_prop_1, 392, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_11$$3, this_ptr, _zephir_prop_3, 392, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_12$$3, this_ptr, _zephir_prop_4, 391, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_13$$3, this_ptr, _zephir_prop_5, 390, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_14$$3, this_ptr, _zephir_prop_1, 395, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_METHOD(NULL, &_11$$3, "log", NULL, 0, &_12$$3, &_13$$3, &_14$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_15$$3);
 		array_init(&_15$$3);
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 392, &_15$$3);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 395, &_15$$3);
 	}
 	ZEPHIR_MM_RESTORE();
 }
@@ -353,9 +353,9 @@ PHP_METHOD(Phalcon_DataMapper_Pdo_Profiler_Profiler, setActive)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &active_param);
 	if (active) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 391, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 394, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 391, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 394, &__$false);
 	}
 	RETURN_THISW();
 }
@@ -383,7 +383,7 @@ PHP_METHOD(Phalcon_DataMapper_Pdo_Profiler_Profiler, setLogFormat)
 		Z_PARAM_STR(logFormat)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&logFormat_zv, logFormat);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 387, &logFormat_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 390, &logFormat_zv);
 	RETURN_THISW();
 }
 
@@ -410,7 +410,7 @@ PHP_METHOD(Phalcon_DataMapper_Pdo_Profiler_Profiler, setLogLevel)
 		Z_PARAM_STR(logLevel)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&logLevel_zv, logLevel);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 388, &logLevel_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 391, &logLevel_zv);
 	RETURN_THISW();
 }
 
@@ -449,15 +449,15 @@ PHP_METHOD(Phalcon_DataMapper_Pdo_Profiler_Profiler, start)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&method_zv);
 	ZVAL_STR_COPY(&method_zv, method);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 391, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 394, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(zephir_is_true(&_0))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		zephir_create_array(&_1$$3, 2, 0);
 		zephir_array_update_string(&_1$$3, SL("method"), &method_zv, PH_COPY | PH_SEPARATE);
-		ZEPHIR_CALL_FUNCTION(&_2$$3, "hrtime", NULL, 233, &__$true);
+		ZEPHIR_CALL_FUNCTION(&_2$$3, "hrtime", NULL, 236, &__$true);
 		zephir_check_call_status();
 		zephir_array_update_string(&_1$$3, SL("start"), &_2$$3, PH_COPY | PH_SEPARATE);
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 392, &_1$$3);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 395, &_1$$3);
 	}
 	ZEPHIR_MM_RESTORE();
 }

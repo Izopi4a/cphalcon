@@ -106,7 +106,7 @@ PHP_METHOD(Phalcon_Storage_Adapter_Memory, clear)
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 233, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 236, &_0);
 	RETURN_MM_BOOL(1);
 }
 
@@ -148,7 +148,7 @@ PHP_METHOD(Phalcon_Storage_Adapter_Memory, getKeys)
 	ZVAL_STR_COPY(&prefix_zv, prefix);
 	}
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 233, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 236, PH_NOISY_CC | PH_READONLY);
 	zephir_array_keys(&_0, &_1);
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "getFilteredKeys", NULL, 0, &_0, &prefix_zv);
 	zephir_check_call_status();
@@ -234,11 +234,11 @@ PHP_METHOD(Phalcon_Storage_Adapter_Memory, doDecrement)
 		}
 	ZEPHIR_CALL_METHOD(&prefixedKey, this_ptr, "getPrefixedKey", NULL, 0, &key_zv);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 233, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 236, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&result);
 	ZVAL_BOOL(&result, zephir_array_key_exists(&_0, &prefixedKey));
 	if (EXPECTED(ZEPHIR_IS_TRUE_IDENTICAL(&result))) {
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 233, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 236, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&current);
 		zephir_array_fetch(&current, &_1$$3, &prefixedKey, PH_NOISY, "phalcon/Storage/Adapter/Memory.zep", 97);
 		ZEPHIR_INIT_VAR(&newValue);
@@ -282,7 +282,7 @@ PHP_METHOD(Phalcon_Storage_Adapter_Memory, doDelete)
 	ZVAL_STR_COPY(&key_zv, key);
 	ZEPHIR_CALL_METHOD(&prefixedKey, this_ptr, "getPrefixedKey", NULL, 0, &key_zv);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 233, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 236, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&exists);
 	ZVAL_BOOL(&exists, zephir_array_key_exists(&_0, &prefixedKey));
 	zephir_unset_property_array(this_ptr, ZEND_STRL("data"), &prefixedKey);
@@ -322,7 +322,7 @@ PHP_METHOD(Phalcon_Storage_Adapter_Memory, doGetData)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 233, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 236, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_1);
 	ZEPHIR_CALL_METHOD(&_2, this_ptr, "getPrefixedKey", NULL, 0, &key_zv);
 	zephir_check_call_status();
@@ -362,7 +362,7 @@ PHP_METHOD(Phalcon_Storage_Adapter_Memory, doHas)
 	ZVAL_STR_COPY(&key_zv, key);
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getPrefixedKey", NULL, 0, &key_zv);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 233, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 236, PH_NOISY_CC | PH_READONLY);
 	RETURN_MM_BOOL(zephir_array_key_exists(&_1, &_0));
 }
 
@@ -412,11 +412,11 @@ PHP_METHOD(Phalcon_Storage_Adapter_Memory, doIncrement)
 		}
 	ZEPHIR_CALL_METHOD(&prefixedKey, this_ptr, "getPrefixedKey", NULL, 0, &key_zv);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 233, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 236, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&result);
 	ZVAL_BOOL(&result, zephir_array_key_exists(&_0, &prefixedKey));
 	if (EXPECTED(ZEPHIR_IS_TRUE_IDENTICAL(&result))) {
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 233, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 236, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&current);
 		zephir_array_fetch(&current, &_1$$3, &prefixedKey, PH_NOISY, "phalcon/Storage/Adapter/Memory.zep", 164);
 		ZEPHIR_INIT_VAR(&newValue);

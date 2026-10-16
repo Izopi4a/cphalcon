@@ -249,7 +249,7 @@ final class IsTest extends AbstractUnitTestCase
             [
                 'type' => 300,
                 'expr' => [
-                    'type' => 273,
+                    'type' => 422,
                     'left' => [
                         'type'  => 265,
                         'value' => 'a',

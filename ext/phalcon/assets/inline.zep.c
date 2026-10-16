@@ -119,14 +119,14 @@ PHP_METHOD(Phalcon_Assets_Inline, __construct)
 	} else {
 		zephir_get_arrval(&attributes, attributes_param);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 115, &type_zv);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 116, &content_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 118, &type_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 119, &content_zv);
 	if (filter) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 117, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 120, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 117, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 120, &__$false);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 118, &attributes);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_3, 121, &attributes);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -159,7 +159,7 @@ PHP_METHOD(Phalcon_Assets_Inline, getAssetKey)
 	}
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "sha256");
-	ZEPHIR_RETURN_CALL_FUNCTION("hash", NULL, 77, &_2, &key);
+	ZEPHIR_RETURN_CALL_FUNCTION("hash", NULL, 80, &_2, &key);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -223,7 +223,7 @@ PHP_METHOD(Phalcon_Assets_Inline, setAttributes)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &attributes_param);
 	zephir_get_arrval(&attributes, attributes_param);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 118, &attributes);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 121, &attributes);
 	RETURN_THIS();
 }
 
@@ -248,9 +248,9 @@ PHP_METHOD(Phalcon_Assets_Inline, setFilter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &filter_param);
 	if (filter) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 117, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 120, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 117, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 120, &__$false);
 	}
 	RETURN_THISW();
 }
@@ -274,7 +274,7 @@ PHP_METHOD(Phalcon_Assets_Inline, setType)
 		Z_PARAM_STR(type)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&type_zv, type);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 115, &type_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 118, &type_zv);
 	RETURN_THISW();
 }
 

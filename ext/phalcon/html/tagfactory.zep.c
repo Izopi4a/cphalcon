@@ -155,8 +155,8 @@ PHP_METHOD(Phalcon_Html_TagFactory, __construct)
 		response = &response_sub;
 		response = &__$null;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 580, escaper);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 581, response);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 583, escaper);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 584, response);
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "init", NULL, 0, &services);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
@@ -229,7 +229,7 @@ PHP_METHOD(Phalcon_Html_TagFactory, has)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 582, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 585, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, &name_zv));
 }
 
@@ -287,24 +287,24 @@ PHP_METHOD(Phalcon_Html_TagFactory, newInstance)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 583, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 586, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_0, &name_zv))) {
 		ZEPHIR_CALL_METHOD(&definition, this_ptr, "getService", NULL, 0, &name_zv);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "input");
-		ZEPHIR_CALL_FUNCTION(&_2$$3, "str_starts_with", NULL, 367, &name_zv, &_1$$3);
+		ZEPHIR_CALL_FUNCTION(&_2$$3, "str_starts_with", NULL, 370, &name_zv, &_1$$3);
 		zephir_check_call_status();
 		if (zephir_is_true(&_2$$3)) {
 			ZEPHIR_INIT_VAR(&_3$$4);
 			ZVAL_STRING(&_3$$4, "doctype");
-			ZEPHIR_CALL_METHOD(&doctype, this_ptr, "newInstance", NULL, 368, &_3$$4);
+			ZEPHIR_CALL_METHOD(&doctype, this_ptr, "newInstance", NULL, 371, &_3$$4);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(&_3$$4);
 			ZEPHIR_INIT_VAR(&_4$$4);
 			zephir_create_array(&_4$$4, 2, 0);
 			zephir_memory_observe(&_5$$4);
-			zephir_read_property_cached(&_5$$4, this_ptr, _zephir_prop_1, 580, PH_NOISY_CC);
+			zephir_read_property_cached(&_5$$4, this_ptr, _zephir_prop_1, 583, PH_NOISY_CC);
 			zephir_array_fast_append(&_4$$4, &_5$$4);
 			zephir_array_fast_append(&_4$$4, &doctype);
 			ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params(&_3$$4, &definition, &_4$$4);
@@ -315,10 +315,10 @@ PHP_METHOD(Phalcon_Html_TagFactory, newInstance)
 			ZEPHIR_INIT_VAR(&_7$$5);
 			zephir_create_array(&_7$$5, 2, 0);
 			zephir_memory_observe(&_8$$5);
-			zephir_read_property_cached(&_8$$5, this_ptr, _zephir_prop_1, 580, PH_NOISY_CC);
+			zephir_read_property_cached(&_8$$5, this_ptr, _zephir_prop_1, 583, PH_NOISY_CC);
 			zephir_array_fast_append(&_7$$5, &_8$$5);
 			ZEPHIR_OBS_NVAR(&_8$$5);
-			zephir_read_property_cached(&_8$$5, this_ptr, _zephir_prop_2, 581, PH_NOISY_CC);
+			zephir_read_property_cached(&_8$$5, this_ptr, _zephir_prop_2, 584, PH_NOISY_CC);
 			zephir_array_fast_append(&_7$$5, &_8$$5);
 			ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params(&_6$$5, &definition, &_7$$5);
 			zephir_check_call_status();
@@ -328,14 +328,14 @@ PHP_METHOD(Phalcon_Html_TagFactory, newInstance)
 			ZEPHIR_INIT_VAR(&_10$$6);
 			zephir_create_array(&_10$$6, 1, 0);
 			zephir_memory_observe(&_11$$6);
-			zephir_read_property_cached(&_11$$6, this_ptr, _zephir_prop_1, 580, PH_NOISY_CC);
+			zephir_read_property_cached(&_11$$6, this_ptr, _zephir_prop_1, 583, PH_NOISY_CC);
 			zephir_array_fast_append(&_10$$6, &_11$$6);
 			ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params(&_9$$6, &definition, &_10$$6);
 			zephir_check_call_status();
 			zephir_update_property_array(this_ptr, SL("services"), &name_zv, &_9$$6);
 		}
 	}
-	zephir_read_property_cached(&_12, this_ptr, _zephir_prop_0, 583, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_12, this_ptr, _zephir_prop_0, 586, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_13);
 	zephir_array_fetch(&_13, &_12, &name_zv, PH_NOISY, "phalcon/Html/TagFactory.zep", 210);
 	RETURN_CCTOR(&_13);

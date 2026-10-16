@@ -164,7 +164,7 @@ final class ArithmeticTest extends AbstractUnitTestCase
             [
                 'type' => 359,
                 'expr' => [
-                    'type' => 37,
+                    'type' => 427,
                     'left' => [
                         'type'  => 258,
                         'value' => '10',

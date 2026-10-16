@@ -169,7 +169,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_Confirmation, validate)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_METHOD(&_2, this_ptr, "compare", NULL, 324, &_3, &_4);
+	ZEPHIR_CALL_METHOD(&_2, this_ptr, "compare", NULL, 327, &_3, &_4);
 	zephir_check_call_status();
 	if (!(zephir_is_true(&_2))) {
 		ZEPHIR_INIT_VAR(&_5$$4);
@@ -255,7 +255,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_Confirmation, compare)
 			return;
 		}
 	}
-	ZEPHIR_CALL_FUNCTION(&_6, "strcmp", NULL, 325, &a, &b);
+	ZEPHIR_CALL_FUNCTION(&_6, "strcmp", NULL, 328, &a, &b);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(ZEPHIR_IS_LONG_IDENTICAL(&_6, 0));
 }

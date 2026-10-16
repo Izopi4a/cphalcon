@@ -120,17 +120,17 @@ PHP_METHOD(Phalcon_Image_ImageFactory, load)
 	}
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "file");
-	ZEPHIR_CALL_METHOD(&file, this_ptr, "getArrVal", NULL, 446, config, &_1);
+	ZEPHIR_CALL_METHOD(&file, this_ptr, "getArrVal", NULL, 449, config, &_1);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "height");
 	ZVAL_NULL(&_2);
-	ZEPHIR_CALL_METHOD(&height, this_ptr, "getArrVal", NULL, 446, config, &_1, &_2);
+	ZEPHIR_CALL_METHOD(&height, this_ptr, "getArrVal", NULL, 449, config, &_1, &_2);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "width");
 	ZVAL_NULL(&_2);
-	ZEPHIR_CALL_METHOD(&width, this_ptr, "getArrVal", NULL, 446, config, &_1, &_2);
+	ZEPHIR_CALL_METHOD(&width, this_ptr, "getArrVal", NULL, 449, config, &_1, &_2);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "newInstance", NULL, 0, &name, &file, &width, &height);
 	zephir_check_call_status();

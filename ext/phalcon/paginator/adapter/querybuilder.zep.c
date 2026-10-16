@@ -133,7 +133,7 @@ PHP_METHOD(Phalcon_Paginator_Adapter_QueryBuilder, __construct)
 	}
 	zephir_memory_observe(&columns);
 	if (zephir_array_isset_string_fetch(&columns, &config, SL("columns"), 0)) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 947, &columns);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 961, &columns);
 	}
 	ZEPHIR_CALL_PARENT(NULL, phalcon_paginator_adapter_querybuilder_ce, getThis(), "__construct", NULL, 0, &config);
 	zephir_check_call_status();
@@ -243,8 +243,8 @@ PHP_METHOD(Phalcon_Paginator_Adapter_QueryBuilder, paginate)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&originalBuilder);
-	zephir_read_property_cached(&originalBuilder, this_ptr, _zephir_prop_0, 948, PH_NOISY_CC);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_1, 947, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&originalBuilder, this_ptr, _zephir_prop_0, 962, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_1, 961, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&columns, &_0);
 	ZEPHIR_INIT_VAR(&builder);
 	if (zephir_clone(&builder, &originalBuilder) == FAILURE) {
@@ -255,9 +255,9 @@ PHP_METHOD(Phalcon_Paginator_Adapter_QueryBuilder, paginate)
 		RETURN_MM();
 	}
 	zephir_memory_observe(&limit);
-	zephir_read_property_cached(&limit, this_ptr, _zephir_prop_2, 949, PH_NOISY_CC);
+	zephir_read_property_cached(&limit, this_ptr, _zephir_prop_2, 963, PH_NOISY_CC);
 	zephir_memory_observe(&_1);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_3, 950, PH_NOISY_CC);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_3, 964, PH_NOISY_CC);
 	numberPage = zephir_get_intval(&_1);
 	if (!(numberPage)) {
 		numberPage = 1;
@@ -447,7 +447,7 @@ PHP_METHOD(Phalcon_Paginator_Adapter_QueryBuilder, paginate)
 	zephir_array_update_string(&_25, SL("items"), &items, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(&_25, SL("total_items"), &rowcount, PH_COPY | PH_SEPARATE);
 	zephir_memory_observe(&_26);
-	zephir_read_property_cached(&_26, this_ptr, _zephir_prop_2, 949, PH_NOISY_CC);
+	zephir_read_property_cached(&_26, this_ptr, _zephir_prop_2, 963, PH_NOISY_CC);
 	zephir_array_update_string(&_25, SL("limit"), &_26, PH_COPY | PH_SEPARATE);
 	add_assoc_long_ex(&_25, SL("first"), 1);
 	ZEPHIR_INIT_VAR(&_27);
@@ -481,7 +481,7 @@ PHP_METHOD(Phalcon_Paginator_Adapter_QueryBuilder, setQueryBuilder)
 		Z_PARAM_OBJECT_OF_CLASS(builder, phalcon_mvc_model_query_builder_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &builder);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 948, builder);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 962, builder);
 	RETURN_THISW();
 }
 

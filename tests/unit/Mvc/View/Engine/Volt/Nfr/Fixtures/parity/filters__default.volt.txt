@@ -1,0 +1,1 @@
+<?= (empty($robot->price) ? (10.0) : ($robot->price)) ?>

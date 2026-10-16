@@ -1906,7 +1906,7 @@ PHP_METHOD(Phalcon_Db_Dialect_Postgresql, getColumnDefinition)
 						ZVAL_COPY(&value$$38, _10$$38);
 						ZEPHIR_INIT_NVAR(&_11$$39);
 						ZVAL_STRING(&_11$$39, "\'");
-						ZEPHIR_CALL_FUNCTION(&_12$$39, "addcslashes", &_13, 245, &value$$38, &_11$$39);
+						ZEPHIR_CALL_FUNCTION(&_12$$39, "addcslashes", &_13, 248, &value$$38, &_11$$39);
 						zephir_check_call_status();
 						ZEPHIR_INIT_NVAR(&_14$$39);
 						ZEPHIR_CONCAT_SVS(&_14$$39, "'", &_12$$39, "', ");
@@ -1940,7 +1940,7 @@ PHP_METHOD(Phalcon_Db_Dialect_Postgresql, getColumnDefinition)
 						zephir_check_call_status();
 							ZEPHIR_INIT_NVAR(&_17$$40);
 							ZVAL_STRING(&_17$$40, "\'");
-							ZEPHIR_CALL_FUNCTION(&_18$$40, "addcslashes", &_13, 245, &value$$38, &_17$$40);
+							ZEPHIR_CALL_FUNCTION(&_18$$40, "addcslashes", &_13, 248, &value$$38, &_17$$40);
 							zephir_check_call_status();
 							ZEPHIR_INIT_NVAR(&_19$$40);
 							ZEPHIR_CONCAT_SVS(&_19$$40, "'", &_18$$40, "', ");
@@ -1974,7 +1974,7 @@ PHP_METHOD(Phalcon_Db_Dialect_Postgresql, getColumnDefinition)
 			} else {
 				ZEPHIR_INIT_VAR(&_24$$41);
 				ZVAL_STRING(&_24$$41, "\'");
-				ZEPHIR_CALL_FUNCTION(&_25$$41, "addcslashes", &_13, 245, &typeValues, &_24$$41);
+				ZEPHIR_CALL_FUNCTION(&_25$$41, "addcslashes", &_13, 248, &typeValues, &_24$$41);
 				zephir_check_call_status();
 				ZEPHIR_INIT_VAR(&_26$$41);
 				ZEPHIR_CONCAT_SVS(&_26$$41, "('", &_25$$41, "')");
@@ -2582,7 +2582,7 @@ PHP_METHOD(Phalcon_Db_Dialect_Postgresql, castDefault)
 	} else {
 		ZEPHIR_INIT_VAR(&_7$$6);
 		ZVAL_STRING(&_7$$6, "\'");
-		ZEPHIR_CALL_FUNCTION(&_8$$6, "addcslashes", NULL, 245, &defaultValue, &_7$$6);
+		ZEPHIR_CALL_FUNCTION(&_8$$6, "addcslashes", NULL, 248, &defaultValue, &_7$$6);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_9$$6);
 		ZEPHIR_CONCAT_SVS(&_9$$6, "'", &_8$$6, "'");

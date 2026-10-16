@@ -197,7 +197,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_StringLength, __construct)
 				zephir_array_update_string(&_7$$4, SL("min"), &value, PH_COPY | PH_SEPARATE);
 				zephir_array_update_string(&_7$$4, SL("message"), &message, PH_COPY | PH_SEPARATE);
 				zephir_array_update_string(&_7$$4, SL("included"), &included, PH_COPY | PH_SEPARATE);
-				ZEPHIR_CALL_METHOD(NULL, &validator, "__construct", &_8, 341, &_7$$4);
+				ZEPHIR_CALL_METHOD(NULL, &validator, "__construct", &_8, 344, &_7$$4);
 				zephir_check_call_status();
 				zephir_array_unset_string(&options, SL("min"), PH_SEPARATE);
 				if (UNEXPECTED(EG(exception))) {
@@ -251,7 +251,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_StringLength, __construct)
 					zephir_array_update_string(&_9$$9, SL("max"), &value, PH_COPY | PH_SEPARATE);
 					zephir_array_update_string(&_9$$9, SL("message"), &message, PH_COPY | PH_SEPARATE);
 					zephir_array_update_string(&_9$$9, SL("included"), &included, PH_COPY | PH_SEPARATE);
-					ZEPHIR_CALL_METHOD(NULL, &validator, "__construct", &_10, 342, &_9$$9);
+					ZEPHIR_CALL_METHOD(NULL, &validator, "__construct", &_10, 345, &_9$$9);
 					zephir_check_call_status();
 					zephir_array_unset_string(&options, SL("max"), PH_SEPARATE);
 					if (UNEXPECTED(EG(exception))) {
@@ -330,7 +330,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_StringLength, __construct)
 					zephir_array_update_string(&_16$$16, SL("min"), &value, PH_COPY | PH_SEPARATE);
 					zephir_array_update_string(&_16$$16, SL("message"), &message, PH_COPY | PH_SEPARATE);
 					zephir_array_update_string(&_16$$16, SL("included"), &included, PH_COPY | PH_SEPARATE);
-					ZEPHIR_CALL_METHOD(NULL, &validator, "__construct", &_10, 342, &_16$$16);
+					ZEPHIR_CALL_METHOD(NULL, &validator, "__construct", &_10, 345, &_16$$16);
 					zephir_check_call_status();
 					zephir_array_unset_string(&options, SL("min"), PH_SEPARATE);
 					if (UNEXPECTED(EG(exception))) {
@@ -384,7 +384,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_StringLength, __construct)
 						zephir_array_update_string(&_17$$21, SL("max"), &value, PH_COPY | PH_SEPARATE);
 						zephir_array_update_string(&_17$$21, SL("message"), &message, PH_COPY | PH_SEPARATE);
 						zephir_array_update_string(&_17$$21, SL("included"), &included, PH_COPY | PH_SEPARATE);
-						ZEPHIR_CALL_METHOD(NULL, &validator, "__construct", &_10, 342, &_17$$21);
+						ZEPHIR_CALL_METHOD(NULL, &validator, "__construct", &_10, 345, &_17$$21);
 						zephir_check_call_status();
 						zephir_array_unset_string(&options, SL("max"), PH_SEPARATE);
 						if (UNEXPECTED(EG(exception))) {

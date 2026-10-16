@@ -384,11 +384,29 @@ int phvolt_get_token(phvolt_scanner_state *s, phvolt_scanner_token *token) {
 		'block' {
 			s->statement_position++;
 			token->opcode = PHVOLT_T_BLOCK;
+			token->value = estrndup(start, YYCURSOR - start);
+			token->len = YYCURSOR - start;
 			return 0;
 		}
 
 		'endblock' {
 			token->opcode = PHVOLT_T_ENDBLOCK;
+			return 0;
+		}
+
+		'endset' {
+			token->opcode = PHVOLT_T_ENDSET;
+			return 0;
+		}
+
+		'embed' {
+			s->statement_position++;
+			token->opcode = PHVOLT_T_EMBED;
+			return 0;
+		}
+
+		'endembed' {
+			token->opcode = PHVOLT_T_ENDEMBED;
 			return 0;
 		}
 
@@ -432,13 +450,13 @@ int phvolt_get_token(phvolt_scanner_state *s, phvolt_scanner_token *token) {
 
 		'is not' {
 			s->statement_position++;
-			token->opcode = PHVOLT_T_NOTEQUALS;
+			token->opcode = PHVOLT_T_ISNOT;
 			return 0;
 		}
 
 		[i][s][ ]+[n][o][t] {
 			s->statement_position++;
-			token->opcode = PHVOLT_T_NOTEQUALS;
+			token->opcode = PHVOLT_T_ISNOT;
 			return 0;
 		}
 
@@ -811,6 +829,16 @@ int phvolt_get_token(phvolt_scanner_state *s, phvolt_scanner_token *token) {
 
 		":" {
 			token->opcode = PHVOLT_T_COLON;
+			return 0;
+		}
+
+		"??" {
+			token->opcode = PHVOLT_T_COALESCE;
+			return 0;
+		}
+
+		"?." {
+			token->opcode = PHVOLT_T_NULLSAFE;
 			return 0;
 		}
 

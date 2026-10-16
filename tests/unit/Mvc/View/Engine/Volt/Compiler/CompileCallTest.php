@@ -25,8 +25,18 @@ class CompileCallTest extends AbstractUnitTestCase
     public function testMvcViewEngineVoltCompilerCompileCall(): void
     {
         $compiler = new Compiler();
-        $result   = $compiler->compileCall([], false);
 
-        $this->assertSame('', $result);
+        /**
+         * {% call %} compiles the macro call with its body as caller()
+         */
+        $result = $compiler->compileString('{% call m(1) %}BODY{% endcall %}');
+
+        $this->assertStringContainsString('$this->pushMacroCaller(', $result);
+        $this->assertStringContainsString('?>BODY<?php', $result);
+        $this->assertStringContainsString("\$this->callMacro('m', [1]);", $result);
+        $this->assertStringContainsString('$this->popMacroCaller();', $result);
+
+        $this->expectException(\Phalcon\Mvc\View\Engine\Volt\Exceptions\CorruptedStatement::class);
+        $compiler->compileCall([], false);
     }
 }

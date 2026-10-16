@@ -45,7 +45,7 @@ PHP_METHOD(phalcon_9__closure, __invoke)
 		zephir_check_call_status();
 	}
 
-	ZEPHIR_RETURN_CALL_METHOD(&_0, "newInstance", NULL, 103);
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "newInstance", NULL, 106);
 	zephir_check_call_status();
 	RETURN_MM();
 }

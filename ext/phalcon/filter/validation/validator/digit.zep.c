@@ -145,7 +145,7 @@ PHP_METHOD(Phalcon_Filter_Validation_Validator_Digit, validate)
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
-		ZEPHIR_CALL_FUNCTION(&_3, "ctype_digit", NULL, 315, &_2);
+		ZEPHIR_CALL_FUNCTION(&_3, "ctype_digit", NULL, 318, &_2);
 		zephir_check_call_status();
 		_1 = zephir_is_true(&_3);
 	}

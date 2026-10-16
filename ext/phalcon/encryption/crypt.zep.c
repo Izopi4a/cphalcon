@@ -228,14 +228,14 @@ PHP_METHOD(Phalcon_Encryption_Crypt, __construct)
 	if (Z_TYPE_P(padFactory) == IS_NULL) {
 		ZEPHIR_INIT_NVAR(padFactory);
 		object_init_ex(padFactory, phalcon_encryption_crypt_padfactory_ce);
-		ZEPHIR_CALL_METHOD(NULL, padFactory, "__construct", NULL, 255);
+		ZEPHIR_CALL_METHOD(NULL, padFactory, "__construct", NULL, 258);
 		zephir_check_call_status();
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 466, padFactory);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 469, padFactory);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "sha256");
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 467, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 470, &_0);
 	ZEPHIR_CALL_METHOD(&_1, this_ptr, "initializeAvailableCiphers", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_2, &_1, "setCipher", NULL, 0, &cipher);
@@ -334,7 +334,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decrypt)
 	ZVAL_STR_COPY(&key_zv, key);
 	}
 	zephir_memory_observe(&decryptKey);
-	zephir_read_property_cached(&decryptKey, this_ptr, _zephir_prop_0, 468, PH_NOISY_CC);
+	zephir_read_property_cached(&decryptKey, this_ptr, _zephir_prop_0, 471, PH_NOISY_CC);
 	if (1 != ZEPHIR_IS_EMPTY(&key_zv)) {
 		ZEPHIR_CPY_WRT(&decryptKey, &key_zv);
 	}
@@ -342,38 +342,38 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decrypt)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_encryption_crypt_exception_exception_ce, "Decryption key cannot be empty", "phalcon/Encryption/Crypt.zep", 206);
 		return;
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_1, 469, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_1, 472, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&cipher, &_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_2, 470, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_2, 473, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&ivLength, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "cipher");
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "checkCipherHashIsAvailable", NULL, 0, &cipher, &_1);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&mode, this_ptr, "getMode", NULL, 256);
+	ZEPHIR_CALL_METHOD(&mode, this_ptr, "getMode", NULL, 259);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&blockSize, this_ptr, "getBlockSize", NULL, 257, &mode);
+	ZEPHIR_CALL_METHOD(&blockSize, this_ptr, "getBlockSize", NULL, 260, &mode);
 	zephir_check_call_status();
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "8bit");
-	ZEPHIR_CALL_FUNCTION(&iv, "mb_substr", NULL, 258, &input_zv, &_0, &ivLength, &_1);
+	ZEPHIR_CALL_FUNCTION(&iv, "mb_substr", NULL, 261, &input_zv, &_0, &ivLength, &_1);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&digest);
 	ZVAL_STRING(&digest, "");
 	ZEPHIR_CALL_METHOD(&hashAlgorithm, this_ptr, "getHashAlgorithm", NULL, 0);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_3, 471, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_3, 474, PH_NOISY_CC | PH_READONLY);
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
 		ZEPHIR_INIT_VAR(&_2$$5);
 		ZVAL_STRING(&_2$$5, "");
-		ZEPHIR_CALL_FUNCTION(&_3$$5, "hash", NULL, 77, &hashAlgorithm, &_2$$5, &__$true);
+		ZEPHIR_CALL_FUNCTION(&_3$$5, "hash", NULL, 80, &hashAlgorithm, &_2$$5, &__$true);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&hashLength);
 		ZVAL_LONG(&hashLength, zephir_fast_strlen_ev(&_3$$5));
 		ZEPHIR_INIT_NVAR(&_2$$5);
 		ZVAL_STRING(&_2$$5, "8bit");
-		ZEPHIR_CALL_FUNCTION(&digest, "mb_substr", NULL, 258, &input_zv, &ivLength, &hashLength, &_2$$5);
+		ZEPHIR_CALL_FUNCTION(&digest, "mb_substr", NULL, 261, &input_zv, &ivLength, &hashLength, &_2$$5);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_4$$5);
 		zephir_add_function(&_4$$5, &ivLength, &hashLength);
@@ -383,12 +383,12 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decrypt)
 		}
 		ZEPHIR_INIT_NVAR(&_2$$5);
 		ZVAL_STRING(&_2$$5, "8bit");
-		ZEPHIR_CALL_FUNCTION(&cipherText, "mb_substr", NULL, 258, &input_zv, &_4$$5, &__$null, &_2$$5);
+		ZEPHIR_CALL_FUNCTION(&cipherText, "mb_substr", NULL, 261, &input_zv, &_4$$5, &__$null, &_2$$5);
 		zephir_check_call_status();
 	} else {
 		ZEPHIR_INIT_VAR(&_5$$6);
 		ZVAL_STRING(&_5$$6, "8bit");
-		ZEPHIR_CALL_FUNCTION(&cipherText, "mb_substr", NULL, 258, &input_zv, &ivLength, &__$null, &_5$$6);
+		ZEPHIR_CALL_FUNCTION(&cipherText, "mb_substr", NULL, 261, &input_zv, &ivLength, &__$null, &_5$$6);
 		zephir_check_call_status();
 	}
 	ZEPHIR_CALL_METHOD(&decrypted, this_ptr, "decryptGcmCcmAuth", NULL, 0, &mode, &cipherText, &decryptKey, &iv);
@@ -397,9 +397,9 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decrypt)
 	ZEPHIR_CALL_METHOD(&_6, this_ptr, "decryptGetUnpadded", NULL, 0, &mode, &blockSize, &decrypted);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&decrypted, &_6);
-	zephir_read_property_cached(&_7, this_ptr, _zephir_prop_3, 471, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_7, this_ptr, _zephir_prop_3, 474, PH_NOISY_CC | PH_READONLY);
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_7)) {
-		ZEPHIR_CALL_FUNCTION(&_8$$7, "hash_hmac", NULL, 259, &hashAlgorithm, &padded, &decryptKey, &__$true);
+		ZEPHIR_CALL_FUNCTION(&_8$$7, "hash_hmac", NULL, 262, &hashAlgorithm, &padded, &decryptKey, &__$true);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_IDENTICAL(&digest, &_8$$7)) {
 			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_encryption_crypt_exception_mismatch_ce, "Hash does not match.", "phalcon/Encryption/Crypt.zep", 255);
@@ -486,7 +486,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decryptBase64)
 			return;
 		}
 	}
-	ZEPHIR_CALL_FUNCTION(&_5, "base64_decode", NULL, 260, &input);
+	ZEPHIR_CALL_FUNCTION(&_5, "base64_decode", NULL, 263, &input);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "decrypt", NULL, 0, &_5, &key_zv);
 	zephir_check_call_status();
@@ -567,7 +567,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encrypt)
 	ZVAL_STR_COPY(&key_zv, key);
 	}
 	zephir_memory_observe(&encryptKey);
-	zephir_read_property_cached(&encryptKey, this_ptr, _zephir_prop_0, 468, PH_NOISY_CC);
+	zephir_read_property_cached(&encryptKey, this_ptr, _zephir_prop_0, 471, PH_NOISY_CC);
 	if (1 != ZEPHIR_IS_EMPTY(&key_zv)) {
 		ZEPHIR_CPY_WRT(&encryptKey, &key_zv);
 	}
@@ -575,17 +575,17 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encrypt)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_encryption_crypt_exception_exception_ce, "Encryption key cannot be empty", "phalcon/Encryption/Crypt.zep", 313);
 		return;
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_1, 469, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_1, 472, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&cipher, &_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_2, 470, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_2, 473, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&ivLength, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "cipher");
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "checkCipherHashIsAvailable", NULL, 0, &cipher, &_1);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&mode, this_ptr, "getMode", NULL, 256);
+	ZEPHIR_CALL_METHOD(&mode, this_ptr, "getMode", NULL, 259);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&blockSize, this_ptr, "getBlockSize", NULL, 257, &mode);
+	ZEPHIR_CALL_METHOD(&blockSize, this_ptr, "getBlockSize", NULL, 260, &mode);
 	zephir_check_call_status();
 
 	/* try_start_1: */
@@ -618,11 +618,11 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encrypt)
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&encrypted, this_ptr, "encryptGcmCcm", NULL, 0, &mode, &padded, &encryptKey, &iv);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_3, 471, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_3, 474, PH_NOISY_CC | PH_READONLY);
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
 		ZEPHIR_CALL_METHOD(&_3$$9, this_ptr, "getHashAlgorithm", NULL, 0);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&digest, "hash_hmac", NULL, 259, &_3$$9, &padded, &encryptKey, &__$true);
+		ZEPHIR_CALL_FUNCTION(&digest, "hash_hmac", NULL, 262, &_3$$9, &padded, &encryptKey, &__$true);
 		zephir_check_call_status();
 		ZEPHIR_CONCAT_VVV(return_value, &iv, &digest, &encrypted);
 		if (UNEXPECTED(EG(exception))) {
@@ -693,7 +693,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encryptBase64)
 	if (safe) {
 		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "encrypt", NULL, 0, &input_zv, &key_zv);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&_1$$3, "base64_encode", NULL, 261, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&_1$$3, "base64_encode", NULL, 264, &_0$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "+/");
@@ -708,7 +708,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encryptBase64)
 	}
 	ZEPHIR_CALL_METHOD(&_5, this_ptr, "encrypt", NULL, 0, &input_zv, &key_zv);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_FUNCTION("base64_encode", NULL, 261, &_5);
+	ZEPHIR_RETURN_CALL_FUNCTION("base64_encode", NULL, 264, &_5);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -779,11 +779,11 @@ PHP_METHOD(Phalcon_Encryption_Crypt, getAvailableHashAlgorithms)
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "phpFunctionExists", NULL, 0, &_1);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
-		ZEPHIR_RETURN_CALL_FUNCTION("hash_hmac_algos", NULL, 262);
+		ZEPHIR_RETURN_CALL_FUNCTION("hash_hmac_algos", NULL, 265);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
-	ZEPHIR_RETURN_CALL_FUNCTION("hash_algos", NULL, 263);
+	ZEPHIR_RETURN_CALL_FUNCTION("hash_algos", NULL, 266);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -852,7 +852,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, isValidDecryptLength)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&input_zv);
 	ZVAL_STR_COPY(&input_zv, input);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 472, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&length, this_ptr, "phpOpensslCipherIvLength", NULL, 0, &_0);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_FALSE_IDENTICAL(&length)) {
@@ -882,7 +882,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, setAuthData)
 		Z_PARAM_STR(data)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&data_zv, data);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 472, &data_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 475, &data_zv);
 	RETURN_THISW();
 }
 
@@ -907,7 +907,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, setAuthTag)
 		Z_PARAM_STR(tag)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&tag_zv, tag);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 473, &tag_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 476, &tag_zv);
 	RETURN_THISW();
 }
 
@@ -934,7 +934,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, setAuthTagLength)
 	zephir_fetch_params_without_memory_grow(1, 0, &length_param);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, length);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 474, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 477, &_0);
 	RETURN_THISW();
 }
 
@@ -977,10 +977,10 @@ PHP_METHOD(Phalcon_Encryption_Crypt, setCipher)
 	ZVAL_STRING(&_0, "cipher");
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "checkCipherHashIsAvailable", NULL, 0, &cipher_zv, &_0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, this_ptr, "getIvLength", NULL, 264, &cipher_zv);
+	ZEPHIR_CALL_METHOD(&_1, this_ptr, "getIvLength", NULL, 267, &cipher_zv);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 470, &_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 469, &cipher_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 473, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 472, &cipher_zv);
 	RETURN_THIS();
 }
 
@@ -1019,7 +1019,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, setKey)
 		Z_PARAM_STR(key)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&key_zv, key);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 468, &key_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 471, &key_zv);
 	RETURN_THISW();
 }
 
@@ -1057,7 +1057,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, setHashAlgorithm)
 	ZVAL_STRING(&_0, "hash");
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "checkCipherHashIsAvailable", NULL, 0, &hashAlgorithm_zv, &_0);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 467, &hashAlgorithm_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 470, &hashAlgorithm_zv);
 	RETURN_THIS();
 }
 
@@ -1086,7 +1086,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, setPadding)
 	zephir_fetch_params_without_memory_grow(1, 0, &scheme_param);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, scheme);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 475, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 478, &_0);
 	RETURN_THISW();
 }
 
@@ -1115,9 +1115,9 @@ PHP_METHOD(Phalcon_Encryption_Crypt, useSigning)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &useSigning_param);
 	if (useSigning) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 471, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 474, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 471, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 474, &__$false);
 	}
 	RETURN_THISW();
 }
@@ -1174,7 +1174,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, checkCipherHashIsAvailable)
 		object_init_ex(&_1$$5, phalcon_encryption_crypt_exception_exception_ce);
 		ZEPHIR_INIT_VAR(&_2$$5);
 		ZVAL_STRING(&_2$$5, "The %s algorithm '%s' is not supported on this system.");
-		ZEPHIR_CALL_FUNCTION(&_3$$5, "sprintf", NULL, 73, &_2$$5, &type_zv, &cipher_zv);
+		ZEPHIR_CALL_FUNCTION(&_3$$5, "sprintf", NULL, 76, &_2$$5, &type_zv, &cipher_zv);
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, &_1$$5, "__construct", NULL, 32, &_3$$5);
 		zephir_check_call_status();
@@ -1251,7 +1251,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, cryptPadText)
 	ZEPHIR_INIT_NVAR(&_2);
 	ZVAL_STRING(&_2, "ecb");
 	zephir_array_fast_append(&_1, &_2);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkIsMode", NULL, 265, &_1, &mode_zv);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkIsMode", NULL, 268, &_1, &mode_zv);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
 		_3$$3 = zephir_safe_mod_long_long(zephir_fast_strlen_ev(&input_zv), blockSize);
@@ -1268,11 +1268,11 @@ PHP_METHOD(Phalcon_Encryption_Crypt, cryptPadText)
 			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_encryption_crypt_exception_exception_ce, "Padding size cannot be less than 0 or greater than 256", "phalcon/Encryption/Crypt.zep", 677);
 			return;
 		}
-		zephir_read_property_cached(&_5$$3, this_ptr, _zephir_prop_0, 466, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_5$$3, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_6$$3, paddingType);
 		ZEPHIR_CALL_METHOD(&service, &_5$$3, "padNumberToService", NULL, 0, &_6$$3);
 		zephir_check_call_status();
-		zephir_read_property_cached(&_6$$3, this_ptr, _zephir_prop_0, 466, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_6$$3, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_METHOD(&_7$$3, &_6$$3, "newInstance", NULL, 0, &service);
 		zephir_check_call_status();
 		ZVAL_LONG(&_8$$3, paddingSize);
@@ -1376,16 +1376,16 @@ PHP_METHOD(Phalcon_Encryption_Crypt, cryptUnpadText)
 		ZEPHIR_INIT_NVAR(&_5);
 		ZVAL_STRING(&_5, "ecb");
 		zephir_array_fast_append(&_4, &_5);
-		ZEPHIR_CALL_METHOD(&_3, this_ptr, "checkIsMode", NULL, 265, &_4, &mode_zv);
+		ZEPHIR_CALL_METHOD(&_3, this_ptr, "checkIsMode", NULL, 268, &_4, &mode_zv);
 		zephir_check_call_status();
 		_2 = ZEPHIR_IS_TRUE_IDENTICAL(&_3);
 	}
 	if (_2) {
-		zephir_read_property_cached(&_6$$3, this_ptr, _zephir_prop_0, 466, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_6$$3, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_7$$3, paddingType);
 		ZEPHIR_CALL_METHOD(&service, &_6$$3, "padNumberToService", NULL, 0, &_7$$3);
 		zephir_check_call_status();
-		zephir_read_property_cached(&_7$$3, this_ptr, _zephir_prop_0, 466, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_7$$3, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_METHOD(&_8$$3, &_7$$3, "newInstance", NULL, 0, &service);
 		zephir_check_call_status();
 		ZVAL_LONG(&_9$$3, blockSize);
@@ -1471,10 +1471,10 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decryptGetUnpadded)
 	ZEPHIR_INIT_NVAR(&_2);
 	ZVAL_STRING(&_2, "ecb");
 	zephir_array_fast_append(&_1, &_2);
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkIsMode", NULL, 265, &_1, &mode_zv);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checkIsMode", NULL, 268, &_1, &mode_zv);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
-		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 475, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 478, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CPY_WRT(&padding, &_3$$3);
 		ZVAL_LONG(&_3$$3, blockSize);
 		ZEPHIR_CALL_METHOD(&_4$$3, this_ptr, "cryptUnpadText", NULL, 0, &decrypted, &mode_zv, &_3$$3, &padding);
@@ -1553,7 +1553,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decryptGcmCcmAuth)
 	ZVAL_STR_COPY(&decryptKey_zv, decryptKey);
 	zephir_memory_observe(&iv_zv);
 	ZVAL_STR_COPY(&iv_zv, iv);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 472, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&cipher, &_0);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_create_array(&_2, 2, 0);
@@ -1563,12 +1563,12 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decryptGcmCcmAuth)
 	ZEPHIR_INIT_NVAR(&_3);
 	ZVAL_STRING(&_3, "gcm");
 	zephir_array_fast_append(&_2, &_3);
-	ZEPHIR_CALL_METHOD(&_1, this_ptr, "checkIsMode", NULL, 265, &_2, &mode_zv);
+	ZEPHIR_CALL_METHOD(&_1, this_ptr, "checkIsMode", NULL, 268, &_2, &mode_zv);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_1)) {
-		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_1, 472, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_1, 475, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CPY_WRT(&authData, &_4$$3);
-		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_2, 474, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_2, 477, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CPY_WRT(&authTagLength, &_4$$3);
 		ZEPHIR_INIT_VAR(&_5$$3);
 		zephir_negate(&_5$$3, &authTagLength);
@@ -1583,11 +1583,11 @@ PHP_METHOD(Phalcon_Encryption_Crypt, decryptGcmCcmAuth)
 		ZEPHIR_INIT_VAR(&encrypted);
 		zephir_fast_str_replace(&encrypted, &authTag, &_6$$3, &cipherText_zv);
 		ZVAL_LONG(&_4$$3, 1);
-		ZEPHIR_CALL_FUNCTION(&decrypted, "openssl_decrypt", NULL, 266, &encrypted, &cipher, &decryptKey_zv, &_4$$3, &iv_zv, &authTag, &authData);
+		ZEPHIR_CALL_FUNCTION(&decrypted, "openssl_decrypt", NULL, 269, &encrypted, &cipher, &decryptKey_zv, &_4$$3, &iv_zv, &authTag, &authData);
 		zephir_check_call_status();
 	} else {
 		ZVAL_LONG(&_7$$4, 1);
-		ZEPHIR_CALL_FUNCTION(&decrypted, "openssl_decrypt", NULL, 266, &cipherText_zv, &cipher, &decryptKey_zv, &_7$$4, &iv_zv);
+		ZEPHIR_CALL_FUNCTION(&decrypted, "openssl_decrypt", NULL, 269, &cipherText_zv, &cipher, &decryptKey_zv, &_7$$4, &iv_zv);
 		zephir_check_call_status();
 	}
 	if (ZEPHIR_IS_FALSE_IDENTICAL(&decrypted)) {
@@ -1640,7 +1640,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encryptGetPadded)
 	ZVAL_STR_COPY(&mode_zv, mode);
 	zephir_memory_observe(&input_zv);
 	ZVAL_STR_COPY(&input_zv, input);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 475, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 478, PH_NOISY_CC | PH_READONLY);
 	_1 = !ZEPHIR_IS_LONG_IDENTICAL(&_0, 0);
 	if (_1) {
 		ZEPHIR_INIT_VAR(&_3);
@@ -1651,12 +1651,12 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encryptGetPadded)
 		ZEPHIR_INIT_NVAR(&_4);
 		ZVAL_STRING(&_4, "ecb");
 		zephir_array_fast_append(&_3, &_4);
-		ZEPHIR_CALL_METHOD(&_2, this_ptr, "checkIsMode", NULL, 265, &_3, &mode_zv);
+		ZEPHIR_CALL_METHOD(&_2, this_ptr, "checkIsMode", NULL, 268, &_3, &mode_zv);
 		zephir_check_call_status();
 		_1 = ZEPHIR_IS_TRUE_IDENTICAL(&_2);
 	}
 	if (_1) {
-		zephir_read_property_cached(&_5$$3, this_ptr, _zephir_prop_0, 475, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_5$$3, this_ptr, _zephir_prop_0, 478, PH_NOISY_CC | PH_READONLY);
 		ZVAL_LONG(&_6$$3, blockSize);
 		ZEPHIR_RETURN_CALL_METHOD(this_ptr, "cryptPadText", NULL, 0, &input_zv, &mode_zv, &_6$$3, &_5$$3);
 		zephir_check_call_status();
@@ -1731,7 +1731,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encryptGcmCcm)
 	ZVAL_STR_COPY(&encryptKey_zv, encryptKey);
 	zephir_memory_observe(&iv_zv);
 	ZVAL_STR_COPY(&iv_zv, iv);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 472, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&cipher, &_0);
 	ZEPHIR_INIT_VAR(&authTag);
 	ZVAL_STRING(&authTag, "");
@@ -1743,28 +1743,28 @@ PHP_METHOD(Phalcon_Encryption_Crypt, encryptGcmCcm)
 	ZEPHIR_INIT_NVAR(&_3);
 	ZVAL_STRING(&_3, "gcm");
 	zephir_array_fast_append(&_2, &_3);
-	ZEPHIR_CALL_METHOD(&_1, this_ptr, "checkIsMode", NULL, 265, &_2, &mode_zv);
+	ZEPHIR_CALL_METHOD(&_1, this_ptr, "checkIsMode", NULL, 268, &_2, &mode_zv);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_1)) {
-		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_1, 472, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_1, 475, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CPY_WRT(&authData, &_4$$3);
 		if (1 == ZEPHIR_IS_EMPTY(&authData)) {
 			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_encryption_crypt_exception_exception_ce, "Auth data must be provided when using AEAD mode", "phalcon/Encryption/Crypt.zep", 877);
 			return;
 		}
-		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_2, 473, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_2, 476, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CPY_WRT(&authTag, &_4$$3);
-		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_3, 474, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_3, 477, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CPY_WRT(&authTagLength, &_4$$3);
 		ZVAL_LONG(&_4$$3, 1);
 		ZEPHIR_MAKE_REF(&authTag);
-		ZEPHIR_CALL_FUNCTION(&encrypted, "openssl_encrypt", NULL, 267, &padded_zv, &cipher, &encryptKey_zv, &_4$$3, &iv_zv, &authTag, &authData, &authTagLength);
+		ZEPHIR_CALL_FUNCTION(&encrypted, "openssl_encrypt", NULL, 270, &padded_zv, &cipher, &encryptKey_zv, &_4$$3, &iv_zv, &authTag, &authData, &authTagLength);
 		ZEPHIR_UNREF(&authTag);
 		zephir_check_call_status();
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 473, &authTag);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 476, &authTag);
 	} else {
 		ZVAL_LONG(&_5$$5, 1);
-		ZEPHIR_CALL_FUNCTION(&encrypted, "openssl_encrypt", NULL, 267, &padded_zv, &cipher, &encryptKey_zv, &_5$$5, &iv_zv);
+		ZEPHIR_CALL_FUNCTION(&encrypted, "openssl_encrypt", NULL, 270, &padded_zv, &cipher, &encryptKey_zv, &_5$$5, &iv_zv);
 		zephir_check_call_status();
 	}
 	if (ZEPHIR_IS_FALSE_IDENTICAL(&encrypted)) {
@@ -1816,7 +1816,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, initializeAvailableCiphers)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_encryption_crypt_exception_exception_ce, "This class requires the openssl extension for PHP", "phalcon/Encryption/Crypt.zep", 928);
 		return;
 	}
-	ZEPHIR_CALL_FUNCTION(&available, "openssl_get_cipher_methods", NULL, 268, &__$true);
+	ZEPHIR_CALL_FUNCTION(&available, "openssl_get_cipher_methods", NULL, 271, &__$true);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&allowed);
 	array_init(&allowed);
@@ -1885,7 +1885,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, initializeAvailableCiphers)
 		}
 	}
 	ZEPHIR_INIT_NVAR(&cipher);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 476, &allowed);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 479, &allowed);
 	RETURN_THIS();
 }
 
@@ -1958,7 +1958,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, getBlockSize)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&mode_zv);
 	ZVAL_STR_COPY(&mode_zv, mode);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 470, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 473, PH_NOISY_CC | PH_READONLY);
 	if (ZEPHIR_GT_LONG(&_0, 0)) {
 		RETURN_MM_MEMBER_TYPED(getThis(), "ivLength", IS_LONG);
 	}
@@ -1968,12 +1968,12 @@ PHP_METHOD(Phalcon_Encryption_Crypt, getBlockSize)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 469, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 472, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "");
-	ZEPHIR_CALL_FUNCTION(&_4, "str_ireplace", NULL, 269, &_1, &_3, &_2);
+	ZEPHIR_CALL_FUNCTION(&_4, "str_ireplace", NULL, 272, &_1, &_3, &_2);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "getIvLength", NULL, 264, &_4);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "getIvLength", NULL, 267, &_4);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -2002,7 +2002,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, getIvLength)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&cipher_zv);
 	ZVAL_STR_COPY(&cipher_zv, cipher);
-	ZEPHIR_CALL_FUNCTION(&length, "openssl_cipher_iv_length", NULL, 270, &cipher_zv);
+	ZEPHIR_CALL_FUNCTION(&length, "openssl_cipher_iv_length", NULL, 273, &cipher_zv);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_FALSE_IDENTICAL(&length)) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_encryption_crypt_exception_exception_ce, "Cannot calculate the initialization vector (IV) length of the cipher", "phalcon/Encryption/Crypt.zep", 998);
@@ -2039,15 +2039,15 @@ PHP_METHOD(Phalcon_Encryption_Crypt, getMode)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 472, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "-");
-	ZEPHIR_CALL_FUNCTION(&_2, "strrpos", NULL, 271, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "strrpos", NULL, 274, &_0, &_1);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&position);
 	ZVAL_LONG(&position, zephir_get_intval(&_2));
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_4, this_ptr, _zephir_prop_0, 469, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 472, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_4, this_ptr, _zephir_prop_0, 472, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&_5);
 	ZVAL_LONG(&_5, zephir_fast_strlen_ev(&_4));
 	ZEPHIR_INIT_VAR(&_6);
@@ -2102,7 +2102,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, phpOpensslCipherIvLength)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&cipher_zv);
 	ZVAL_STR_COPY(&cipher_zv, cipher);
-	ZEPHIR_RETURN_CALL_FUNCTION("openssl_cipher_iv_length", NULL, 270, &cipher_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("openssl_cipher_iv_length", NULL, 273, &cipher_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -2121,7 +2121,7 @@ PHP_METHOD(Phalcon_Encryption_Crypt, phpOpensslRandomPseudoBytes)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &length_param);
 	ZVAL_LONG(&_0, length);
-	ZEPHIR_RETURN_CALL_FUNCTION("openssl_random_pseudo_bytes", NULL, 272, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("openssl_random_pseudo_bytes", NULL, 275, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

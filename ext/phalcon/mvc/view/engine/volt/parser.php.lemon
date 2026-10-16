@@ -22,10 +22,11 @@
 %right OPEN_DELIMITER .
 %left COMMA .
 %left QUESTION COLON .
+%right COALESCE .
 %left RANGE .
 %left AND OR .
 %left IN .
-%left IS EQUALS NOTEQUALS LESS GREATER GREATEREQUAL LESSEQUAL IDENTICAL NOTIDENTICAL .
+%left IS ISNOT EQUALS NOTEQUALS LESS GREATER GREATEREQUAL LESSEQUAL IDENTICAL NOTIDENTICAL .
 %left DIVIDE TIMES MOD .
 %left PLUS MINUS CONCAT .
 %right SBRACKET_OPEN .
@@ -33,7 +34,7 @@
 %right NOT .
 %left INCR DECR .
 %right PARENTHESES_OPEN .
-%left DOT .
+%left DOT NULLSAFE .
 
 %include {
 #include "parser.php.inc.h"
@@ -232,6 +233,14 @@ statement(R) ::= echo_statement(E) . {
 }
 
 statement(R) ::= block_statement(E) . {
+	R = E;
+}
+
+statement(R) ::= set_capture_statement(E) . {
+	R = E;
+}
+
+statement(R) ::= embed_statement(E) . {
 	R = E;
 }
 
@@ -468,6 +477,32 @@ block_statement(R) ::= OPEN_DELIMITER BLOCK IDENTIFIER(I) CLOSE_DELIMITER OPEN_D
 	phvolt_ret_block_statement(&R, I, NULL, status->scanner_state);
 }
 
+/* {% embed "card.volt" [with expr] %} {% block x %}...{% endblock %} {% endembed %} */
+embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
+	phvolt_ret_embed_statement(&R, &E, NULL, &T, status->scanner_state);
+}
+
+embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) CLOSE_DELIMITER OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
+	phvolt_ret_embed_statement(&R, &E, NULL, NULL, status->scanner_state);
+}
+
+embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) WITH expr(P) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
+	phvolt_ret_embed_statement(&R, &E, &P, &T, status->scanner_state);
+}
+
+embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) WITH expr(P) CLOSE_DELIMITER OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
+	phvolt_ret_embed_statement(&R, &E, &P, NULL, status->scanner_state);
+}
+
+/* {% set name %}...{% endset %} */
+set_capture_statement(R) ::= OPEN_DELIMITER SET IDENTIFIER(I) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDSET CLOSE_DELIMITER . {
+	phvolt_ret_set_capture_statement(&R, I, &T, status->scanner_state);
+}
+
+set_capture_statement(R) ::= OPEN_DELIMITER SET IDENTIFIER(I) CLOSE_DELIMITER OPEN_DELIMITER ENDSET CLOSE_DELIMITER . {
+	phvolt_ret_set_capture_statement(&R, I, NULL, status->scanner_state);
+}
+
 cache_statement(R) ::= OPEN_DELIMITER CACHE expr(E) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDCACHE CLOSE_DELIMITER . {
 	phvolt_ret_cache_statement(&R, &E, NULL, &T, status->scanner_state);
 }
@@ -561,7 +596,7 @@ expr(R) ::= expr(O1) DIVIDE expr(O2) . {
 }
 
 expr(R) ::= expr(O1) DIVIDE DIVIDE expr(O2) . {
-	phvolt_ret_expr(&R, PHVOLT_T_MOD, &O1, &O2, NULL, status->scanner_state);
+	phvolt_ret_expr(&R, PHVOLT_T_FLOORDIV, &O1, &O2, NULL, status->scanner_state);
 }
 
 expr(R) ::= expr(O1) MOD expr(O2) . {
@@ -646,6 +681,49 @@ expr(R) ::= expr(O1) NOTEQUALS ITERABLE . {
 
 expr(R) ::= expr(O1) IS ITERABLE . {
 	phvolt_ret_expr(&R, PHVOLT_T_ISITERABLE, &O1, NULL, NULL, status->scanner_state);
+}
+
+/* is not <test>: a negated test, distinct from != */
+expr(R) ::= expr(O1) ISNOT DEFINED . {
+	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISSET, &O1, NULL, NULL, status->scanner_state);
+}
+
+expr(R) ::= expr(O1) ISNOT EMPTY . {
+	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISEMPTY, &O1, NULL, NULL, status->scanner_state);
+}
+
+expr(R) ::= expr(O1) ISNOT EVEN . {
+	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISEVEN, &O1, NULL, NULL, status->scanner_state);
+}
+
+expr(R) ::= expr(O1) ISNOT ODD . {
+	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISODD, &O1, NULL, NULL, status->scanner_state);
+}
+
+expr(R) ::= expr(O1) ISNOT NUMERIC . {
+	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISNUMERIC, &O1, NULL, NULL, status->scanner_state);
+}
+
+expr(R) ::= expr(O1) ISNOT SCALAR . {
+	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISSCALAR, &O1, NULL, NULL, status->scanner_state);
+}
+
+expr(R) ::= expr(O1) ISNOT ITERABLE . {
+	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISITERABLE, &O1, NULL, NULL, status->scanner_state);
+}
+
+expr(R) ::= expr(O1) ISNOT expr(O2) . {
+	phvolt_ret_expr(&R, PHVOLT_T_ISNOT, &O1, &O2, NULL, status->scanner_state);
+}
+
+/* a ?? b */
+expr(R) ::= expr(O1) COALESCE expr(O2) . {
+	phvolt_ret_expr(&R, PHVOLT_T_COALESCE, &O1, &O2, NULL, status->scanner_state);
+}
+
+/* a?.b, a?.b() */
+expr(R) ::= expr(O1) NULLSAFE expr(O2) . {
+	phvolt_ret_expr(&R, PHVOLT_T_NULLSAFE, &O1, &O2, NULL, status->scanner_state);
 }
 
 expr(R) ::= expr(O1) IS expr(O2) . {

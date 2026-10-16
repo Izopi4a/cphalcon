@@ -90,7 +90,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Behavior_Timestampable, notify)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_mvc_model_exception_ce, "The option 'field' is required", "phalcon/Mvc/Model/Behavior/Timestampable.zep", 50);
 		return;
 	}
-	ZEPHIR_CALL_METHOD(&timestamp, this_ptr, "getTimestamp", NULL, 475, &options);
+	ZEPHIR_CALL_METHOD(&timestamp, this_ptr, "getTimestamp", NULL, 478, &options);
 	zephir_check_call_status();
 	if (UNEXPECTED(Z_TYPE_P(&field) == IS_ARRAY)) {
 		if (Z_TYPE_P(&field) == IS_STRING) {
@@ -159,7 +159,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Behavior_Timestampable, getTimestamp)
 	zephir_get_arrval(&options, options_param);
 	zephir_memory_observe(&format);
 	if (zephir_array_isset_string_fetch(&format, &options, SL("format"), 0)) {
-		ZEPHIR_RETURN_CALL_FUNCTION("date", NULL, 476, &format);
+		ZEPHIR_RETURN_CALL_FUNCTION("date", NULL, 479, &format);
 		zephir_check_call_status();
 		RETURN_MM();
 	}

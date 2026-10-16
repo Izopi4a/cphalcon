@@ -186,6 +186,10 @@ final class NodeCompiler
             'test'     => 'getRuntimeTest',
         };
 
-        return '$this->' . $method . '(' . var_export($callable->getName(), true) . ')(' . $list . ')';
+        // memoized on the engine: one array read per call after the first
+        $name = var_export($callable->getName(), true);
+        $key  = var_export($kind . ':' . $callable->getName(), true);
+
+        return '($this->runtime[' . $key . '] ??= $this->' . $method . '(' . $name . '))(' . $list . ')';
     }
 }

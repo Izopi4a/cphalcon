@@ -161,8 +161,8 @@ compile {{ greeting(name) }} → <?= Hello $name ?>
 
 **Proposed**
 ```text
-compile {{ year() }} → <?= $this->getRuntimeFunction('year')() ?>
-compile {{ greeting(name) }} → <?= $this->getRuntimeFunction('greeting')($name) ?>
+compile {{ year() }} → <?= ($this->runtime['function:year'] ??= $this->getRuntimeFunction('year'))() ?>
+compile {{ greeting(name) }} → <?= ($this->runtime['function:greeting'] ??= $this->getRuntimeFunction('greeting'))($name) ?>
 ```
 
 ## E6. Functions backed by a service, safe HTML, custom tests
@@ -196,7 +196,7 @@ compile {% if user is premium %} → <?php if ($user == $premium) { ?>x<?php } ?
 render, premium user → 19.50 EUR <i class="star"></i><i class="star"></i>Free shipping
 render, free user → 19.50 EUR <i class="star"></i><i class="star"></i>Shipping: 4.90 EUR
 Prices instances → 1
-compile {{ price(p) }} → <?= $this->getRuntimeFunction('price')($p) ?>
+compile {{ price(p) }} → <?= ($this->runtime['function:price'] ??= $this->getRuntimeFunction('price'))($p) ?>
 typo: user is premiun → throws Phalcon\VoltNfr\Exception: Unknown test "premiun" in eval code on line 1
 ```
 

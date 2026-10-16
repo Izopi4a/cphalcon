@@ -51,7 +51,7 @@ final class RuntimeExtensionTest extends TemplateTestCase
 
         $this->assertSame('1,2', $this->render('page', [], [], $setup));
         $this->assertSame('3,4', $this->render('page', [], [], $setup));
-        $this->assertSame('<?= $this->getRuntimeFunction(\'counter\')() ?>', $this->compile('{{ counter() }}', [], $setup));
+        $this->assertSame('<?= ($this->runtime[\'function:counter\'] ??= $this->getRuntimeFunction(\'counter\'))() ?>', $this->compile('{{ counter() }}', [], $setup));
     }
 
     public function testFirstClassCallableAndInvokableObject(): void
@@ -83,7 +83,7 @@ final class RuntimeExtensionTest extends TemplateTestCase
         };
 
         $code = $this->compile('{{ price(total) }}', [], $setup);
-        $this->assertSame('<?= $this->getRuntimeFunction(\'price\')($total) ?>', $code);
+        $this->assertSame('<?= ($this->runtime[\'function:price\'] ??= $this->getRuntimeFunction(\'price\'))($total) ?>', $code);
         $this->assertSame(0, PriceFormatter::$instances);
 
         $this->views(['page' => '{{ price(total) }}|{{ price(total, "USD") }}']);

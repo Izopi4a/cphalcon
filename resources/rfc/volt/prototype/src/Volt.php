@@ -22,6 +22,14 @@ use Phalcon\VoltNfr\Runtime\VoltTest;
  */
 class Volt extends VoltEngine
 {
+    /**
+     * Resolved runtime callables, read by compiled templates:
+     * ($this->runtime['function:money'] ??= $this->getRuntimeFunction('money'))(...)
+     *
+     * @var array<string, Closure>
+     */
+    public array $runtime = [];
+
     private Registry $registry;
 
     public function __construct(ViewBaseInterface $view, ?DiInterface $container = null)
@@ -55,6 +63,7 @@ class Volt extends VoltEngine
     public function addFunction(VoltFunction $function): static
     {
         $this->registry->add($function);
+        $this->runtime = [];
 
         return $this;
     }
@@ -62,6 +71,7 @@ class Volt extends VoltEngine
     public function addFilter(VoltFilter $filter): static
     {
         $this->registry->add($filter);
+        $this->runtime = [];
 
         return $this;
     }
@@ -69,6 +79,7 @@ class Volt extends VoltEngine
     public function addTest(VoltTest $test): static
     {
         $this->registry->add($test);
+        $this->runtime = [];
 
         return $this;
     }
@@ -76,6 +87,7 @@ class Volt extends VoltEngine
     public function addExtension(ExtensionInterface $extension): static
     {
         $this->registry->addExtension($extension);
+        $this->runtime = [];
 
         return $this;
     }

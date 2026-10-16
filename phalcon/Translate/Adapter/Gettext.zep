@@ -125,7 +125,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     /**
      * @return string
      */
-    public function getLocale() -> string
+    public function getLocale() -> false | string
     {
         return this->locale;
     }

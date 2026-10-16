@@ -68,7 +68,7 @@ interface MetaDataInterface
     /**
      * Returns the name of identity field (if one is present)
      */
-    public function getIdentityField(<ModelInterface> model) -> string | null;
+    public function getIdentityField(<ModelInterface> model) -> bool | string | null;
 
     /**
      * Returns an array of fields which are not part of the primary key
@@ -118,7 +118,7 @@ interface MetaDataInterface
     /**
      * Reads column-map information for certain model using a MODEL_* constant
      */
-    public function readColumnMapIndex(<ModelInterface> model, int index) -> array | null;
+    public function readColumnMapIndex(<ModelInterface> model, int index) -> array | bool | string | null;
 
     /**
      * Reads meta-data for certain model
@@ -128,7 +128,7 @@ interface MetaDataInterface
     /**
      * Reads meta-data for certain model using a MODEL_* constant
      */
-    public function readMetaDataIndex(<ModelInterface> model, int index) -> array | null;
+    public function readMetaDataIndex(<ModelInterface> model, int index) -> array | bool | string | null;
 
     /**
      * Resets internal meta-data in order to regenerate it

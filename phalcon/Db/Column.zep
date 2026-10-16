@@ -547,7 +547,7 @@ class Column implements ColumnInterface
     /**
      * Check whether field absolute to position in table
      */
-    public function getAfterPosition() -> string
+    public function getAfterPosition() -> string | null
     {
         return this->after;
     }
@@ -603,7 +603,7 @@ class Column implements ColumnInterface
     /**
      * Column data type
      */
-    public function getType() -> int
+    public function getType() -> int | string
     {
         return this->type;
     }
@@ -619,7 +619,7 @@ class Column implements ColumnInterface
     /**
      * Column data type values
      */
-    public function getTypeValues() -> array | string
+    public function getTypeValues() -> array | string | int
     {
         return this->typeValues;
     }

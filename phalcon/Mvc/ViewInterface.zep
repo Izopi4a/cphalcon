@@ -65,7 +65,7 @@ interface ViewInterface extends ViewBaseInterface
     /**
      * Returns the name of the main view
      */
-    public function getLayout() -> string;
+    public function getLayout() -> string | null;
 
     /**
      * Gets the current layouts sub-directory

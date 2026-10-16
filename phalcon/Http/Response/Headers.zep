@@ -30,7 +30,7 @@ class Headers implements HeadersInterface
     /**
      * Gets a header value from the internal bag
      */
-    public function get(string name) -> string | bool
+    public function get(string name) -> bool | string | null
     {
         var headers, headerValue;
 

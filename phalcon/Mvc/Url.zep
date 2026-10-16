@@ -194,7 +194,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
     /**
      * Returns the base path
      */
-    public function getBasePath() -> string
+    public function getBasePath() -> string | null
     {
         return this->basePath;
     }

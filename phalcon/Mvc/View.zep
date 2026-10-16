@@ -418,7 +418,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * Returns the name of the main view
      */
-    public function getLayout() -> string
+    public function getLayout() -> string | null
     {
         return this->layout;
     }

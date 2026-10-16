@@ -47,7 +47,7 @@
     "friendsofphp/php-cs-fixer": "~3.0",
     "mustache/mustache": "^2.14",
     "phalcon/ide-stubs": "^5.4",
-    "phalcon/zephir": "dev-development",
+    "phalcon/zephir": "dev-cphalcon-fixes",
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^10.5",
     "predis/predis": "^2.3",
@@ -116,5 +116,13 @@
       "./vendor/bin/zephir build",
       "./vendor/bin/zephir stubs"
     ]
-  }
+  },
+  "repositories": [{
+    "name": "zephir",
+    "type": "path",
+    "url": "../zephir",
+    "options": {
+      "symlink": true
+    }
+  }]
 }

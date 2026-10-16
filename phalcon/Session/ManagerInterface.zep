@@ -77,7 +77,7 @@ interface ManagerInterface
     /**
      * Returns the stored session adapter
      */
-    public function getAdapter() -> <SessionHandlerInterface>;
+    public function getAdapter() -> <SessionHandlerInterface> | null;
 
     /**
      * Returns the name of the session

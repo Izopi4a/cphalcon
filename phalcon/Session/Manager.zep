@@ -157,7 +157,7 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
     /**
      * Returns the stored session adapter
      */
-    public function getAdapter() -> <SessionHandlerInterface>
+    public function getAdapter() -> <SessionHandlerInterface> | null
     {
         return this->adapter;
     }

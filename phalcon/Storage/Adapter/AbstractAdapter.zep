@@ -282,7 +282,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return SerializerInterface
      */
-    public function getSerializer() -> <SerializerInterface>
+    public function getSerializer() -> <SerializerInterface> | null
     {
         return this->serializer;
     }

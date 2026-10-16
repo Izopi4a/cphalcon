@@ -222,8 +222,9 @@ class Imagick extends AbstractAdapter
         int opacity
     ) -> void {
         var background, color, pixel1, pixel2, result;
+        double alpha;
 
-        let opacity    /= 100;
+        let alpha      = opacity / 100;
         let color      = sprintf("rgb(%d, %d, %d)", red, green, blue);
         let pixel1     = new ImagickPixel(color);
         let pixel2     = new ImagickPixel("transparent");
@@ -244,7 +245,7 @@ class Imagick extends AbstractAdapter
 
             background->evaluateImage(
                 constant("Imagick::EVALUATE_MULTIPLY"),
-                opacity,
+                alpha,
                 constant("Imagick::CHANNEL_ALPHA")
             );
 

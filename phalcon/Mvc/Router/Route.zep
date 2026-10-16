@@ -337,7 +337,7 @@ class Route implements RouteInterface
     /**
      * Returns the 'before match' callback if any
      */
-    public function getBeforeMatch() -> callable
+    public function getBeforeMatch() -> callable | null
     {
         return this->beforeMatch;
     }
@@ -369,7 +369,7 @@ class Route implements RouteInterface
     /**
      * Returns the HTTP methods that constraint matching the route
      */
-    public function getHttpMethods() -> array | string
+    public function getHttpMethods() -> array | string | null
     {
         return this->methods;
     }
@@ -393,7 +393,7 @@ class Route implements RouteInterface
     /**
      * Returns the 'match' callback if any
      */
-    public function getMatch() -> callable
+    public function getMatch() -> callable | null
     {
         return this->match;
     }

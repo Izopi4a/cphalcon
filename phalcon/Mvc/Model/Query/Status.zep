@@ -80,7 +80,7 @@ class Status implements StatusInterface
     /**
      * Returns the model that executed the action
      */
-    public function getModel() -> <ModelInterface>
+    public function getModel() -> <ModelInterface> | null
     {
         return this->model;
     }

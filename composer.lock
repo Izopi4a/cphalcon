@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f84ca0d2ce70b8810784ca14c19271be",
+    "content-hash": "96aeef5e89208181981f74c7e38c8f95",
     "packages": [],
     "packages-dev": [
         {
@@ -1933,16 +1933,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.11.0",
+            "version": "2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "37308608e599f34a1a4845b16440047ec98a172a"
+                "reference": "bf2403f591c5a431b6e0e1170cbadd3d64499564"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/37308608e599f34a1a4845b16440047ec98a172a",
-                "reference": "37308608e599f34a1a4845b16440047ec98a172a",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/bf2403f591c5a431b6e0e1170cbadd3d64499564",
+                "reference": "bf2403f591c5a431b6e0e1170cbadd3d64499564",
                 "shasum": ""
             },
             "require": {
@@ -2019,7 +2019,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.11.0"
+                "source": "https://github.com/Seldaek/monolog/tree/2.11.1"
             },
             "funding": [
                 {
@@ -2031,7 +2031,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-01T13:05:00+00:00"
+            "time": "2026-09-02T07:57:24+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -2401,17 +2401,11 @@
         },
         {
             "name": "phalcon/zephir",
-            "version": "dev-development",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zephir-lang/zephir.git",
-                "reference": "dabf707a44c46798550134ad5e8fd4ae753201da"
-            },
+            "version": "dev-cphalcon-fixes",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zephir-lang/zephir/zipball/dabf707a44c46798550134ad5e8fd4ae753201da",
-                "reference": "dabf707a44c46798550134ad5e8fd4ae753201da",
-                "shasum": ""
+                "type": "path",
+                "url": "../zephir",
+                "reference": "dabf707a44c46798550134ad5e8fd4ae753201da"
             },
             "require": {
                 "ext-ctype": "*",
@@ -2438,7 +2432,6 @@
             "suggest": {
                 "ext-zephir_parser": "Optional native parser used as a fast path; the built-in pure-PHP parser is used when it is absent"
             },
-            "default-branch": true,
             "bin": [
                 "zephir"
             ],
@@ -2448,7 +2441,33 @@
                     "Zephir\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Zephir\\Test\\": "tests/Zephir/",
+                    "Extension\\": "tests/Extension/",
+                    "Benchmark\\": "tests/Benchmark/"
+                },
+                "classmap": [
+                    "tests/fixtures/mocks/"
+                ]
+            },
+            "scripts": {
+                "cs": [
+                    "./vendor/bin/phpcs --standard=phpcs.xml.dist"
+                ],
+                "cs-fix": [
+                    "./vendor/bin/phpcbf --standard=phpcs.xml.dist"
+                ],
+                "test": [
+                    "./vendor/bin/phpunit --testsuite Zephir"
+                ],
+                "test-coverage": [
+                    "./vendor/bin/phpunit --testsuite Zephir --coverage-php ./tests/output/coverage/coverage.xml"
+                ],
+                "test-coverage-html": [
+                    "./vendor/bin/phpunit --testsuite Zephir --coverage-html ./tests/output/coverage"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -2472,22 +2491,15 @@
                 "zephir"
             ],
             "support": {
-                "docs": "https://docs.zephir-lang.com",
-                "irc": "irc://irc.freenode.net/zephir",
                 "issues": "https://github.com/zephir-lang/zephir/issues?state=open",
-                "source": "https://github.com/zephir-lang/zephir"
+                "source": "https://github.com/zephir-lang/zephir",
+                "irc": "irc://irc.freenode.net/zephir",
+                "docs": "https://docs.zephir-lang.com"
             },
-            "funding": [
-                {
-                    "url": "https://opencollective.com/phalcon",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/phalcon",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-10-15T20:49:33+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "phar-io/manifest",
@@ -2860,16 +2872,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "2.3.2",
+            "version": "2.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "a004701b11273a26cd7955a61d67a7f1e525a45a"
+                "reference": "1427af4647235b4a73b13940b1f1258d3584f36e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/a004701b11273a26cd7955a61d67a7f1e525a45a",
-                "reference": "a004701b11273a26cd7955a61d67a7f1e525a45a",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/1427af4647235b4a73b13940b1f1258d3584f36e",
+                "reference": "1427af4647235b4a73b13940b1f1258d3584f36e",
                 "shasum": ""
             },
             "require": {
@@ -2901,9 +2913,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.2"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.6"
             },
-            "time": "2026-01-25T14:56:51+00:00"
+            "time": "2026-09-27T20:07:45+00:00"
         },
         {
             "name": "phpstan/phpstan",

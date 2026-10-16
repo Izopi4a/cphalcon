@@ -467,17 +467,17 @@ class Stream extends AbstractAdapter
      */
     private function storePayload(array payload, string key) -> bool
     {
-        var directory;
+        var directory, serialized;
 
-        let payload   = serialize(payload),
-            directory = this->getDir(key);
+        let serialized = serialize(payload),
+            directory  = this->getDir(key);
 
         if !is_dir(directory) {
             mkdir(directory, 0777, true);
         }
 
         return (
-            false !== this->phpFilePutContents(directory . key, payload, LOCK_EX)
+            false !== this->phpFilePutContents(directory . key, serialized, LOCK_EX)
         );
     }
 

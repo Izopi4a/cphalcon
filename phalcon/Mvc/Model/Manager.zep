@@ -1232,7 +1232,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Get last initialized model
      */
-    public function getLastInitialized() -> <ModelInterface>
+    public function getLastInitialized() -> <ModelInterface> | null
     {
         return this->lastInitialized;
     }

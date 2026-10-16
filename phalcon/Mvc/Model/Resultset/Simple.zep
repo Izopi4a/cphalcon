@@ -77,7 +77,7 @@ class Simple extends Resultset
      * Returns current row in the resultset
      * @return TValue
      */
-    final public function current() -> <ModelInterface> | null
+    final public function current() -> <ModelInterface> | <Row> | null
     {
         var row, hydrateMode, columnMap, activeRow, modelName;
 

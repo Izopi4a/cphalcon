@@ -331,7 +331,7 @@ class Group implements GroupInterface
     /**
      * Returns the 'before match' callback if any
      */
-    public function getBeforeMatch() -> callable
+    public function getBeforeMatch() -> callable | null
     {
         return this->beforeMatch;
     }
@@ -347,7 +347,7 @@ class Group implements GroupInterface
     /**
      * Returns the common paths defined for this group
      */
-    public function getPaths() -> array | string
+    public function getPaths() -> array | string | null
     {
         return this->paths;
     }
@@ -355,7 +355,7 @@ class Group implements GroupInterface
     /**
      * Returns the common prefix for all the routes
      */
-    public function getPrefix() -> string
+    public function getPrefix() -> string | null
     {
         return this->prefix;
     }

@@ -28,7 +28,7 @@ interface StatusInterface
     /**
      * Returns the model which executed the action
      */
-    public function getModel() -> <ModelInterface>;
+    public function getModel() -> <ModelInterface> | null;
 
     /**
      * Allows to check if the executed operation was successful

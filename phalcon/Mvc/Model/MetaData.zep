@@ -398,7 +398,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
      * );
      *```
      */
-    public function getIdentityField(<ModelInterface> model) -> string | null
+    public function getIdentityField(<ModelInterface> model) -> bool | string | null
     {
         return this->readMetaDataIndex(model, self::MODELS_IDENTITY_COLUMN);
     }
@@ -598,7 +598,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
      * );
      *```
      */
-    final public function readColumnMapIndex(<ModelInterface> model, int index) -> array | null
+    final public function readColumnMapIndex(<ModelInterface> model, int index) -> array | bool | string | null
     {
         var keyName;
 
@@ -645,7 +645,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
      * );
      *```
      */
-    final public function readMetaDataIndex(<ModelInterface> model, int index) -> array | null
+    final public function readMetaDataIndex(<ModelInterface> model, int index) -> array | bool | string | null
     {
         var key;
         let key = this->getMetaDataUniqueKey(model);

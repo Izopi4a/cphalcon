@@ -43,7 +43,7 @@ class Failed extends Exception
      *
      * @return ModelInterface
      */
-    public function getRecord() -> <ModelInterface>
+    public function getRecord() -> <ModelInterface> | null
     {
         return this->record;
     }

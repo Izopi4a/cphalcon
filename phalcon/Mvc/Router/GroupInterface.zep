@@ -188,7 +188,7 @@ interface GroupInterface
     /**
      * Returns the 'before match' callback if any
      */
-    public function getBeforeMatch() -> callable;
+    public function getBeforeMatch() -> callable | null;
 
     /**
      * Returns the hostname restriction
@@ -198,12 +198,12 @@ interface GroupInterface
     /**
      * Returns the common paths defined for this group
      */
-    public function getPaths() -> array | string;
+    public function getPaths() -> array | string | null;
 
     /**
      * Returns the common prefix for all the routes
      */
-    public function getPrefix() -> string;
+    public function getPrefix() -> string | null;
 
     /**
      * Returns the routes added to the group

@@ -40,7 +40,7 @@ interface RouteInterface
     /**
      * Returns the HTTP methods that constraint matching the route
      */
-    public function getHttpMethods() -> string | array;
+    public function getHttpMethods() -> array | string | null;
 
     /**
      * Returns the route's name

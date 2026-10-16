@@ -19,6 +19,15 @@
 #define zephir_make_printable_zval(expr, expr_copy) zend_make_printable_zval(expr, expr_copy);
 
 /** Strict comparing */
+/**
+ * The byte a zval stands for when compared with a char literal: a long (a
+ * char kept in a var) or a 1-char string (a string offset read, #760); -1
+ * for anything else, which matches no char.
+ */
+#define ZEPHIR_CHAR_VALUE(op) \
+	(Z_TYPE_P(op) == IS_LONG ? (zend_long) Z_LVAL_P(op) : \
+	 ((Z_TYPE_P(op) == IS_STRING && Z_STRLEN_P(op) == 1) ? (zend_long) (unsigned char) Z_STRVAL_P(op)[0] : (zend_long) -1))
+
 #define ZEPHIR_IS_LONG(op1, op2)   ((Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) == op2) || zephir_compare_strict_long(op1, op2))
 #define ZEPHIR_IS_DOUBLE(op1, op2) ((Z_TYPE_P(op1) == IS_DOUBLE && Z_DVAL_P(op1) == op2) || zephir_compare_strict_double(op1, op2))
 #define ZEPHIR_IS_STRING(op1, op2) zephir_compare_strict_string(op1, op2, strlen(op2))

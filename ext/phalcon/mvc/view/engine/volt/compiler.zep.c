@@ -377,7 +377,7 @@ PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Compiler, attributeReader)
 		zephir_check_call_status();
 		zephir_memory_observe(&leftType);
 		zephir_array_fetch_string(&leftType, &left, SL("type"), PH_NOISY, "phalcon/Mvc/View/Engine/Volt/Compiler.zep", 244);
-		_9$$8 = !ZEPHIR_IS_LONG(&leftType, '.');
+		_9$$8 = ZEPHIR_CHAR_VALUE(&leftType) != '.';
 		if (_9$$8) {
 			_9$$8 = !ZEPHIR_IS_LONG(&leftType, 350);
 		}
@@ -3010,7 +3010,7 @@ PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Compiler, expression)
 			zephir_fast_join_str(&exprCode, SL(", "), &items);
 			break;
 		}
-		if (ZEPHIR_IS_LONG(&type, '.')) {
+		if (ZEPHIR_CHAR_VALUE(&type) == '.') {
 			ZEPHIR_CALL_METHOD(&exprCode, this_ptr, "attributeReader", &_14, 0, &expr);
 			zephir_check_call_status();
 			break;
@@ -3051,13 +3051,13 @@ PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Compiler, expression)
 		}
 		ZEPHIR_INIT_NVAR(&exprCode);
 		ZVAL_NULL(&exprCode);
-		if (ZEPHIR_IS_LONG(&type, '!')) { goto zephir_switch_0_clause_0; }
-		if (ZEPHIR_IS_LONG(&type, '*')) { goto zephir_switch_0_clause_1; }
-		if (ZEPHIR_IS_LONG(&type, '+')) { goto zephir_switch_0_clause_2; }
-		if (ZEPHIR_IS_LONG(&type, '-')) { goto zephir_switch_0_clause_3; }
-		if (ZEPHIR_IS_LONG(&type, '/')) { goto zephir_switch_0_clause_4; }
+		if (ZEPHIR_CHAR_VALUE(&type) == '!') { goto zephir_switch_0_clause_0; }
+		if (ZEPHIR_CHAR_VALUE(&type) == '*') { goto zephir_switch_0_clause_1; }
+		if (ZEPHIR_CHAR_VALUE(&type) == '+') { goto zephir_switch_0_clause_2; }
+		if (ZEPHIR_CHAR_VALUE(&type) == '-') { goto zephir_switch_0_clause_3; }
+		if (ZEPHIR_CHAR_VALUE(&type) == '/') { goto zephir_switch_0_clause_4; }
 		if (ZEPHIR_IS_LONG(&type, 37)) { goto zephir_switch_0_clause_5; }
-		if (ZEPHIR_IS_LONG(&type, '<')) { goto zephir_switch_0_clause_6; }
+		if (ZEPHIR_CHAR_VALUE(&type) == '<') { goto zephir_switch_0_clause_6; }
 		if (ZEPHIR_IS_LONG(&type, 61)) { goto zephir_switch_0_clause_7; }
 		if (ZEPHIR_IS_LONG(&type, 62)) { goto zephir_switch_0_clause_8; }
 		if (ZEPHIR_IS_LONG(&type, 126)) { goto zephir_switch_0_clause_9; }
@@ -4712,7 +4712,7 @@ PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Compiler, compileSource)
 				ZEPHIR_INIT_NVAR(&block);
 				ZVAL_COPY(&block, _5$$7);
 				if (Z_TYPE_P(&name) == IS_STRING) {
-					if (zephir_array_isset_value(&blocks, &name)) {
+					if (zephir_array_key_exists(&blocks, &name)) {
 						ZEPHIR_OBS_NVAR(&localBlock);
 						zephir_array_fetch(&localBlock, &blocks, &name, PH_NOISY, "phalcon/Mvc/View/Engine/Volt/Compiler.zep", 2315);
 						zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 924, &name);
@@ -4772,7 +4772,7 @@ PHP_METHOD(Phalcon_Mvc_View_Engine_Volt_Compiler, compileSource)
 				ZEPHIR_CALL_METHOD(&block, _3$$7, "current", NULL, 0);
 				zephir_check_call_status();
 					if (Z_TYPE_P(&name) == IS_STRING) {
-						if (zephir_array_isset_value(&blocks, &name)) {
+						if (zephir_array_key_exists(&blocks, &name)) {
 							ZEPHIR_OBS_NVAR(&localBlock);
 							zephir_array_fetch(&localBlock, &blocks, &name, PH_NOISY, "phalcon/Mvc/View/Engine/Volt/Compiler.zep", 2315);
 							zephir_update_property_zval_cached(this_ptr, _zephir_prop_6, 924, &name);

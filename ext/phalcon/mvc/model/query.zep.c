@@ -3673,22 +3673,22 @@ PHP_METHOD(Phalcon_Mvc_Model_Query, getExpression)
 				zephir_check_call_status();
 			}
 		}
-		if (ZEPHIR_IS_LONG(&exprType, '<')) { goto zephir_switch_0_clause_0; }
-		if (ZEPHIR_IS_LONG(&exprType, '=')) { goto zephir_switch_0_clause_1; }
-		if (ZEPHIR_IS_LONG(&exprType, '>')) { goto zephir_switch_0_clause_2; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '<') { goto zephir_switch_0_clause_0; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '=') { goto zephir_switch_0_clause_1; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '>') { goto zephir_switch_0_clause_2; }
 		if (ZEPHIR_IS_LONG(&exprType, 270)) { goto zephir_switch_0_clause_3; }
 		if (ZEPHIR_IS_LONG(&exprType, 271)) { goto zephir_switch_0_clause_4; }
 		if (ZEPHIR_IS_LONG(&exprType, 272)) { goto zephir_switch_0_clause_5; }
 		if (ZEPHIR_IS_LONG(&exprType, 266)) { goto zephir_switch_0_clause_6; }
 		if (ZEPHIR_IS_LONG(&exprType, 267)) { goto zephir_switch_0_clause_7; }
 		if (ZEPHIR_IS_LONG(&exprType, 355)) { goto zephir_switch_0_clause_8; }
-		if (ZEPHIR_IS_LONG(&exprType, '+')) { goto zephir_switch_0_clause_9; }
-		if (ZEPHIR_IS_LONG(&exprType, '-')) { goto zephir_switch_0_clause_10; }
-		if (ZEPHIR_IS_LONG(&exprType, '*')) { goto zephir_switch_0_clause_11; }
-		if (ZEPHIR_IS_LONG(&exprType, '/')) { goto zephir_switch_0_clause_12; }
-		if (ZEPHIR_IS_LONG(&exprType, '%')) { goto zephir_switch_0_clause_13; }
-		if (ZEPHIR_IS_LONG(&exprType, '&')) { goto zephir_switch_0_clause_14; }
-		if (ZEPHIR_IS_LONG(&exprType, '|')) { goto zephir_switch_0_clause_15; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '+') { goto zephir_switch_0_clause_9; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '-') { goto zephir_switch_0_clause_10; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '*') { goto zephir_switch_0_clause_11; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '/') { goto zephir_switch_0_clause_12; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '%') { goto zephir_switch_0_clause_13; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '&') { goto zephir_switch_0_clause_14; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '|') { goto zephir_switch_0_clause_15; }
 		if (ZEPHIR_IS_LONG(&exprType, 356)) { goto zephir_switch_0_clause_16; }
 		if (ZEPHIR_IS_LONG(&exprType, 407)) { goto zephir_switch_0_clause_17; }
 		if (ZEPHIR_IS_LONG(&exprType, 367)) { goto zephir_switch_0_clause_18; }
@@ -3706,7 +3706,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Query, getExpression)
 		if (ZEPHIR_IS_LONG(&exprType, 351)) { goto zephir_switch_0_clause_30; }
 		if (ZEPHIR_IS_LONG(&exprType, 275)) { goto zephir_switch_0_clause_31; }
 		if (ZEPHIR_IS_LONG(&exprType, 357)) { goto zephir_switch_0_clause_32; }
-		if (ZEPHIR_IS_LONG(&exprType, '!')) { goto zephir_switch_0_clause_33; }
+		if (ZEPHIR_CHAR_VALUE(&exprType) == '!') { goto zephir_switch_0_clause_33; }
 		if (ZEPHIR_IS_LONG(&exprType, 365)) { goto zephir_switch_0_clause_34; }
 		if (ZEPHIR_IS_LONG(&exprType, 366)) { goto zephir_switch_0_clause_35; }
 		if (ZEPHIR_IS_LONG(&exprType, 315)) { goto zephir_switch_0_clause_36; }

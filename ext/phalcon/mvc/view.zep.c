@@ -2438,13 +2438,13 @@ PHP_METHOD(Phalcon_Mvc_View, isAbsolutePath)
 		if (_1$$3) {
 			ZEPHIR_INIT_VAR(&_3$$3);
 			zephir_string_offset_read(&_3$$3, &path_zv, 1, PH_NOISY);
-			_1$$3 = ZEPHIR_IS_LONG(&_3$$3, ':');
+			_1$$3 = ZEPHIR_CHAR_VALUE(&_3$$3) == ':';
 		}
 		_4$$3 = _1$$3;
 		if (_4$$3) {
 			ZEPHIR_INIT_VAR(&_6$$3);
 			zephir_string_offset_read(&_6$$3, &path_zv, 2, PH_NOISY);
-			_4$$3 = ZEPHIR_IS_LONG(&_6$$3, '\\');
+			_4$$3 = ZEPHIR_CHAR_VALUE(&_6$$3) == '\\';
 		}
 		RETURN_MM_BOOL(_4$$3);
 	}
@@ -2452,7 +2452,7 @@ PHP_METHOD(Phalcon_Mvc_View, isAbsolutePath)
 	if (_7) {
 		ZEPHIR_INIT_VAR(&_9);
 		zephir_string_offset_read(&_9, &path_zv, 0, PH_NOISY);
-		_7 = ZEPHIR_IS_LONG(&_9, '/');
+		_7 = ZEPHIR_CHAR_VALUE(&_9) == '/';
 	}
 	RETURN_MM_BOOL(_7);
 }

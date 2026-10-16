@@ -61,7 +61,8 @@ exists three times: the C parser, the Zephir compiler and the PHP port `phalcon/
 | `survey-issues.md` | 565 issues/PRs + docs, Discussions, phalcon/volt: themes by demand, open items, maintainer quotes |
 | `survey-volt-current.md` | implementation: pipeline, inheritance internals, syntax inventory, extension contract, escaping, 7.0.x vs master |
 | `survey-twig-gap.md` | feature gap vs Twig 3.x, declaring a function side by side, docs review |
-| `prototype/patches/volt-parser.patch` | the C changes: nested blocks, `block()` identifier, `??`, `?.`, `is not` token, `embed`, set capture |
+| `prototype/patches/NN-*.patch` | the C changes as a series, one patch per feature, applied in order: 01 nested blocks (12 lines), 02 `block()`/`article.block`, 03 `is not` token, 04 `??`, 05 `?.`, 06 `embed`, 07 set capture; 0 Lemon conflicts after each |
+| `issues/` | ticket drafts, split per feature as niden asked; `issues/README.md` is the plan |
 | `prototype/src/Inheritance/Resolver.php` | inheritance resolved on the AST |
 | `prototype/src/Compiler.php` | compileSource/compile/compileFile/compileEcho/compileInclude overrides |
 | `prototype/src/NodeCompiler.php` | extension hooks for runtime calls and the new nodes |

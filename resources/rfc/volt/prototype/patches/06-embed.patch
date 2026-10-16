@@ -1,0 +1,141 @@
+diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine/volt/base.c
+--- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.898473718 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.926541589 +0300
+@@ -69,6 +69,8 @@
+   { SL("++"),            PHVOLT_T_INCR },
+   { SL("--"),            PHVOLT_T_DECR },
+   { SL("BLOCK"),         PHVOLT_T_BLOCK },
++  { SL("EMBED"),         PHVOLT_T_EMBED },
++  { SL("ENDEMBED"),      PHVOLT_T_ENDEMBED },
+   { SL("?."),            PHVOLT_T_NULLSAFE },
+   { SL("??"),            PHVOLT_T_COALESCE },
+   { SL("IS NOT"),        PHVOLT_T_ISNOT },
+@@ -689,6 +691,22 @@
+ 				phvolt_(phvolt_parser, PHVOLT_NULLSAFE, NULL, parser_status);
+ 				break;
+ 
++			case PHVOLT_T_EMBED:
++				if (state->extends_mode == 1 && state->block_level == 0) {
++					phvolt_create_error_msg(parser_status, "Child templates only may contain blocks");
++					parser_status->status = PHVOLT_PARSING_FAILED;
++					break;
++				}
++
++				state->block_level++;
++				phvolt_(phvolt_parser, PHVOLT_EMBED, NULL, parser_status);
++				break;
++
++			case PHVOLT_T_ENDEMBED:
++				state->block_level--;
++				phvolt_(phvolt_parser, PHVOLT_ENDEMBED, NULL, parser_status);
++				break;
++
+ 			case PHVOLT_T_MACRO:
+ 				if (state->macro_level > 0) {
+ 					phvolt_create_error_msg(parser_status, "Embedding macros into other macros is not allowed");
+diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 16:44:04.790411933 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 16:44:04.926604837 +0300
+@@ -320,6 +320,29 @@
+ }
+ /* }}} */
+ 
++/* {{{ phvolt_ret_embed_statement */
++static void phvolt_ret_embed_statement(zval *ret, zval *path, zval *params, zval *block_statements,
++	phvolt_scanner_state *state)
++{
++	array_init(ret);
++
++	add_assoc_long(ret, "type", PHVOLT_T_EMBED);
++
++	add_assoc_zval(ret, "path", path);
++	if (params) {
++		add_assoc_zval(ret, "params", params);
++	}
++
++	if (block_statements) {
++		add_assoc_zval(ret, "block_statements", block_statements);
++	}
++
++	Z_TRY_ADDREF_P(state->active_file);
++	add_assoc_zval(ret, "file", state->active_file);
++	add_assoc_long(ret, "line", state->active_line);
++}
++/* }}} */
++
+ /* {{{ phvolt_ret_do_statement */
+ static void phvolt_ret_do_statement(zval *ret, zval *expr, phvolt_scanner_state *state)
+ {
+diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.898637253 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.926750783 +0300
+@@ -236,6 +236,10 @@
+ 	R = E;
+ }
+ 
++statement(R) ::= embed_statement(E) . {
++	R = E;
++}
++
+ statement(R) ::= cache_statement(E) . {
+ 	R = E;
+ }
+@@ -469,6 +473,23 @@
+ 	phvolt_ret_block_statement(&R, I, NULL, status->scanner_state);
+ }
+ 
++/* {% embed "card.volt" [with expr] %} {% block x %}...{% endblock %} {% endembed %} */
++embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
++	phvolt_ret_embed_statement(&R, &E, NULL, &T, status->scanner_state);
++}
++
++embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) CLOSE_DELIMITER OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
++	phvolt_ret_embed_statement(&R, &E, NULL, NULL, status->scanner_state);
++}
++
++embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) WITH expr(P) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
++	phvolt_ret_embed_statement(&R, &E, &P, &T, status->scanner_state);
++}
++
++embed_statement(R) ::= OPEN_DELIMITER EMBED expr(E) WITH expr(P) CLOSE_DELIMITER OPEN_DELIMITER ENDEMBED CLOSE_DELIMITER . {
++	phvolt_ret_embed_statement(&R, &E, &P, NULL, status->scanner_state);
++}
++
+ cache_statement(R) ::= OPEN_DELIMITER CACHE expr(E) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDCACHE CLOSE_DELIMITER . {
+ 	phvolt_ret_cache_statement(&R, &E, NULL, &T, status->scanner_state);
+ }
+diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.h b/ext/phalcon/mvc/view/engine/volt/scanner.h
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.898231945 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.926335955 +0300
+@@ -164,6 +164,10 @@
+ #define PHVOLT_T_DEFAULT 413
+ #define PHVOLT_T_ENDSWITCH 414
+ 
++/* {% embed %}...{% endembed %} */
++#define PHVOLT_T_EMBED 423
++#define PHVOLT_T_ENDEMBED 424
++
+ /* a?.b */
+ #define PHVOLT_T_NULLSAFE 421
+ 
+diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.re b/ext/phalcon/mvc/view/engine/volt/scanner.re
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.898304733 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.926396934 +0300
+@@ -394,6 +394,17 @@
+ 			return 0;
+ 		}
+ 
++		'embed' {
++			s->statement_position++;
++			token->opcode = PHVOLT_T_EMBED;
++			return 0;
++		}
++
++		'endembed' {
++			token->opcode = PHVOLT_T_ENDEMBED;
++			return 0;
++		}
++
+ 		'macro' {
+ 			s->statement_position++;
+ 			token->opcode = PHVOLT_T_MACRO;

@@ -1,0 +1,106 @@
+diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine/volt/base.c
+--- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.817300751 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.842984965 +0300
+@@ -69,6 +69,7 @@
+   { SL("++"),            PHVOLT_T_INCR },
+   { SL("--"),            PHVOLT_T_DECR },
+   { SL("BLOCK"),         PHVOLT_T_BLOCK },
++  { SL("IS NOT"),        PHVOLT_T_ISNOT },
+   { SL("ENDBLOCK"),      PHVOLT_T_ENDBLOCK },
+   { SL("CACHE"),         PHVOLT_T_CACHE },
+   { SL("ENDCACHE"),      PHVOLT_T_ENDCACHE },
+@@ -674,6 +675,10 @@
+ 				phvolt_(phvolt_parser, PHVOLT_ENDBLOCK, NULL, parser_status);
+ 				break;
+ 
++			case PHVOLT_T_ISNOT:
++				phvolt_(phvolt_parser, PHVOLT_ISNOT, NULL, parser_status);
++				break;
++
+ 			case PHVOLT_T_MACRO:
+ 				if (state->macro_level > 0) {
+ 					phvolt_create_error_msg(parser_status, "Embedding macros into other macros is not allowed");
+diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.790315746 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.843115081 +0300
+@@ -25,7 +25,7 @@
+ %left RANGE .
+ %left AND OR .
+ %left IN .
+-%left IS EQUALS NOTEQUALS LESS GREATER GREATEREQUAL LESSEQUAL IDENTICAL NOTIDENTICAL .
++%left IS ISNOT EQUALS NOTEQUALS LESS GREATER GREATEREQUAL LESSEQUAL IDENTICAL NOTIDENTICAL .
+ %left DIVIDE TIMES MOD .
+ %left PLUS MINUS CONCAT .
+ %right SBRACKET_OPEN .
+@@ -648,6 +648,39 @@
+ 	phvolt_ret_expr(&R, PHVOLT_T_ISITERABLE, &O1, NULL, NULL, status->scanner_state);
+ }
+ 
++/* is not <test>: a negated test, distinct from != */
++expr(R) ::= expr(O1) ISNOT DEFINED . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISSET, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT EMPTY . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISEMPTY, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT EVEN . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISEVEN, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT ODD . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISODD, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT NUMERIC . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISNUMERIC, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT SCALAR . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISSCALAR, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT ITERABLE . {
++	phvolt_ret_expr(&R, PHVOLT_T_NOT_ISITERABLE, &O1, NULL, NULL, status->scanner_state);
++}
++
++expr(R) ::= expr(O1) ISNOT expr(O2) . {
++	phvolt_ret_expr(&R, PHVOLT_T_ISNOT, &O1, &O2, NULL, status->scanner_state);
++}
++
+ expr(R) ::= expr(O1) IS expr(O2) . {
+ 	phvolt_ret_expr(&R, PHVOLT_T_IS, &O1, &O2, NULL, status->scanner_state);
+ }
+diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.h b/ext/phalcon/mvc/view/engine/volt/scanner.h
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.790003096 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.842714694 +0300
+@@ -164,6 +164,9 @@
+ #define PHVOLT_T_DEFAULT 413
+ #define PHVOLT_T_ENDSWITCH 414
+ 
++/* "is not": a negated test, distinct from != */
++#define PHVOLT_T_ISNOT 422
++
+ /* List of tokens and their names */
+ typedef struct _phvolt_token_names { /* {{{ */
+ 	char *name;
+diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.re b/ext/phalcon/mvc/view/engine/volt/scanner.re
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.817218363 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.842844240 +0300
+@@ -434,13 +434,13 @@
+ 
+ 		'is not' {
+ 			s->statement_position++;
+-			token->opcode = PHVOLT_T_NOTEQUALS;
++			token->opcode = PHVOLT_T_ISNOT;
+ 			return 0;
+ 		}
+ 
+ 		[i][s][ ]+[n][o][t] {
+ 			s->statement_position++;
+-			token->opcode = PHVOLT_T_NOTEQUALS;
++			token->opcode = PHVOLT_T_ISNOT;
+ 			return 0;
+ 		}
+ 

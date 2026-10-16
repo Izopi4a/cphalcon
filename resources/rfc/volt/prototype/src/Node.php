@@ -6,7 +6,7 @@ namespace Phalcon\VoltNfr;
 
 /**
  * AST node types produced by the Volt parser (ext/.../volt/scanner.h).
- * 420+ are added by patches/volt-parser.patch.
+ * 420+ are added by the patches/ series.
  */
 final class Node
 {
@@ -31,7 +31,7 @@ final class Node
     public const ARRAY        = 360;
     public const SWITCH       = 411;
 
-    // patches/volt-parser.patch
+    // the patches/ series
     public const COALESCE    = 420;
     public const NULLSAFE    = 421;
     public const ISNOT       = 422;

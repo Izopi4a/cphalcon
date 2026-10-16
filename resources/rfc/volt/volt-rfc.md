@@ -6,8 +6,8 @@ Related: #17145 (nested blocks, 2013), #17271 (extends from a variable), #17368 
 extension), #17053 (Tag → TagFactory + `TagTranslator`), #14608 (vote list), phalcon#274 (pass a
 Compiler to the engine), #17652 / PR #17670 (trailing comma), #17425 (`->`).
 Evidence:
-- a PHP prototype over the built extension (`prototype/`), with a 232-line parser patch built into
-  a second extension;
+- a PHP prototype over the built extension (`prototype/`), with a parser patch series (seven
+  patches, one per feature, 237 changed lines) built into a second extension;
 - 38 tests that pin today's behaviour on the stock build and 122 tests for the prototype on the
   patched build;
 - all 50 templates of the upstream Volt fixtures compile **byte-identical** with the prototype;
@@ -107,8 +107,8 @@ biggest impact that fit Volt's design. The rest is under "Later".
 
 - **Three implementations.** Volt exists as the C scanner/parser, the Zephir compiler and the PHP
   port `phalcon/volt`, which is kept in sync ("Sync verbatim logic from cphalcon"). Every grammar
-  change is paid three times. This proposal keeps grammar changes small: one 232-line patch over
-  five hand-written C files, and the expansion handles nested blocks, block() and dynamic extends
+  change is paid three times. This proposal keeps grammar changes small: seven small patches over
+  five hand-written C files (237 changed lines), and the expansion handles nested blocks, block() and dynamic extends
   without new syntax. The runtime registry needs no grammar at all.
 - **The v7 window.** #17271 and #17368 were deferred to v7 because they need compiler and interface
   changes. #17652 was deferred as "a parser fix and there are a few lined up there". phalcon#274
@@ -135,7 +135,7 @@ time.
 
 ### 2. Parser changes
 
-From `prototype/patches/volt-parser.patch`; Lemon reports 0 conflicts:
+From the `prototype/patches/` series, one patch per row; Lemon reports 0 conflicts after each:
 
 | change | files |
 |---|---|

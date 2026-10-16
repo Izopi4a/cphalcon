@@ -3,8 +3,9 @@
 # Builds the Phalcon extension from this checkout's ext/ into prototype/.build/<flavor>/.
 #
 #   ./build.sh stock     HEAD's ext/ unchanged: what users run today
-#   ./build.sh patched   HEAD's ext/ + patches/volt-parser.patch, with the Volt
-#                        scanner and parser regenerated (bin/genparsers.sh steps)
+#   ./build.sh patched   HEAD's ext/ + the patches/NN-*.patch series (one per
+#                        feature, applied in order), with the Volt scanner and
+#                        parser regenerated (bin/genparsers.sh steps)
 #
 # Needs phpize, a C compiler and re2c. Takes about 3 minutes with -j$(nproc).
 # Nothing in the repository is modified; the build happens in .build/.
@@ -27,7 +28,9 @@ mkdir -p "$OUT"
 git -C "$REPO" archive HEAD ext | tar -x -C "$OUT"
 
 if [ "$FLAVOR" = "patched" ]; then
-    (cd "$OUT" && patch -p1 --quiet < "$HERE/patches/volt-parser.patch")
+    for series in "$HERE"/patches/[0-9][0-9]-*.patch; do
+        (cd "$OUT" && patch -p1 --quiet < "$series") || { echo "failed: $series" >&2; exit 1; }
+    done
 
     # lemon.c predates C23 prototypes; gnu99 builds it with current compilers
     "${CC:-gcc}" -std=gnu99 -w "$REPO/3rdparty/lemon/lemon.c" -o "$OUT/lemon"

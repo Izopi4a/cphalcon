@@ -1,0 +1,113 @@
+diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine/volt/base.c
+--- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.926541589 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.961507777 +0300
+@@ -69,6 +69,7 @@
+   { SL("++"),            PHVOLT_T_INCR },
+   { SL("--"),            PHVOLT_T_DECR },
+   { SL("BLOCK"),         PHVOLT_T_BLOCK },
++  { SL("ENDSET"),        PHVOLT_T_ENDSET },
+   { SL("EMBED"),         PHVOLT_T_EMBED },
+   { SL("ENDEMBED"),      PHVOLT_T_ENDEMBED },
+   { SL("?."),            PHVOLT_T_NULLSAFE },
+@@ -707,6 +708,10 @@
+ 				phvolt_(phvolt_parser, PHVOLT_ENDEMBED, NULL, parser_status);
+ 				break;
+ 
++			case PHVOLT_T_ENDSET:
++				phvolt_(phvolt_parser, PHVOLT_ENDSET, NULL, parser_status);
++				break;
++
+ 			case PHVOLT_T_MACRO:
+ 				if (state->macro_level > 0) {
+ 					phvolt_create_error_msg(parser_status, "Embedding macros into other macros is not allowed");
+diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 16:44:04.926604837 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.inc.h	2026-10-16 16:44:04.961576035 +0300
+@@ -343,6 +343,28 @@
+ }
+ /* }}} */
+ 
++/* {{{ phvolt_ret_set_capture_statement */
++static void phvolt_ret_set_capture_statement(zval *ret, phvolt_parser_token *name, zval *block_statements,
++	phvolt_scanner_state *state)
++{
++	array_init(ret);
++
++	add_assoc_long(ret, "type", PHVOLT_T_SET_CAPTURE);
++
++	phvolt_add_assoc_stringl(ret, "name", name->token, name->token_len, 0);
++	efree(name->token);
++	efree(name);
++
++	if (block_statements) {
++		add_assoc_zval(ret, "block_statements", block_statements);
++	}
++
++	Z_TRY_ADDREF_P(state->active_file);
++	add_assoc_zval(ret, "file", state->active_file);
++	add_assoc_long(ret, "line", state->active_line);
++}
++/* }}} */
++
+ /* {{{ phvolt_ret_do_statement */
+ static void phvolt_ret_do_statement(zval *ret, zval *expr, phvolt_scanner_state *state)
+ {
+diff -ru a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon
+--- a/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.926750783 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/parser.php.lemon	2026-10-16 16:44:04.961700611 +0300
+@@ -236,6 +236,10 @@
+ 	R = E;
+ }
+ 
++statement(R) ::= set_capture_statement(E) . {
++	R = E;
++}
++
+ statement(R) ::= embed_statement(E) . {
+ 	R = E;
+ }
+@@ -490,6 +494,15 @@
+ 	phvolt_ret_embed_statement(&R, &E, &P, NULL, status->scanner_state);
+ }
+ 
++/* {% set name %}...{% endset %} */
++set_capture_statement(R) ::= OPEN_DELIMITER SET IDENTIFIER(I) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDSET CLOSE_DELIMITER . {
++	phvolt_ret_set_capture_statement(&R, I, &T, status->scanner_state);
++}
++
++set_capture_statement(R) ::= OPEN_DELIMITER SET IDENTIFIER(I) CLOSE_DELIMITER OPEN_DELIMITER ENDSET CLOSE_DELIMITER . {
++	phvolt_ret_set_capture_statement(&R, I, NULL, status->scanner_state);
++}
++
+ cache_statement(R) ::= OPEN_DELIMITER CACHE expr(E) CLOSE_DELIMITER statement_list(T) OPEN_DELIMITER ENDCACHE CLOSE_DELIMITER . {
+ 	phvolt_ret_cache_statement(&R, &E, NULL, &T, status->scanner_state);
+ }
+diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.h b/ext/phalcon/mvc/view/engine/volt/scanner.h
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.926335955 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.h	2026-10-16 16:44:04.961309273 +0300
+@@ -164,6 +164,10 @@
+ #define PHVOLT_T_DEFAULT 413
+ #define PHVOLT_T_ENDSWITCH 414
+ 
++/* {% set name %}...{% endset %} */
++#define PHVOLT_T_ENDSET 425
++#define PHVOLT_T_SET_CAPTURE 426
++
+ /* {% embed %}...{% endembed %} */
+ #define PHVOLT_T_EMBED 423
+ #define PHVOLT_T_ENDEMBED 424
+diff -ru a/ext/phalcon/mvc/view/engine/volt/scanner.re b/ext/phalcon/mvc/view/engine/volt/scanner.re
+--- a/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.926396934 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/scanner.re	2026-10-16 16:44:04.961370881 +0300
+@@ -394,6 +394,11 @@
+ 			return 0;
+ 		}
+ 
++		'endset' {
++			token->opcode = PHVOLT_T_ENDSET;
++			return 0;
++		}
++
+ 		'embed' {
+ 			s->statement_position++;
+ 			token->opcode = PHVOLT_T_EMBED;

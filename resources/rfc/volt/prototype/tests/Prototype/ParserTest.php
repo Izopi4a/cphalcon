@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * AST from the patched parser (patches/volt-parser.patch), through the stock
+ * AST from the patched parser (the patches/ series), through the stock
  * Compiler::parse(). Shows the node shapes a Compiler.zep implementation
  * would handle.
  */

@@ -1,0 +1,23 @@
+diff -ru a/ext/phalcon/mvc/view/engine/volt/base.c b/ext/phalcon/mvc/view/engine/volt/base.c
+--- a/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.790217229 +0300
++++ b/ext/phalcon/mvc/view/engine/volt/base.c	2026-10-16 16:44:04.791330274 +0300
+@@ -651,14 +651,12 @@
+ 				phvolt_(phvolt_parser, PHVOLT_DECR, NULL, parser_status);
+ 				break;
+ 
++			/*
++			 * Blocks may nest, and may sit inside if/for/switch: the
++			 * compiler resolves inheritance on the AST
++			 */
+ 			case PHVOLT_T_BLOCK:
+-				if (state->block_level > 0) {
+-					phvolt_create_error_msg(parser_status, "Embedding blocks into other blocks is not supported");
+-					parser_status->status = PHVOLT_PARSING_FAILED;
+-					break;
+-				} else {
+-					state->block_level++;
+-				}
++				state->block_level++;
+ 				phvolt_(phvolt_parser, PHVOLT_BLOCK, NULL, parser_status);
+ 				break;
+ 

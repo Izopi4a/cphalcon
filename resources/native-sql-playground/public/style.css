@@ -159,3 +159,11 @@ summary { cursor: pointer; color: var(--muted); font-size: 13px; margin-bottom: 
   font: inherit;
   cursor: pointer;
 }
+
+.today { color: var(--muted); margin: 0 0 8px; font-size: 13.5px; }
+.file { margin-bottom: 8px; }
+.file-name { font-size: 12px; color: var(--muted); margin: 0 0 2px; font-family: ui-monospace, Menlo, monospace; }
+.rendered { padding: 10px 12px; border: 1px dashed var(--border); border-radius: 6px; margin-bottom: 8px; background: var(--surface); }
+.rendered .card { padding: 8px; margin: 4px 0; }
+.html { border-left: 3px solid var(--ok); }
+.play input[type=checkbox] { margin-right: 6px; }

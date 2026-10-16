@@ -6,6 +6,7 @@ use Phalcon\Mvc\Micro;
 
 require dirname(__DIR__) . '/bootstrap.php';
 require dirname(__DIR__) . '/runner.php';
+require dirname(__DIR__) . '/volt.php';
 
 // php -S: let the built-in server hand out static files
 if (PHP_SAPI === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) {
@@ -68,7 +69,7 @@ function layout(string $title, string $body): string
 <body>
 <header>
   <strong>native-sql-spin</strong>
-  <nav><a href="/">Scenarios</a><a href="/playground">Playground</a></nav>
+  <nav><a href="/">SQL scenarios</a><a href="/playground">SQL playground</a><a href="/volt">Volt</a><a href="/volt/try">Volt playground</a></nav>
 </header>
 <main>{$body}</main>
 </body>
@@ -185,6 +186,96 @@ $app->map('/playground', function () use ($app) {
 </form>' . $output;
 
     echo layout('Playground', $body);
+})->via(['GET', 'POST']);
+
+$app->get('/volt', function () use ($app) {
+    warmMetadata();
+
+    $body  = '<h1>Volt on this branch</h1>';
+    $body .= '<p class="lead">Every card renders its templates through View\Simple and the Volt engine on this request, shows the compiled PHP, and says what happens without the change. Variables come from the same shop database as the SQL scenarios.</p>';
+
+    $group = null;
+    foreach (voltScenarios() as $index => $scenario) {
+        if ($scenario['group'] !== $group) {
+            $group = $scenario['group'];
+            $body .= '<h2>' . e($group) . '</h2>';
+        }
+
+        $result = renderVoltScenario($scenario, $app->getDI());
+        $ok     = !in_array(false, array_map(fn ($r) => $r['error'] === null, $result['renders']), true);
+        $files  = '';
+        foreach ($scenario['files'] as $name => $source) {
+            $files .= '<div class="file"><div class="file-name">' . e($name) . '.volt</div><pre class="code">' . e($source) . '</pre></div>';
+        }
+
+        $outputs = '';
+        foreach ($result['renders'] as $render) {
+            $label = $render['vars'] ? '<div class="file-name">' . e(json_encode($render['vars'], JSON_UNESCAPED_SLASHES)) . '</div>' : '';
+            $outputs .= $label . ($render['error'] !== null
+                ? '<pre class="error">' . e($render['error']) . '</pre>'
+                : '<div class="rendered">' . $render['output'] . '</div><pre class="html">' . e(trim($render['output'])) . '</pre>');
+        }
+
+        $deps = $result['deps'] ? '<details><summary>dependency sidecar (.deps.php)</summary><pre class="result">' . json($result['deps']) . '</pre></details>' : '';
+
+        $body .= sprintf(
+            '<section class="card"><div class="card-head"><span class="num">#%d</span><h3>%s</h3><span class="chip %s">%s</span></div>'
+            . '<p class="today"><b>Today:</b> %s</p>'
+            . '<div class="cols"><div class="panel"><h4>templates</h4>%s</div><div class="panel"><h4>rendered</h4>%s'
+            . '<details><summary>compiled PHP</summary><pre class="sql">%s</pre></details>%s</div></div></section>',
+            $index + 1,
+            e($scenario['title']),
+            $ok ? 'v-same' : 'v-api',
+            $ok ? 'works' : 'compile error (by design)',
+            e($scenario['today']),
+            $files,
+            $outputs,
+            e((string) $result['compiled']),
+            $deps
+        );
+    }
+
+    echo layout('Volt', $body);
+});
+
+$app->map('/volt/try', function () use ($app) {
+    $request  = $app->request;
+    $template = $request->get('template') ?? "{# runtime functions: price(), stars(), now(); filters: money, initials; tests: local, shipped #}\n"
+        . "{% set shown = customers|length %}\n"
+        . "<h3>{% block title %}Customers{% endblock %}</h3>\n"
+        . "{% for c in customers %}\n"
+        . "  <p>{{ c.name|initials }} · {{ c.name }}{% if c is local %} {{ stars(3) }}{% endif %} · {{ c.orders?.count() ?? 0 }} orders</p>\n"
+        . "{% endfor %}\n"
+        . "<p>{{ shown }} shown · {{ 1999.5|money('currency': 'BGN') }} · {{ 9 // 2 }} · {{ block(\"title\") }} again</p>";
+    $autoescape = $request->isPost() ? (bool) $request->getPost('autoescape') : true;
+
+    $output = '';
+    if ($request->isPost()) {
+        warmMetadata();
+        $scenario = [
+            'files'   => ['page' => $template],
+            'vars'    => fn () => ['customers' => Customer::find(['order' => 'id', 'limit' => 5]), 'orders' => Order::count()],
+            'options' => ['autoescape' => $autoescape],
+        ];
+        $result = renderVoltScenario($scenario, $app->getDI());
+        $render = $result['renders'][0];
+        $output = '<div class="cols"><div class="panel"><h4>rendered</h4>'
+            . ($render['error'] !== null ? '<pre class="error">' . e($render['error']) . '</pre>' : '<div class="rendered">' . $render['output'] . '</div><pre class="html">' . e(trim($render['output'])) . '</pre>')
+            . '</div><div class="panel"><h4>compiled PHP</h4><pre class="sql">' . e((string) $result['compiled']) . '</pre></div></div>';
+    }
+
+    $body = '<h1>Volt playground</h1>
+<p class="lead">Variables: <code>customers</code> (5 Customer models, with the <code>orders</code> relation) and <code>orders</code> (a count). The ShopExtension is registered: functions <code>price()</code>, <code>stars()</code> (safe), <code>now()</code>; filters <code>money</code>, <code>initials</code>; tests <code>local</code>, <code>shipped</code>.</p>
+<form method="post" class="play">
+  <fieldset>
+    <legend>Template</legend>
+    <label><input type="checkbox" name="autoescape" value="1"' . ($autoescape ? ' checked' : '') . '> autoescape</label>
+    <textarea name="template" rows="12" spellcheck="false">' . e($template) . '</textarea>
+    <button>Render</button>
+  </fieldset>
+</form>' . $output;
+
+    echo layout('Volt playground', $body);
 })->via(['GET', 'POST']);
 
 $app->notFound(function () {

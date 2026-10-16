@@ -1,9 +1,18 @@
 # native-sql playground
 
-A small shop on PostgreSQL that runs every scenario twice: with
+Two parts, on the same shop database:
+
+- **SQL** (`/`, `/playground`): every ORM scenario twice, with
 `orm.native_compiler` off (today's PHQL parser) and on (find()/Builder compiled
 straight to SQL), showing the SQL each path sent, plus the new native SQL API
 (`Model::findBySql()`, `Model::findFirstBySql()`, `Manager::nativeQuery()`).
+- **Volt** (`/volt`, `/volt/try`): every new Volt feature on a small template:
+  nested blocks, `block()`, blocks in if/for, `embed`, `extends` from a
+  variable, runtime functions/filters/tests (`ShopExtension`), `??`, `?.`,
+  set capture, scoped `include ... with`, `{% call %}`/`caller()`, `//`,
+  autoescape without double escaping, strict tests and the dependency
+  sidecar. Each card shows the templates, the output, the compiled PHP and
+  what happens without the change.
 
 ## Run it
 
@@ -29,7 +38,8 @@ read by both PHP (parse_ini_file) and docker compose, so keep it to plain
 
 - `scenarios.php` - every scenario is a closure; the page shows its source next to the SQL
 - `models.php` - Customer (prefixed columns behind a columnMap), Order, Product (jsonb), OrderItem
-- `public/index.php` - the page (Phalcon Micro), `/playground` takes your own find() params or raw SQL
+- `volt.php` - the Volt scenarios, `ShopExtension` (runtime functions, filters, tests) and the renderer
+- `public/index.php` - the pages (Phalcon Micro); `/playground` takes your own find() params or raw SQL, `/volt/try` your own template
 
 `ext/` was generated on PHP 8.5: Zephir inlines `\PDO::FETCH_*` at generate
 time, so `Db\Enum::FETCH_*` carry 8.5's values (FETCH_GROUP and friends differ

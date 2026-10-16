@@ -48,7 +48,7 @@ interface ColumnInterface
     /**
      * Returns column type
      */
-    public function getType() -> int;
+    public function getType() -> int | string;
 
     /**
      * Returns column type reference
@@ -58,7 +58,7 @@ interface ColumnInterface
     /**
      * Returns column type values
      */
-    public function getTypeValues() -> array | string;
+    public function getTypeValues() -> array | string | int;
 
 
     /**

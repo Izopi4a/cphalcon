@@ -40,13 +40,16 @@ PHP port), not a new ORM.
   - `./run.sh test`: 65 tests, SQLite in-memory;
   - `./run.sh tools/trace.php [n] [--full]`: every pipeline stage for 6 queries, plus the native
     path;
-  - `./run.sh tools/probe.php [--markdown]`: which SQL PHQL refuses vs what PDO accepts.
+  - `./run.sh tools/probe.php [--markdown]`: which SQL PHQL refuses vs what PDO accepts;
+  - `./run.sh tools/examples.php [E#]`: the examples.md cases, before/after. It exits 1 if one
+    drifts.
 - The system PHP 8.5.4 has no `pdo_mysql` / `pdo_pgsql`, so MySQL/PostgreSQL runs need those
   extensions plus a database container.
 
 ## Files
 | file | what |
 |---|---|
+| `examples.md` | before/after examples (UNION, CASE, window functions, CTE into models, a raw-SQL report with foreach/print_r, columnMap, MySQL syntax, error changes); every output captured by `prototype/tools/examples.php` |
 | `walkthrough.md` | reading guide: today's 6 hops with real data at each one, the Dialect definition format, the same query compiled natively, what is given up, a reading order |
 | `native-sql-rfc.md` | the NFR draft |
 | `survey-query-core.md` | parser → AST → IR → Dialect internals (`Query.zep`, `Dialect.zep`) |
@@ -66,6 +69,7 @@ PHP port), not a new ORM.
 - [x] PHP prototype M0: find()/findFirst() compiled to the Dialect, findBySql, rows. 65 tests
       green (2026-10-16).
 - [x] walkthrough.md written for the user's code reading
+- [x] examples.md: 10 before/after examples, outputs captured by tools/examples.php
 - [x] native-sql-rfc.md drafted (awaiting user review)
 - [ ] user review of walkthrough + RFC
 - [ ] MySQL + PostgreSQL runs of the prototype (needs pdo_mysql/pdo_pgsql)

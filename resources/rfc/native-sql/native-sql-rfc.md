@@ -5,7 +5,8 @@ Related: #17142 / #17141 (CTE support, deferred to v7), #12867 and #2882 (UNION)
 list), #14954 (new PHQL operators), #16984 (UPDATE … JOIN).
 Evidence: a working PHP prototype on 7.0.x with 65 tests (`prototype/`, SQLite so far; MySQL
 and PostgreSQL runs are pending), a probe of what PHQL accepts (`survey-upstream-context.md`),
-and a stage-by-stage trace of today's pipeline (`walkthrough.md`).
+a stage-by-stage trace of today's pipeline (`walkthrough.md`), and before/after usage examples
+with captured output (`examples.md`).
 
 ## Problem
 

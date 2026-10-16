@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# php with the branch's extension: ./spin seed.php | ./spin cli.php [-v] [filter]
+# PHALCON_SO in .env overrides the default (ext/ of this checkout).
+# Loads a snapshot of phalcon.so (one per build), so rebuilding never swaps the
+# library under a running php -S (it would segfault).
+DIR="$(cd "$(dirname "$0")" && pwd)"
+SO="$(grep -s '^PHALCON_SO=' "$DIR/.env" | cut -d= -f2-)"
+SO="${SO:-$DIR/../../ext/modules/phalcon.so}"
+if [ ! -f "$SO" ]; then
+    echo "phalcon.so not found at $SO: build it first (cd ext && phpize && ./configure && make -j)" >&2
+    exit 1
+fi
+mkdir -p "$DIR/.run"
+SNAP="$DIR/.run/phalcon-$(stat -c %Y "$SO").so"
+[ -f "$SNAP" ] || cp "$SO" "$SNAP"
+exec php -d extension="$SNAP" -d xdebug.mode=off "$@"

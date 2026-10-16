@@ -1,0 +1,10 @@
+# a throwaway PostgreSQL for the playground: docker compose up -d
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: phalcon_spin
+      POSTGRES_USER: phalcon
+      POSTGRES_PASSWORD: phalcon
+    ports:
+      - "127.0.0.1:54329:5432"

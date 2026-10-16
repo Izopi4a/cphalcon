@@ -42,6 +42,13 @@ use Phalcon\Support\Settings;
 class FragmentRewriter
 {
     /**
+     * Column aliases of the SELECT list, quoted when referenced
+     *
+     * @var array
+     */
+    protected aliases = [];
+
+    /**
      * Column maps (property => column) of the queried models, in query order
      *
      * @var array
@@ -166,6 +173,17 @@ class FragmentRewriter
         if typeof map == "array" {
             let this->bareMaps[] = map;
         }
+
+        return this;
+    }
+
+    /**
+     * Registers a column alias of the SELECT list, so a reference to it in
+     * ORDER BY / GROUP BY / HAVING is quoted like the alias itself
+     */
+    public function addAlias(string alias) -> <FragmentRewriter>
+    {
+        let this->aliases[alias] = true;
 
         return this;
     }
@@ -460,7 +478,7 @@ class FragmentRewriter
 
                     if column !== null {
                         let output .= this->escape(column);
-                    } elseif kind == "br" {
+                    } elseif kind == "br" || isset this->aliases[name] {
                         let output .= this->escape(name);
                     } else {
                         let output .= text;

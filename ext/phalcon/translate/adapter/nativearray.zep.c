@@ -110,16 +110,16 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, __construct)
 	zephir_memory_observe(&error);
 	if (zephir_array_isset_string_fetch(&error, &options, SL("triggerError"), 0)) {
 		if (zephir_get_boolval(&error)) {
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 985, &__$true);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 986, &__$true);
 		} else {
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 985, &__$false);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 986, &__$false);
 		}
 	}
 	if (UNEXPECTED(Z_TYPE_P(&data) != IS_ARRAY)) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_translate_exception_ce, "Translation data must be an array", "phalcon/Translate/Adapter/NativeArray.zep", 65);
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 986, &data);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 987, &data);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -176,7 +176,7 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, has)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&index_zv, index);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 986, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 987, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, &index_zv));
 }
 
@@ -213,7 +213,7 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, notFound)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&index_zv);
 	ZVAL_STR_COPY(&index_zv, index);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 985, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 986, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(ZEPHIR_IS_TRUE_IDENTICAL(&_0))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		object_init_ex(&_1$$3, phalcon_translate_exception_ce);
@@ -278,7 +278,7 @@ PHP_METHOD(Phalcon_Translate_Adapter_NativeArray, query)
 		zephir_get_arrval(&placeholders, placeholders_param);
 	}
 	zephir_memory_observe(&translation);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 986, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 987, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_fetch(&translation, &_0, &translateKey_zv, 0))) {
 		ZEPHIR_RETURN_CALL_METHOD(this_ptr, "notFound", NULL, 0, &translateKey_zv);
 		zephir_check_call_status();

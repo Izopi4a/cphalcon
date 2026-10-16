@@ -1952,6 +1952,15 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             }
         }
 
+        /**
+         * Aliases of the SELECT list are quoted where they are referenced
+         */
+        for key, item in irColumns {
+            if typeof key == "string" && item["type"] == "scalar" {
+                rewriter->addAlias(key);
+            }
+        }
+
         let intermediate = [
             "models":  irModels,
             "tables":  irTables,

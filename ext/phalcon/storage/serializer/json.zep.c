@@ -88,7 +88,7 @@ PHP_METHOD(Phalcon_Storage_Serializer_Json, __construct)
 		zephir_check_call_status();
 	}
 
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 963, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 964, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	object_init_ex(&_1, phalcon_support_helper_json_decode_ce);
 	if (zephir_has_constructor(&_1)) {
@@ -96,7 +96,7 @@ PHP_METHOD(Phalcon_Storage_Serializer_Json, __construct)
 		zephir_check_call_status();
 	}
 
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 964, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 965, &_1);
 	ZEPHIR_CALL_PARENT(NULL, phalcon_storage_serializer_json_ce, getThis(), "__construct", NULL, 0, data);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
@@ -136,11 +136,11 @@ PHP_METHOD(Phalcon_Storage_Serializer_Json, serialize)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&_0);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 965, PH_NOISY_CC);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 966, PH_NOISY_CC);
 	_1 = Z_TYPE_P(&_0) == IS_OBJECT;
 	if (_1) {
 		zephir_memory_observe(&_2);
-		zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 965, PH_NOISY_CC);
+		zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 966, PH_NOISY_CC);
 		_1 = !((zephir_is_instance_of(&_2, SL("JsonSerializable"))));
 	}
 	if (_1) {
@@ -158,14 +158,14 @@ PHP_METHOD(Phalcon_Storage_Serializer_Json, serialize)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 965, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 966, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_5, this_ptr, "isSerializable", NULL, 0, &_6);
 	zephir_check_call_status();
 	if (!ZEPHIR_IS_TRUE_IDENTICAL(&_5)) {
 		RETURN_MM_MEMBER(getThis(), "data");
 	}
-	zephir_read_property_cached(&_7, this_ptr, _zephir_prop_1, 963, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_8, this_ptr, _zephir_prop_0, 965, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_7, this_ptr, _zephir_prop_1, 964, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_8, this_ptr, _zephir_prop_0, 966, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_RETURN_CALL_METHOD(&_7, "__invoke", NULL, 0, &_8);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -208,12 +208,12 @@ PHP_METHOD(Phalcon_Storage_Serializer_Json, unserialize)
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "isSerializable", NULL, 0, data);
 	zephir_check_call_status();
 	if (!ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 965, data);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 966, data);
 	} else {
-		zephir_read_property_cached(&_1$$4, this_ptr, _zephir_prop_1, 964, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$4, this_ptr, _zephir_prop_1, 965, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_METHOD(&_2$$4, &_1$$4, "__invoke", NULL, 0, data);
 		zephir_check_call_status();
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 965, &_2$$4);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 966, &_2$$4);
 	}
 	ZEPHIR_MM_RESTORE();
 }

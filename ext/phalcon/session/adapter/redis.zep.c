@@ -96,7 +96,7 @@ PHP_METHOD(Phalcon_Session_Adapter_Redis, __construct)
 	ZVAL_STRING(&_1, "redis");
 	ZEPHIR_CALL_METHOD(&_3, factory, "newInstance", NULL, 0, &_1, &options);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 949, &_3);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 950, &_3);
 	ZEPHIR_MM_RESTORE();
 }
 

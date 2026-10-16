@@ -5,6 +5,7 @@ ZEPHIR_INIT_CLASS(Phalcon_Mvc_Model_Query_FragmentRewriter);
 
 PHP_METHOD(Phalcon_Mvc_Model_Query_FragmentRewriter, __construct);
 PHP_METHOD(Phalcon_Mvc_Model_Query_FragmentRewriter, addModel);
+PHP_METHOD(Phalcon_Mvc_Model_Query_FragmentRewriter, addAlias);
 PHP_METHOD(Phalcon_Mvc_Model_Query_FragmentRewriter, escape);
 PHP_METHOD(Phalcon_Mvc_Model_Query_FragmentRewriter, getBindTypes);
 PHP_METHOD(Phalcon_Mvc_Model_Query_FragmentRewriter, qualify);
@@ -34,6 +35,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_query_fragmentr
 	ZEND_ARG_OBJ_INFO(0, model, Phalcon\\Mvc\\ModelInterface, 0)
 	ZEND_ARG_TYPE_INFO(0, sqlAlias, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, hasAlias, _IS_BOOL, 0, "false")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_query_fragmentrewriter_addalias, 0, 1, Phalcon\\Mvc\\Model\\Query\\FragmentRewriter, 0)
+	ZEND_ARG_TYPE_INFO(0, alias, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_query_fragmentrewriter_escape, 0, 1, IS_STRING, 0)
@@ -106,6 +111,7 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(phalcon_mvc_model_query_fragmentrewriter_method_entry) {
 	PHP_ME(Phalcon_Mvc_Model_Query_FragmentRewriter, __construct, arginfo_phalcon_mvc_model_query_fragmentrewriter___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Phalcon_Mvc_Model_Query_FragmentRewriter, addModel, arginfo_phalcon_mvc_model_query_fragmentrewriter_addmodel, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_Model_Query_FragmentRewriter, addAlias, arginfo_phalcon_mvc_model_query_fragmentrewriter_addalias, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Query_FragmentRewriter, escape, arginfo_phalcon_mvc_model_query_fragmentrewriter_escape, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Query_FragmentRewriter, getBindTypes, arginfo_phalcon_mvc_model_query_fragmentrewriter_getbindtypes, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Query_FragmentRewriter, qualify, arginfo_phalcon_mvc_model_query_fragmentrewriter_qualify, ZEND_ACC_PUBLIC)

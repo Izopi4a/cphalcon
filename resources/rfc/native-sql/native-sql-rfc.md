@@ -209,8 +209,6 @@ get bigger:
    keep them as the last PHQL feature?
 6. **Native multi-model mapping:** a Doctrine-style result-set mapping object, or the existing
    `_alias_column` alias convention made public?
-7. **The PHP port:** the compiler is plain PHP-shaped code (the prototype is PHP). Should it land
-   in `phalcon/phalcon` first and be ported to Zephir, or the other way round?
 
 ## Out of scope
 

@@ -19,7 +19,7 @@ class Php extends AbstractSerializer
      *
      * @return string
      */
-	public function serialize() -> string
+	public function serialize() -> mixed
 	{
         if (true !== this->isSerializable(this->data)) {
             return this->data;

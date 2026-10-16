@@ -104,7 +104,7 @@ PHP_METHOD(Phalcon_Acl_Component, __toString)
 PHP_METHOD(Phalcon_Acl_Component, getDescription)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "description", IS_STRING);
+	RETURN_MEMBER(getThis(), "description");
 }
 
 PHP_METHOD(Phalcon_Acl_Component, getName)

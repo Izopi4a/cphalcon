@@ -18,7 +18,7 @@ interface ComponentInterface
     /**
      * Returns component description
      */
-    public function getDescription() -> string;
+    public function getDescription() -> string | null;
 
     /**
      * Returns the component name

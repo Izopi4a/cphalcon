@@ -23,7 +23,7 @@ interface RoleInterface
     /**
      * Returns role description
      */
-    public function getDescription() -> string;
+    public function getDescription() -> string | null;
 
     /**
      * Magic method __toString

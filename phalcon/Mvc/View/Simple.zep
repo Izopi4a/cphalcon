@@ -11,17 +11,22 @@
 namespace Phalcon\Mvc\View;
 
 use Closure;
+use Phalcon\Contracts\View\Renderer;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface;
-use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
+use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
+use Phalcon\Mvc\View\Exceptions\SimpleViewNotFound;
+use Phalcon\Mvc\View\Exceptions\SimpleViewServicesUnavailable;
+use Phalcon\Mvc\View\Traits\ViewParamsTrait;
+use Phalcon\Mvc\ViewBaseInterface;
+use Phalcon\Traits\Php\FileTrait;
+use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
 /**
- * Phalcon\Mvc\View\Simple
- *
  * This component allows to render views without hierarchical levels
  *
  *```php
@@ -46,27 +51,25 @@ use Phalcon\Mvc\View\Engine\Php as PhpEngine;
  * );
  *```
  */
-class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterface
+class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterface, Renderer
 {
+    use DirSeparatorTrait;
+    use FileTrait;
+    use ViewParamsTrait;
+
     /**
      * @var string
      */
     protected activeRenderPath;
 
     /**
-     * @var string
-     */
-    protected content;
-
-    /**
      * @var EngineInterface[]|false
+     *
+     * @phpstan-var array<string, EngineInterface>|false
      */
     protected engines = false; // TODO: Change to default null or empty array
 
-    /**
-     * @var ManagerInterface|null
-     */
-    protected eventsManager;
+    protected ?<ManagerInterface> eventsManager = null;
 
     /**
      * @var array
@@ -74,28 +77,22 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     protected options = [];
 
     /**
-     * @var array
-     */
-    protected registeredEngines = [];
-
-    /**
      * @var string
      */
     protected viewsDir;
 
     /**
-     * @var array
-     */
-    protected viewParams = [];
-
-    /**
      * Phalcon\Mvc\View\Simple constructor
      *
      * @param array options
+     *
+     * @phpstan-param array<string, mixed> $options
      */
     public function __construct(array options = [])
     {
-        let this->options = options;
+        let this->options           = options,
+            this->registeredEngines = [],
+            this->viewParams        = [];
     }
 
     /**
@@ -107,7 +104,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return mixed|null
      */
-    public function __get(string! key) -> var | null
+    public function __get(string key) -> var | null
     {
         var value;
 
@@ -127,7 +124,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return void
      */
-    public function __set(string! key, var value) -> void
+    public function __set(string key, var value) -> void
     {
         let this->viewParams[key] = value;
     }
@@ -143,16 +140,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     }
 
     /**
-     * Returns output from another view stage
-     *
-     * @return string
-     */
-    public function getContent() -> string
-    {
-        return this->content;
-    }
-
-    /**
      * Returns the internal event manager
      *
      * @return ManagerInterface|null
@@ -160,40 +147,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     public function getEventsManager()  -> <ManagerInterface> | null
     {
         return this->eventsManager;
-    }
-
-    /**
-     * Returns parameters to views
-     *
-     * @return array
-     */
-    public function getParamsToView() -> array
-    {
-        return this->viewParams;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRegisteredEngines() -> array
-    {
-        return this->registeredEngines;
-    }
-
-    /**
-     * Returns a parameter previously set in the view
-     *
-     * @return mixed|null
-     */
-    public function getVar(string! key) -> var | null
-    {
-        var value;
-
-        if !fetch value, this->viewParams[key] {
-            return null;
-        }
-
-        return value;
     }
 
     /**
@@ -226,9 +179,10 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return void
      */
-    public function partial(string! partialPath, var params = null) -> void
+    public function partial(string partialPath, var params = null) -> void
     {
-        var viewParams, mergedParams;
+        var mergedParams,
+            viewParams = [];
 
         /**
          * Start output buffering
@@ -292,8 +246,10 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *```
      *
      * @return void
+     *
+     * @phpstan-param array<string, mixed> $engines
      */
-    public function registerEngines(array! engines) -> void
+    public function registerEngines(array engines) -> void
     {
         let this->registeredEngines = engines;
     }
@@ -302,8 +258,10 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * Renders a view
      *
      * @return string
+     *
+     * @phpstan-param array<string, mixed> $params
      */
-    public function render(string! path, array params = []) -> string
+    public function render(string path, array params = []) -> string
     {
         var mergedParams, viewParams;
 
@@ -332,22 +290,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     }
 
     /**
-     * Externally sets the view content
-     *
-     *```php
-     * $this->view->setContent("<h1>hello</h1>");
-     *```
-     *
-     * @return Simple
-     */
-    public function setContent(string! content) -> <Simple>
-    {
-        let this->content = content;
-
-        return this;
-    }
-
-    /**
      * Sets the events manager
      *
      * @return void
@@ -364,27 +306,13 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * $this->view->setParamToView("products", $products);
      *```
      *
-     * @return Simple
+     * @return static
+     *
+     * @phpstan-return static
      */
-    public function setParamToView(string! key, var value) -> <Simple>
+    public function setParamToView(string key, var value) -> <static>
     {
         return this->setVar(key, value);
-    }
-
-    /**
-     * Set a single view parameter
-     *
-     *```php
-     * $this->view->setVar("products", $products);
-     *```
-     *
-     * @return Simple
-     */
-    public function setVar(string! key, var value) -> <Simple>
-    {
-        let this->viewParams[key] = value;
-
-        return this;
     }
 
     /**
@@ -398,9 +326,11 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * );
      *```
      *
-     * @return Simple
+     * @return static
+     *
+     * @phpstan-param array<string, mixed> $params
      */
-    public function setVars(array! params, bool merge = true) -> <Simple>
+    public function setVars(array params, bool merge = true) -> <static>
     {
         if merge {
             let params = array_merge(this->viewParams, params);
@@ -416,9 +346,9 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return void
      */
-    public function setViewsDir(string! viewsDir) -> void
+    public function setViewsDir(string viewsDir) -> void
     {
-        let this->viewsDir = this->getDirSeparator(viewsDir);
+        let this->viewsDir = this->toDirSeparator(viewsDir);
     }
 
     /**
@@ -426,11 +356,13 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * Phalcon\Mvc\View\Engine\Php
      *
      * @return array
+     *
+     * @phpstan-return array<string, EngineInterface>
      */
     protected function loadTemplateEngines() -> array
     {
         var engines, di, registeredEngines, extension, engineService,
-            engineObject;
+            engineObject = null;
 
         /**
          * If the engines aren't initialized 'engines' is false
@@ -452,9 +384,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                 let engines[".phtml"] = new PhpEngine(this, di);
             } else {
                 if typeof di != "object" {
-                    throw new Exception(
-                        "A dependency injection container is required to access the application services"
-                    );
+                    throw new SimpleViewServicesUnavailable();
                 }
 
                 for extension, engineService in registeredEngines {
@@ -480,9 +410,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                             ]
                         );
                     } else {
-                        throw new Exception(
-                            "Invalid template engine registration for extension: " . extension
-                        );
+                        throw new InvalidEngineRegistration(extension);
                     }
 
                     let engines[extension] = engineObject;
@@ -505,11 +433,11 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return void
      */
-    final protected function internalRender(string! path, params) -> void
+    final protected function internalRender(string path, params) -> void
     {
-        var eventsManager, engines, extension, engine;
+        var eventsManager, engines, extension, engine, segment, segments;
         bool notExists, mustClean;
-        string viewEnginePath, viewsDirPath;
+        string viewEnginePath = "", viewsDirPath;
 
         let eventsManager = this->eventsManager;
 
@@ -529,7 +457,34 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
         let notExists = true,
             mustClean = true;
 
-        let viewsDirPath =  this->viewsDir . path;
+        /**
+         * Resolve "." and ".." path segments so a crafted view path cannot
+         * climb out of the views directory, while still allowing
+         * sub-directories and absolute paths (CWE-22). A ".." removes the
+         * previous segment. At the top level, or at the root of an absolute
+         * path, the ".." is dropped. Backslashes are separators on Windows,
+         * so they are normalized first.
+         */
+        let segments = [];
+        for segment in explode("/", str_replace("\\", "/", path)) {
+            if segment === "." {
+                continue;
+            }
+
+            if segment === ".." {
+                if count(segments) > 0 && segments[count(segments) - 1] !== "" {
+                    array_pop(segments);
+                }
+
+                continue;
+            }
+
+            let segments[] = segment;
+        }
+
+        let path = implode("/", segments);
+
+        let viewsDirPath = this->viewsDir . path;
 
         /**
          * Load the template engines
@@ -540,9 +495,9 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
          * Views are rendered in each engine
          */
         for extension, engine in engines {
-            if file_exists(viewsDirPath . extension) {
+            if this->phpFileExists(viewsDirPath . extension) {
                 let viewEnginePath = viewsDirPath . extension;
-            } elseif substr(viewsDirPath, -strlen(extension)) == extension && file_exists(viewsDirPath) {
+            } elseif substr(viewsDirPath, -strlen(extension)) == extension && this->phpFileExists(viewsDirPath) {
                 /**
                  * if passed filename with engine extension
                  */
@@ -579,9 +534,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
          * Always throw an exception if the view does not exist
          */
         if notExists {
-            throw new Exception(
-                "View '" . viewsDirPath . "' was not found in the views directory"
-            );
+            throw new SimpleViewNotFound(viewsDirPath);
         }
 
         /**
@@ -590,13 +543,5 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
         if typeof eventsManager == "object" {
             eventsManager->fire("view:afterRender", this);
         }
-    }
-
-    /**
-     * @todo Remove this when we get traits
-     */
-    private function getDirSeparator(string! directory) -> string
-    {
-        return rtrim(directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     }
 }

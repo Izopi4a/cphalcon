@@ -15,7 +15,8 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class IsIncludedTest extends AbstractUnitTestCase
 {
@@ -33,14 +34,13 @@ class IsIncludedTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider provideIsIncluded
-     *
      * @param array<int, string>|string $haystack
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testMvcViewEngineVoltIsIncluded(mixed $needle, array|string $haystack, bool $expected): void
+    #[DataProvider('provideIsIncluded')]
+    public function testMvcViewEngineVoltIsIncluded(mixed $needle, array | string $haystack, bool $expected): void
     {
         $volt = new Volt(new View());
         $this->assertSame($expected, $volt->isIncluded($needle, $haystack));

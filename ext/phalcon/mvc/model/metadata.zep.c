@@ -488,7 +488,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, getDI)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 50, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 51, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&container, &_0);
 	if (Z_TYPE_P(&container) != IS_OBJECT) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_mvc_model_exception_ce, "A dependency injection container is required to access internal services", "phalcon/Mvc/Model/MetaData.zep", 357);
@@ -738,7 +738,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, getStrategy)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 51, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 52, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_0) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		object_init_ex(&_1$$3, phalcon_mvc_model_metadata_strategy_introspection_ce);
@@ -747,7 +747,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, getStrategy)
 			zephir_check_call_status();
 		}
 
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 51, &_1$$3);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 52, &_1$$3);
 	}
 	RETURN_MM_MEMBER(getThis(), "strategy");
 }
@@ -817,7 +817,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, isEmpty)
 	if (UNEXPECTED(!_zephir_prop_0)) {
 		_zephir_prop_0 = zend_string_init("metaData", 8, 1);
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 52, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 53, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_fast_count_int(&_0) == 0);
 }
 
@@ -846,7 +846,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, read)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 53, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 54, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_RETURN_CALL_METHOD(&_0, "get", NULL, 0, &key_zv);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -897,7 +897,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, readColumnMap)
 	ZEPHIR_CALL_METHOD(&keyName, this_ptr, "getColumnMapUniqueKey", NULL, 26, model);
 	zephir_check_call_status();
 	if (EXPECTED(Z_TYPE_P(&keyName) != IS_NULL)) {
-		zephir_read_property_cached(&_2$$4, this_ptr, _zephir_prop_0, 54, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$4, this_ptr, _zephir_prop_0, 55, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&_3$$4);
 		zephir_array_fetch(&_3$$4, &_2$$4, &keyName, PH_NOISY, "phalcon/Mvc/Model/MetaData.zep", 584);
 		RETURN_CCTOR(&_3$$4);
@@ -953,7 +953,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, readColumnMapIndex)
 	ZEPHIR_CALL_METHOD(&keyName, this_ptr, "getColumnMapUniqueKey", NULL, 26, model);
 	zephir_check_call_status();
 	if (EXPECTED(Z_TYPE_P(&keyName) != IS_NULL)) {
-		zephir_read_property_cached(&_2$$4, this_ptr, _zephir_prop_0, 54, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$4, this_ptr, _zephir_prop_0, 55, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&_3$$4);
 		zephir_array_fetch(&_3$$4, &_2$$4, &keyName, PH_NOISY, "phalcon/Mvc/Model/MetaData.zep", 610);
 		zephir_memory_observe(&_4$$4);
@@ -999,7 +999,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, readMetaData)
 	ZEPHIR_CALL_METHOD(&key, this_ptr, "getMetaDataUniqueKey", NULL, 27, model);
 	zephir_check_call_status();
 	if (EXPECTED(Z_TYPE_P(&key) != IS_NULL)) {
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 52, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 53, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&_1$$3);
 		zephir_array_fetch(&_1$$3, &_0$$3, &key, PH_NOISY, "phalcon/Mvc/Model/MetaData.zep", 631);
 		RETURN_CCTOR(&_1$$3);
@@ -1046,7 +1046,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, readMetaDataIndex)
 	ZEPHIR_CALL_METHOD(&key, this_ptr, "getMetaDataUniqueKey", NULL, 27, model);
 	zephir_check_call_status();
 	if (EXPECTED(Z_TYPE_P(&key) != IS_NULL)) {
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 52, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 53, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&_1$$3);
 		zephir_array_fetch(&_1$$3, &_0$$3, &key, PH_NOISY, "phalcon/Mvc/Model/MetaData.zep", 653);
 		zephir_memory_observe(&_2$$3);
@@ -1084,10 +1084,10 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, reset)
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 52, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 53, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	array_init(&_1);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 54, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 55, &_1);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -1220,7 +1220,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, setDI)
 		Z_PARAM_OBJECT_OF_CLASS(container, phalcon_di_diinterface_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &container);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 50, container);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 51, container);
 }
 
 /**
@@ -1241,7 +1241,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, setStrategy)
 		Z_PARAM_OBJECT_OF_CLASS(strategy, phalcon_mvc_model_metadata_strategy_strategyinterface_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &strategy);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 51, strategy);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 52, strategy);
 }
 
 /**
@@ -1287,7 +1287,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, write)
 		ZVAL_STRING(&_0$$3, "orm.exception_on_failed_metadata_save");
 		ZEPHIR_CALL_CE_STATIC(&option, phalcon_support_settings_ce, "get", NULL, 0, &_0$$3);
 		zephir_check_call_status_or_jump(try_end_1);
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 53, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 54, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_METHOD(&result, &_1$$3, "set", NULL, 0, &key_zv, &data);
 		zephir_check_call_status_or_jump(try_end_1);
 		if (ZEPHIR_IS_FALSE_IDENTICAL(&result)) {
@@ -1425,7 +1425,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, initializeMetaData)
 	ZEPHIR_INIT_VAR(&strategy);
 	ZVAL_NULL(&strategy);
 	if (EXPECTED(Z_TYPE_P(key) != IS_NULL)) {
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 52, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 53, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CPY_WRT(&metaData, &_0$$3);
 		if (0 == zephir_array_isset_value(&metaData, key)) {
 			ZEPHIR_INIT_VAR(&_1$$4);
@@ -1526,7 +1526,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, initializeColumnMap)
 	if (!(zephir_is_true(&_0))) {
 		RETURN_MM_BOOL(0);
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 54, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 55, PH_NOISY_CC | PH_READONLY);
 	if (1 == zephir_array_isset_value(&_2, key)) {
 		RETURN_MM_BOOL(1);
 	}
@@ -1662,7 +1662,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, getMetaDataUniqueKey)
 	zephir_fetch_params(1, 1, 0, &model);
 	ZEPHIR_INIT_VAR(&key);
 	zephir_get_class(&key, model, 1);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 52, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 53, PH_NOISY_CC | PH_READONLY);
 	if (0 == zephir_array_isset_value(&_0, &key)) {
 		ZEPHIR_CALL_METHOD(&_1$$3, this_ptr, "initializeMetaData", NULL, 30, model, &key);
 		zephir_check_call_status();
@@ -1703,7 +1703,7 @@ PHP_METHOD(Phalcon_Mvc_Model_MetaData, getColumnMapUniqueKey)
 	zephir_fetch_params(1, 1, 0, &model);
 	ZEPHIR_INIT_VAR(&key);
 	zephir_get_class(&key, model, 1);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 54, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 55, PH_NOISY_CC | PH_READONLY);
 	if (0 == zephir_array_isset_value(&_0, &key)) {
 		ZEPHIR_CALL_METHOD(&_1$$3, this_ptr, "initializeColumnMap", NULL, 31, model, &key);
 		zephir_check_call_status();

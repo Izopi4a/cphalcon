@@ -102,7 +102,7 @@ PHP_METHOD(Phalcon_Html_Helper_Ol, add)
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_create_array(&_2, 4, 0);
 	zephir_memory_observe(&_3);
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 197, PH_NOISY_CC);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 198, PH_NOISY_CC);
 	zephir_array_fast_append(&_2, &_3);
 	zephir_array_fast_append(&_2, &text_zv);
 	zephir_array_fast_append(&_2, &attributes);

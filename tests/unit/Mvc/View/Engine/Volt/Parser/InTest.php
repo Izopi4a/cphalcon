@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class InTest extends AbstractUnitTestCase
 {
@@ -38,16 +38,16 @@ final class InTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 309,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'item',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'collection',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,
@@ -73,16 +73,16 @@ final class InTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 367,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'item',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'collection',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,

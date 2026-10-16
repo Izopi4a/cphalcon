@@ -449,14 +449,14 @@ PHP_METHOD(Phalcon_Flash_Session, getSessionService)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 526, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 527, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_0) != IS_NULL) {
 		RETURN_MM_MEMBER(getThis(), "sessionService");
 	}
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 527, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 528, PH_NOISY_CC | PH_READONLY);
 	_2 = Z_TYPE_P(&_1) != IS_NULL;
 	if (_2) {
-		zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 527, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 528, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_INIT_VAR(&_5);
 		ZVAL_STRING(&_5, "session");
 		ZEPHIR_CALL_METHOD(&_4, &_3, "has", NULL, 0, &_5);
@@ -464,12 +464,12 @@ PHP_METHOD(Phalcon_Flash_Session, getSessionService)
 		_2 = ZEPHIR_IS_TRUE_IDENTICAL(&_4);
 	}
 	if (_2) {
-		zephir_read_property_cached(&_6$$4, this_ptr, _zephir_prop_1, 527, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_6$$4, this_ptr, _zephir_prop_1, 528, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_INIT_VAR(&_8$$4);
 		ZVAL_STRING(&_8$$4, "session");
 		ZEPHIR_CALL_METHOD(&_7$$4, &_6$$4, "getShared", NULL, 0, &_8$$4);
 		zephir_check_call_status();
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 526, &_7$$4);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 527, &_7$$4);
 		RETURN_MM_MEMBER(getThis(), "sessionService");
 	}
 	ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_flash_exception_ce, "A dependency injection container is required to access the 'session' service", "phalcon/Flash/Session.zep", 208);

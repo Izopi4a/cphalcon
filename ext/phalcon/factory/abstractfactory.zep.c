@@ -87,7 +87,7 @@ PHP_METHOD(Phalcon_Factory_AbstractFactory, getService)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 13, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
 	if (UNEXPECTED(!(zephir_array_isset_value(&_0, &name_zv)))) {
 		ZEPHIR_INIT_VAR(&_2$$3);
 		ZEPHIR_CONCAT_SVS(&_2$$3, "Service ", &name_zv, " is not registered");
@@ -101,7 +101,7 @@ PHP_METHOD(Phalcon_Factory_AbstractFactory, getService)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 13, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 14, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_4);
 	zephir_array_fetch(&_4, &_3, &name_zv, PH_NOISY, "phalcon/Factory/AbstractFactory.zep", 43);
 	RETURN_CCTOR(&_4);

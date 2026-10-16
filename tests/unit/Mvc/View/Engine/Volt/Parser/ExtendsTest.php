@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class ExtendsTest extends AbstractUnitTestCase
 {
@@ -36,10 +36,10 @@ final class ExtendsTest extends AbstractUnitTestCase
             [
                 'type' => 310,
                 'path' => [
-                    'type' => 260,
+                    'type'  => 260,
                     'value' => 'base.volt',
-                    'file' => 'eval code',
-                    'line' => 1,
+                    'file'  => 'eval code',
+                    'line'  => 1,
                 ],
                 'file' => 'eval code',
                 'line' => 1,
@@ -60,10 +60,10 @@ final class ExtendsTest extends AbstractUnitTestCase
             [
                 'type' => 310,
                 'path' => [
-                    'type' => 265,
+                    'type'  => 265,
                     'value' => 'layout',
-                    'file' => 'eval code',
-                    'line' => 1,
+                    'file'  => 'eval code',
+                    'line'  => 1,
                 ],
                 'file' => 'eval code',
                 'line' => 1,

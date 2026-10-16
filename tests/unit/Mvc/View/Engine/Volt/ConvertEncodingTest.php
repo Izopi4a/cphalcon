@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 use function chr;
 
@@ -44,12 +44,10 @@ class ConvertEncodingTest extends AbstractUnitTestCase
         $actual   = $engine->convertEncoding($text, $from, $to);
         $this->assertEquals($expected, $actual);
 
-        // 'ü' (UTF-8 \xc3\xbc) is not valid UTF-7, so mb_convert_encoding
-        // emits one substitution '?' per unrecognized byte
         $text     = 'Schlüssel';
         $from     = 'utf7';
         $to       = 'euc-jp';
-        $expected = 'Schl' . str_repeat('?', 2) . 'ssel';
+        $expected = 'Schl??ssel';
         $actual   = $engine->convertEncoding($text, $from, $to);
         $this->assertEquals($expected, $actual);
     }

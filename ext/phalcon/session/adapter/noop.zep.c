@@ -123,8 +123,8 @@ PHP_METHOD(Phalcon_Session_Adapter_Noop, __construct)
 		ZEPHIR_INIT_NVAR(&prefix);
 		ZVAL_STRING(&prefix, "");
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 225, &prefix);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 226, &options);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 226, &prefix);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 227, &options);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -250,7 +250,7 @@ PHP_METHOD(Phalcon_Session_Adapter_Noop, getPrefixedName)
 		return;
 	}
 	ZEPHIR_CPY_WRT(name, &_0);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 225, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 226, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CONCAT_VV(return_value, &_1, name);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();

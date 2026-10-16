@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class SliceTest extends AbstractUnitTestCase
 {
@@ -38,22 +38,22 @@ final class SliceTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 365,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'items',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'start' => [
-                        'type' => 258,
+                        'type'  => 258,
                         'value' => '1',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'end' => [
-                        'type' => 258,
+                        'type'  => 258,
                         'value' => '3',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,
@@ -79,16 +79,16 @@ final class SliceTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 365,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'items',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'start' => [
-                        'type' => 258,
+                        'type'  => 258,
                         'value' => '2',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,
@@ -114,16 +114,16 @@ final class SliceTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 365,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'items',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'end' => [
-                        'type' => 258,
+                        'type'  => 258,
                         'value' => '4',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,

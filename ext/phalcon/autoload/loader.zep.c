@@ -131,9 +131,9 @@ PHP_METHOD(Phalcon_Autoload_Loader, __construct)
 	ZVAL_STRING(&_0, "php");
 	zephir_update_property_array(this_ptr, SL("extensions"), &_2, &_0);
 	if (isDebug) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 293, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 294, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 293, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 294, &__$false);
 	}
 	ZEPHIR_MM_RESTORE();
 }
@@ -336,7 +336,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, addNamespace)
 	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checkDirectories", NULL, 182, directories, &dirSeparator);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(directories, &_2);
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 294, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 295, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_3, &nsName))) {
 		ZEPHIR_INIT_VAR(&_4$$3);
 		array_init(&_4$$3);
@@ -345,12 +345,12 @@ PHP_METHOD(Phalcon_Autoload_Loader, addNamespace)
 	if (prepend) {
 		ZEPHIR_CPY_WRT(&source, directories);
 	} else {
-		zephir_read_property_cached(&_5, this_ptr, _zephir_prop_0, 294, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_5, this_ptr, _zephir_prop_0, 295, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_OBS_NVAR(&source);
 		zephir_array_fetch(&source, &_5, &nsName, PH_NOISY, "phalcon/Autoload/Loader.zep", 169);
 	}
 	if (prepend) {
-		zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 294, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_6, this_ptr, _zephir_prop_0, 295, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&target);
 		zephir_array_fetch(&target, &_6, &nsName, PH_NOISY, "phalcon/Autoload/Loader.zep", 170);
 	} else {
@@ -410,7 +410,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoload)
 	ZVAL_STR_COPY(&className_zv, className);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 295, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 296, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SV(&_1, "Loading: ", &className_zv);
 	if (UNEXPECTED(EG(exception))) {
@@ -449,7 +449,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoload)
 	}
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "addDebug", NULL, 184, &_6);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_8, this_ptr, _zephir_prop_1, 296, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_8, this_ptr, _zephir_prop_1, 297, PH_NOISY_CC | PH_READONLY);
 	ZVAL_BOOL(&_9, 1);
 	ZEPHIR_CALL_METHOD(&_7, this_ptr, "autoloadCheckDirectories", NULL, 187, &_8, &className_zv, &_9);
 	zephir_check_call_status();
@@ -593,7 +593,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, loadFiles)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 297, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 298, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&files, &_0);
 	if (Z_TYPE_P(&files) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_2);
@@ -615,7 +615,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, loadFiles)
 			ZEPHIR_CALL_METHOD(&_6$$3, this_ptr, "requireFile", &_7, 0, &file);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_TRUE_IDENTICAL(&_6$$3)) {
-				zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 298, &file);
+				zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 299, &file);
 				ZEPHIR_INIT_NVAR(&_8$$4);
 				ZVAL_STRING(&_8$$4, "loader:pathFound");
 				ZEPHIR_CALL_METHOD(NULL, this_ptr, "fireManagerEvent", &_5, 0, &_8$$4, &file);
@@ -647,7 +647,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, loadFiles)
 				ZEPHIR_CALL_METHOD(&_12$$5, this_ptr, "requireFile", &_7, 0, &file);
 				zephir_check_call_status();
 				if (ZEPHIR_IS_TRUE_IDENTICAL(&_12$$5)) {
-					zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 298, &file);
+					zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 299, &file);
 					ZEPHIR_INIT_NVAR(&_13$$6);
 					ZVAL_STRING(&_13$$6, "loader:pathFound");
 					ZEPHIR_CALL_METHOD(NULL, this_ptr, "fireManagerEvent", &_5, 0, &_13$$6, &file);
@@ -693,7 +693,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, register)
 		prepend = 0;
 	} else {
 		}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 299, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 300, PH_NOISY_CC | PH_READONLY);
 	if (!ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
 		ZEPHIR_CALL_METHOD(NULL, this_ptr, "loadFiles", NULL, 0);
 		zephir_check_call_status();
@@ -707,9 +707,9 @@ PHP_METHOD(Phalcon_Autoload_Loader, register)
 		ZEPHIR_CALL_FUNCTION(NULL, "spl_autoload_register", NULL, 188, &_1$$3, &__$true, &_3$$3);
 		zephir_check_call_status();
 		if (1) {
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 299, &__$true);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 300, &__$true);
 		} else {
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 299, &__$false);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 300, &__$false);
 		}
 	}
 	RETURN_THIS();
@@ -761,7 +761,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, setClasses)
 	if (!merge) {
 		ZEPHIR_INIT_VAR(&_0$$3);
 		array_init(&_0$$3);
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 300, &_0$$3);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 301, &_0$$3);
 	}
 	zephir_is_iterable(&classes, 0, "phalcon/Autoload/Loader.zep", 364);
 	if (Z_TYPE_P(&classes) == IS_ARRAY) {
@@ -902,7 +902,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, setExtensions)
 	if (!merge) {
 		ZEPHIR_INIT_VAR(&_0$$3);
 		array_init(&_0$$3);
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 301, &_0$$3);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 302, &_0$$3);
 		ZEPHIR_INIT_VAR(&_1$$3);
 		ZVAL_STRING(&_1$$3, "sha256");
 		ZEPHIR_INIT_VAR(&_2$$3);
@@ -995,12 +995,12 @@ PHP_METHOD(Phalcon_Autoload_Loader, setFileCheckingCallback)
 		method = &__$null;
 	}
 	if (1 == zephir_is_callable(method)) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 302, method);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 303, method);
 	} else if (Z_TYPE_P(method) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&_0$$4);
 		ZEPHIR_INIT_NVAR(&_0$$4);
 		zephir_create_closure_ex(&_0$$4, NULL, phalcon_7__closure_ce, SL("__invoke"));
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 302, &_0$$4);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 303, &_0$$4);
 	} else {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_autoload_exception_ce, "The 'method' parameter must be either a callable or NULL", "phalcon/Autoload/Loader.zep", 441);
 		return;
@@ -1108,7 +1108,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, setNamespaces)
 	if (!merge) {
 		ZEPHIR_INIT_VAR(&_0$$3);
 		array_init(&_0$$3);
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 294, &_0$$3);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 295, &_0$$3);
 	}
 	zephir_is_iterable(&namespaces, 0, "phalcon/Autoload/Loader.zep", 489);
 	if (Z_TYPE_P(&namespaces) == IS_ARRAY) {
@@ -1185,7 +1185,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, unregister)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 299, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 300, PH_NOISY_CC | PH_READONLY);
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		zephir_create_array(&_1$$3, 2, 0);
@@ -1196,9 +1196,9 @@ PHP_METHOD(Phalcon_Autoload_Loader, unregister)
 		ZEPHIR_CALL_FUNCTION(NULL, "spl_autoload_unregister", NULL, 190, &_1$$3);
 		zephir_check_call_status();
 		if (0) {
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 299, &__$true);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 300, &__$true);
 		} else {
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 299, &__$false);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 300, &__$false);
 		}
 	}
 	RETURN_THIS();
@@ -1249,7 +1249,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, requireFile)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&file_zv);
 	ZVAL_STR_COPY(&file_zv, file);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 302, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 303, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_FUNCTION(&_1, "call_user_func", NULL, 191, &_0, &file_zv);
 	zephir_check_call_status();
 	if (!ZEPHIR_IS_FALSE_IDENTICAL(&_1)) {
@@ -1303,7 +1303,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, addDebug)
 		Z_PARAM_STR(message)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&message_zv, message);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 293, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 294, PH_NOISY_CC | PH_READONLY);
 	if (ZEPHIR_IS_TRUE_IDENTICAL(&_0)) {
 		zephir_update_property_array_append(this_ptr, SL("debug"), &message_zv);
 	}
@@ -1432,9 +1432,9 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckClasses)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&className_zv);
 	ZVAL_STR_COPY(&className_zv, className);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 300, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 301, PH_NOISY_CC | PH_READONLY);
 	if (1 == zephir_array_isset_value(&_0, &className_zv)) {
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 300, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 301, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&filePath);
 		zephir_array_fetch(&filePath, &_1$$3, &className_zv, PH_NOISY, "phalcon/Autoload/Loader.zep", 610);
 		ZEPHIR_INIT_VAR(&_2$$3);
@@ -1542,7 +1542,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckDirectories)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 301, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 302, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&extensions, &_1);
 	zephir_is_iterable(&directories, 0, "phalcon/Autoload/Loader.zep", 669);
 	if (Z_TYPE_P(&directories) == IS_ARRAY) {
@@ -1577,7 +1577,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckDirectories)
 						ZEPHIR_MM_RESTORE();
 						return;
 					}
-					zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 303, &filePath);
+					zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 304, &filePath);
 					ZEPHIR_INIT_NVAR(&_7$$4);
 					ZVAL_STRING(&_7$$4, "loader:beforeCheckPath");
 					ZEPHIR_CALL_METHOD(NULL, this_ptr, "fireManagerEvent", &_8, 0, &_7$$4, &filePath);
@@ -1622,7 +1622,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckDirectories)
 							ZEPHIR_MM_RESTORE();
 							return;
 						}
-						zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 303, &filePath);
+						zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 304, &filePath);
 						ZEPHIR_INIT_NVAR(&_15$$7);
 						ZVAL_STRING(&_15$$7, "loader:beforeCheckPath");
 						ZEPHIR_CALL_METHOD(NULL, this_ptr, "fireManagerEvent", &_8, 0, &_15$$7, &filePath);
@@ -1691,7 +1691,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckDirectories)
 							ZEPHIR_MM_RESTORE();
 							return;
 						}
-						zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 303, &filePath);
+						zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 304, &filePath);
 						ZEPHIR_INIT_NVAR(&_24$$11);
 						ZVAL_STRING(&_24$$11, "loader:beforeCheckPath");
 						ZEPHIR_CALL_METHOD(NULL, this_ptr, "fireManagerEvent", &_8, 0, &_24$$11, &filePath);
@@ -1736,7 +1736,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckDirectories)
 								ZEPHIR_MM_RESTORE();
 								return;
 							}
-							zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 303, &filePath);
+							zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 304, &filePath);
 							ZEPHIR_INIT_NVAR(&_29$$14);
 							ZVAL_STRING(&_29$$14, "loader:beforeCheckPath");
 							ZEPHIR_CALL_METHOD(NULL, this_ptr, "fireManagerEvent", &_8, 0, &_29$$14, &filePath);
@@ -1823,7 +1823,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckNamespaces)
 	ZVAL_STR_COPY(&className_zv, className);
 	ZEPHIR_INIT_VAR(&nsSeparator);
 	ZVAL_STRING(&nsSeparator, "\\");
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 294, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 295, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&namespaces, &_0);
 	if (Z_TYPE_P(&namespaces) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_2);
@@ -1862,7 +1862,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckNamespaces)
 			ZEPHIR_CALL_METHOD(&_9$$3, this_ptr, "autoloadCheckDirectories", &_10, 187, &directories, &fileName);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_TRUE_IDENTICAL(&_9$$3)) {
-				zephir_read_property_cached(&_11$$5, this_ptr, _zephir_prop_1, 303, PH_NOISY_CC | PH_READONLY);
+				zephir_read_property_cached(&_11$$5, this_ptr, _zephir_prop_1, 304, PH_NOISY_CC | PH_READONLY);
 				ZEPHIR_INIT_NVAR(&_12$$5);
 				ZEPHIR_CONCAT_SVSV(&_12$$5, "Namespace: ", &prefix, " - ", &_11$$5);
 				if (UNEXPECTED(EG(exception))) {
@@ -1912,7 +1912,7 @@ PHP_METHOD(Phalcon_Autoload_Loader, autoloadCheckNamespaces)
 				ZEPHIR_CALL_METHOD(&_19$$6, this_ptr, "autoloadCheckDirectories", &_10, 187, &directories, &fileName);
 				zephir_check_call_status();
 				if (ZEPHIR_IS_TRUE_IDENTICAL(&_19$$6)) {
-					zephir_read_property_cached(&_20$$8, this_ptr, _zephir_prop_1, 303, PH_NOISY_CC | PH_READONLY);
+					zephir_read_property_cached(&_20$$8, this_ptr, _zephir_prop_1, 304, PH_NOISY_CC | PH_READONLY);
 					ZEPHIR_INIT_NVAR(&_21$$8);
 					ZEPHIR_CONCAT_SVSV(&_21$$8, "Namespace: ", &prefix, " - ", &_20$$8);
 					if (UNEXPECTED(EG(exception))) {

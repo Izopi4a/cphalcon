@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  +------------------------------------------------------------------------+
  | Phalcon Framework                                                      |
@@ -28,10 +30,10 @@ use Phalcon\Mvc\Url;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use stdClass;
 
-use function dataDir;
 use function file_put_contents;
 
 /**
@@ -41,6 +43,17 @@ use function file_put_contents;
  */
 class CompilerTest extends AbstractUnitTestCase
 {
+    /**
+     * Runs regardless of the test outcome, so a failing test cannot leave
+     * compiled `*.volt.php` artifacts behind and poison later runs.
+     */
+    protected function tearDown(): void
+    {
+        $this->clearFiles();
+
+        parent::tearDown();
+    }
+
     /**
      * @issue  -
      * @author Sergii Svyrydenko <sergey.v.sviridenko@gmail.com>
@@ -88,7 +101,7 @@ class CompilerTest extends AbstractUnitTestCase
 
         // Refreshing generated view
         file_put_contents(
-            supportDir('assets/views/extends/other.volt'),
+            Talon::settings()->supportPath('assets/views/extends/other.volt'),
             '{{song}} {{song}}'
         );
 
@@ -114,7 +127,7 @@ class CompilerTest extends AbstractUnitTestCase
 
         // Change the view
         file_put_contents(
-            supportDir('assets/views/extends/other.volt'),
+            Talon::settings()->supportPath('assets/views/extends/other.volt'),
             'Two songs: {{song}} {{song}}'
         );
 
@@ -277,9 +290,15 @@ class CompilerTest extends AbstractUnitTestCase
 
         $actual = ob_get_clean();
 
-        // Trim xdebug first line (file path)
-        $actual   = substr($actual, strpos($actual, 'class'));
-        $expected = substr($view->getContent(), strpos($view->getContent(), 'class'));
+        // Xdebug's overloaded var_dump() prepends a "<file>:<line>:" header
+        // to the output. Drop it when present, so that the comparison holds
+        // whether or not Xdebug runs in "develop" mode. The ANSI codes have
+        // to go first: with xdebug.cli_color on and a TTY attached, they sit
+        // between the line number and its colon and stop $header matching.
+        $ansi     = '#\e\[[0-9;]*m#';
+        $header   = '#^.+:\d+:\R#';
+        $actual   = preg_replace($header, '', (string) preg_replace($ansi, '', $actual));
+        $expected = preg_replace($header, '', (string) preg_replace($ansi, '', $view->getContent()));
 
         $this->assertEquals($expected, $actual);
 
@@ -308,64 +327,57 @@ FORM;
 
         $actual = $view->getContent();
         $this->assertSame($expected, $actual);
-
-        $this->clearFiles();
     }
 
-    /**
-     * @return void
-     */
     private function clearFiles(): void
     {
         $this->safeDeleteFile(
-            supportDir('assets/views/layouts/extends.volt.php')
+            Talon::settings()->supportPath('assets/views/layouts/extends.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/extends/index.volt.php')
+            Talon::settings()->supportPath('assets/views/extends/index.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/extends/other.volt.php')
+            Talon::settings()->supportPath('assets/views/extends/other.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/macro/hello.volt.php')
+            Talon::settings()->supportPath('assets/views/macro/hello.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/macro/conditionaldate.volt.php')
+            Talon::settings()->supportPath('assets/views/macro/conditionaldate.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/macro/my_input.volt.php')
+            Talon::settings()->supportPath('assets/views/macro/my_input.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/macro/error_messages.volt.php')
+            Talon::settings()->supportPath('assets/views/macro/error_messages.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/macro/related_links.volt.php')
+            Talon::settings()->supportPath('assets/views/macro/related_links.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/macro/strtotime.volt.php')
+            Talon::settings()->supportPath('assets/views/macro/strtotime.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/macro/list.volt.php')
+            Talon::settings()->supportPath('assets/views/macro/list.volt.php')
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/macro/form_row.volt.php')
+            Talon::settings()->supportPath('assets/views/macro/form_row.volt.php')
         );
     }
 
     /**
      * Sets up a view with relevant services
-     *
-     * @return View
      */
     private function setupServices(Di $di): View
     {
@@ -387,7 +399,7 @@ FORM;
         );
         $view->setDI($di);
 
-        $view->setViewsDir(supportDir('assets/views/'));
+        $view->setViewsDir(Talon::settings()->supportPath('assets/views/'));
 
         return $view;
     }

@@ -82,8 +82,8 @@ PHP_METHOD(Phalcon_Html_Helper_Input_Select_ResultsetData, __construct)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "The 'using' parameter requires exactly two values", "phalcon/Html/Helper/Input/Select/ResultsetData.zep", 37);
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 567, resultset);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 568, &using);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 568, resultset);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 569, &using);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -120,15 +120,15 @@ PHP_METHOD(Phalcon_Html_Helper_Input_Select_ResultsetData, getOptions)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 568, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 569, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&usingZero);
 	zephir_array_fetch_long(&usingZero, &_0, 0, PH_NOISY, "phalcon/Html/Helper/Input/Select/ResultsetData.zep", 51);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 568, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 569, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&usingOne);
 	zephir_array_fetch_long(&usingOne, &_1, 1, PH_NOISY, "phalcon/Html/Helper/Input/Select/ResultsetData.zep", 52);
 	ZEPHIR_INIT_VAR(&options);
 	array_init(&options);
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 567, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 568, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_2) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_4);
 		zephir_string_to_char_array(&_4, &_2);

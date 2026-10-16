@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\View\Exception;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Objects\ChildObject;
 use Phalcon\Tests\Support\Objects\ParentObject;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use Phalcon\Tests\Unit\Mvc\Fake\ViewTrait;
 
-use function dataDir;
 use function ob_end_clean;
 use function ob_get_level;
 use function ob_start;
@@ -50,7 +50,7 @@ class RenderTest extends AbstractUnitTestCase
     public function testMvcViewRenderChildobject(): void
     {
         $this->safeDeleteFile(
-            supportDir('assets/views/currentrender/subobject.volt.php')
+            Talon::settings()->supportPath('assets/views/currentrender/subobject.volt.php')
         );
 
         $view = $this->container->get('viewSimple');
@@ -71,7 +71,7 @@ class RenderTest extends AbstractUnitTestCase
         $this->assertEquals($expected, $actual);
 
         $this->safeDeleteFile(
-            supportDir('assets/views/currentrender/subobject.volt.php')
+            Talon::settings()->supportPath('assets/views/currentrender/subobject.volt.php')
         );
     }
 
@@ -94,18 +94,22 @@ class RenderTest extends AbstractUnitTestCase
      */
     public function testRenderFilenameWithoutEngine(): void
     {
-        $this->markTestSkipped('TODO: Check open buffers');
+        $startLevel = ob_get_level();
+
         try {
             $view = $this->container->get('viewSimple');
             $view->setParamToView('name', 'FooBar');
             $view->render('unknown/view');
         } catch (Exception $ex) {
-            $view->finish();
-            ob_end_clean();
+            // Drain any buffers opened by render() before it threw.
+            while (ob_get_level() > $startLevel) {
+                ob_end_clean();
+            }
+
             $actual   = $ex->getMessage();
             $expected = sprintf(
-                "View '%sfixtures/views/unknown/view' was not found in the views directory",
-                dataDir()
+                "View '%sunknown/view' was not found in the views directory",
+                Talon::settings()->supportPath('assets/views/')
             );
             $this->assertSame($expected, $actual);
         }
@@ -117,17 +121,24 @@ class RenderTest extends AbstractUnitTestCase
      */
     public function testRenderMissingView(): void
     {
-        $this->markTestSkipped('TODO: Check open buffers');
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            sprintf(
-                "View '%sfixtures/views/unknown/view' was not found in the views directory",
-                dataDir()
-            )
-        );
+        $startLevel = ob_get_level();
+        $view       = $this->container->get('viewSimple');
 
-        $view = $this->container->get('viewSimple');
-        $view->render('unknown/view');
+        try {
+            $view->render('unknown/view');
+            $this->fail('Expected View Exception was not thrown.');
+        } catch (Exception $ex) {
+            // Drain any buffers opened by render() before it threw.
+            while (ob_get_level() > $startLevel) {
+                ob_end_clean();
+            }
+
+            $expected = sprintf(
+                "View '%sunknown/view' was not found in the views directory",
+                Talon::settings()->supportPath('assets/views/')
+            );
+            $this->assertSame($expected, $ex->getMessage());
+        }
     }
 
     /**
@@ -152,11 +163,11 @@ class RenderTest extends AbstractUnitTestCase
         );
 
         $this->assertFileExists(
-            supportDir('assets/views/mustache') . '/index.mhtml.php'
+            Talon::settings()->supportPath('assets/views/mustache') . '/index.mhtml.php'
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/mustache') . '/index.mhtml.php'
+            Talon::settings()->supportPath('assets/views/mustache') . '/index.mhtml.php'
         );
     }
 

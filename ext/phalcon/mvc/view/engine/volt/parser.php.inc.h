@@ -182,20 +182,6 @@ static void phvolt_ret_cache_statement(zval *ret, zval *expr, zval *lifetime, zv
 }
 /* }}} */
 
-/* {{{ phvolt_ret_raw_statement */
-static void phvolt_ret_raw_statement(zval *ret, zval *statement, phvolt_scanner_state *state)
-{
-	array_init(ret);
-
-	add_assoc_long(ret, "type", PHVOLT_T_RAW);
-	add_assoc_zval(ret, "content", statement);
-
-	Z_TRY_ADDREF_P(state->active_file);
-	add_assoc_zval(ret, "file", state->active_file);
-	add_assoc_long(ret, "line", state->active_line);
-}
-/* }}} */
-
 /* {{{ phvolt_ret_set_statement */
 static void phvolt_ret_set_statement(zval *ret, zval *assignments)
 {
@@ -417,30 +403,28 @@ static void phvolt_ret_continue_statement(zval *ret, phvolt_scanner_state *state
 /* {{{ phvolt_ret_zval_list */
 static void phvolt_ret_zval_list(zval *ret, zval *list_left, zval *right_list)
 {
-	HashTable *list;
-
-	array_init(ret);
-
 	if (list_left) {
-
-		list = Z_ARRVAL_P(list_left);
-		if (zend_hash_index_exists(list, 0)) {
-			{
-				zval *item;
-				ZEND_HASH_FOREACH_VAL(list, item) {
-
-					Z_TRY_ADDREF_P(item);
-					add_next_index_zval(ret, item);
-
-				} ZEND_HASH_FOREACH_END();
-			}
-			zval_dtor(list_left);
+		if (zend_hash_index_exists(Z_ARRVAL_P(list_left), 0)) {
+			/*
+			 * list_left is the list built so far. Take it over instead of
+			 * copying every item on each reduction (that made a list of n
+			 * items cost O(n^2)). The parser drops the source slot after
+			 * the reduction, so the ownership moves with the zval.
+			 */
+			ZVAL_COPY_VALUE(ret, list_left);
+			ZVAL_UNDEF(list_left);
+			SEPARATE_ARRAY(ret);
 		} else {
+			array_init(ret);
 			add_next_index_zval(ret, list_left);
 		}
+	} else {
+		array_init(ret);
 	}
 
-	add_next_index_zval(ret, right_list);
+	if (right_list) {
+		add_next_index_zval(ret, right_list);
+	}
 }
 /* }}} */
 

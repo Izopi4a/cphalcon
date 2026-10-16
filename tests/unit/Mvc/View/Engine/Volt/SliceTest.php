@@ -15,7 +15,8 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SliceTest extends AbstractUnitTestCase
 {
@@ -32,12 +33,11 @@ class SliceTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider provideSlice
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testMvcViewEngineVoltSlice(mixed $value, int $start, int|null $end, mixed $expected): void
+    #[DataProvider('provideSlice')]
+    public function testMvcViewEngineVoltSlice(mixed $value, int $start, int | null $end, mixed $expected): void
     {
         $volt = new Volt(new View());
         $this->assertSame($expected, $volt->slice($value, $start, $end));

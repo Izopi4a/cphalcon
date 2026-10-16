@@ -15,7 +15,8 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\View;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Mvc\View\AfterRenderListener;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
@@ -40,15 +41,15 @@ class GetSetRenderLevelTest extends AbstractUnitTestCase
         $this->setDiService('view');
         $view = $this->getService('view');
 
-        $view->setViewsDir(supportDir('assets/views' . DIRECTORY_SEPARATOR));
+        $view->setViewsDir(Talon::settings()->supportPath('assets/views' . DIRECTORY_SEPARATOR));
         $view->setEventsManager($eventsManager);
 
         $view->start();
         $view->render('currentrender', 'other');
         $view->finish();
-//         $this->assertEquals("lolhere\n", $view->getContent());
+        //         $this->assertEquals("lolhere\n", $view->getContent());
         $this->assertEquals('lolhere', $view->getContent());
-//         $this->assertEquals('1,3,5', $listener->getLevels());
+        //         $this->assertEquals('1,3,5', $listener->getLevels());
         $this->assertEquals('1,3', $listener->getLevels());
 
         $listener->reset();
@@ -56,9 +57,9 @@ class GetSetRenderLevelTest extends AbstractUnitTestCase
         $view->start();
         $view->render('currentrender', 'other');
         $view->finish();
-//         $this->assertEquals("zuplolhere\n", $view->getContent());
+        //         $this->assertEquals("zuplolhere\n", $view->getContent());
         $this->assertEquals('zuplolhere', $view->getContent());
-//         $this->assertEquals('1,3,4,5', $listener->getLevels());
+        //         $this->assertEquals('1,3,4,5', $listener->getLevels());
         $this->assertEquals('1,3,4', $listener->getLevels());
 
         $listener->reset();
@@ -68,9 +69,9 @@ class GetSetRenderLevelTest extends AbstractUnitTestCase
         $view->render('currentrender', 'other');
         $view->finish();
 
-//         $this->assertEquals("lolhere\n", $view->getContent());
+        //         $this->assertEquals("lolhere\n", $view->getContent());
         $this->assertEquals('lolhere', $view->getContent());
-//         $this->assertEquals('1,3,5', $listener->getLevels());
+        //         $this->assertEquals('1,3,5', $listener->getLevels());
         $this->assertEquals('1,3', $listener->getLevels());
 
         $listener->reset();

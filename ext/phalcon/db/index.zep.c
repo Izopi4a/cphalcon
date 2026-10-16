@@ -128,9 +128,9 @@ PHP_METHOD(Phalcon_Db_Index, __construct)
 		zephir_memory_observe(&type_zv);
 	ZVAL_STR_COPY(&type_zv, type);
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 427, &name_zv);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 428, &columns);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 429, &type_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 428, &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 429, &columns);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 430, &type_zv);
 	ZEPHIR_MM_RESTORE();
 }
 

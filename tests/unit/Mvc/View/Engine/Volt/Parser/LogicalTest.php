@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class LogicalTest extends AbstractUnitTestCase
 {
@@ -38,16 +38,74 @@ final class LogicalTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 266,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'a',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'b',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    'file' => 'eval code',
+                    'line' => 1,
+                ],
+                'file' => 'eval code',
+                'line' => 1,
+            ],
+        ];
+        $actual   = $this->compiler->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcViewEngineVoltParserExprNot(): void
+    {
+        $source   = '{{ not a }}';
+        $expected = [
+            [
+                'type' => 359,
+                'expr' => [
+                    'type'  => 33,
+                    'right' => [
+                        'type'  => 265,
+                        'value' => 'a',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    'file' => 'eval code',
+                    'line' => 1,
+                ],
+                'file' => 'eval code',
+                'line' => 1,
+            ],
+        ];
+        $actual   = $this->compiler->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcViewEngineVoltParserExprNotBang(): void
+    {
+        $source   = '{{ !a }}';
+        $expected = [
+            [
+                'type' => 359,
+                'expr' => [
+                    'type'  => 33,
+                    'right' => [
+                        'type'  => 265,
+                        'value' => 'a',
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,
@@ -73,74 +131,16 @@ final class LogicalTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 267,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'a',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'b',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    'file' => 'eval code',
-                    'line' => 1,
-                ],
-                'file' => 'eval code',
-                'line' => 1,
-            ],
-        ];
-        $actual   = $this->compiler->parse($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-10
-     */
-    public function testMvcViewEngineVoltParserExprNot(): void
-    {
-        $source   = '{{ not a }}';
-        $expected = [
-            [
-                'type' => 359,
-                'expr' => [
-                    'type' => 33,
-                    'right' => [
-                        'type' => 265,
-                        'value' => 'a',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    'file' => 'eval code',
-                    'line' => 1,
-                ],
-                'file' => 'eval code',
-                'line' => 1,
-            ],
-        ];
-        $actual   = $this->compiler->parse($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-10
-     */
-    public function testMvcViewEngineVoltParserExprNotBang(): void
-    {
-        $source   = '{{ !a }}';
-        $expected = [
-            [
-                'type' => 359,
-                'expr' => [
-                    'type' => 33,
-                    'right' => [
-                        'type' => 265,
-                        'value' => 'a',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,

@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ResolveTest extends AbstractUnitTestCase
 {
@@ -48,11 +49,10 @@ class ResolveTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider getResolveTestCases
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[DataProvider('getResolveTestCases')]
     public function testMvcViewEngineVoltCompilerResolveTest(
         string $template,
         string $expected

@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AddFilterTest extends AbstractUnitTestCase
 {
@@ -43,11 +44,10 @@ class AddFilterTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider getVoltAddFilter
-     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
      */
+    #[DataProvider('getVoltAddFilter')]
     public function testMvcViewEngineVoltCompilerAddFilter(
         string $name,
         string $filter,
@@ -64,11 +64,10 @@ class AddFilterTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider getVoltAddFilterClosure
-     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
      */
+    #[DataProvider('getVoltAddFilterClosure')]
     public function testMvcViewEngineVoltCompilerAddFilterClosure(
         string $name,
         string $filter,

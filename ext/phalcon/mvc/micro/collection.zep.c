@@ -572,11 +572,11 @@ PHP_METHOD(Phalcon_Mvc_Micro_Collection, setHandler)
 		lazy = 0;
 	} else {
 		}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 698, handler);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 699, handler);
 	if (lazy) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 699, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 700, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 699, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 700, &__$false);
 	}
 	RETURN_THISW();
 }
@@ -611,9 +611,9 @@ PHP_METHOD(Phalcon_Mvc_Micro_Collection, setLazy)
 	}
 	lazy = (Z_TYPE_P(lazy_param) == IS_TRUE);
 	if (lazy) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 699, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 700, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 699, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 700, &__$false);
 	}
 	RETURN_THISW();
 }
@@ -641,7 +641,7 @@ PHP_METHOD(Phalcon_Mvc_Micro_Collection, setPrefix)
 		Z_PARAM_STR(prefix)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&prefix_zv, prefix);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 700, &prefix_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 701, &prefix_zv);
 	RETURN_THISW();
 }
 

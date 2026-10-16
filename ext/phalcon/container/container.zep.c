@@ -122,7 +122,7 @@ PHP_METHOD(Phalcon_Container_Container, __construct)
 		zephir_check_call_status();
 	}
 
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 340, &_0);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 341, &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	zephir_create_array(&_1, 3, 0);
 	ZEPHIR_INIT_VAR(&_2);
@@ -149,7 +149,7 @@ PHP_METHOD(Phalcon_Container_Container, __construct)
 	}
 
 	zephir_array_fast_append(&_1, &_2);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 341, &_1);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 342, &_1);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -259,7 +259,7 @@ PHP_METHOD(Phalcon_Container_Container, extend)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 342, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset_value(&_1, &name)) {
 		ZEPHIR_CALL_CE_STATIC(&_2$$4, phalcon_container_exception_invalid_ce, "cannotExtendResolved", NULL, 0, &name);
 		zephir_check_call_status();
@@ -267,7 +267,7 @@ PHP_METHOD(Phalcon_Container_Container, extend)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 343, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 344, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_3, &name))) {
 		ZEPHIR_CALL_CE_STATIC(&_4$$5, phalcon_container_exception_notfound_ce, "serviceNotFound", NULL, 0, &name);
 		zephir_check_call_status();
@@ -275,7 +275,7 @@ PHP_METHOD(Phalcon_Container_Container, extend)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_5, this_ptr, _zephir_prop_1, 343, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_5, this_ptr, _zephir_prop_1, 344, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_6);
 	zephir_array_fetch(&_6, &_5, &name, PH_NOISY, "phalcon/Container/Container.zep", 125);
 	ZEPHIR_CALL_METHOD(NULL, &_6, "addExtender", NULL, 0, callableObject);
@@ -329,15 +329,15 @@ PHP_METHOD(Phalcon_Container_Container, get)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_key_exists(&_1, &name)) {
 		ZEPHIR_RETURN_CALL_METHOD(this_ptr, "resolveParameter", NULL, 204, &name);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 342, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_1, 343, PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset_value(&_2, &name)) {
-		zephir_read_property_cached(&_3$$4, this_ptr, _zephir_prop_1, 342, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$4, this_ptr, _zephir_prop_1, 343, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&_4$$4);
 		zephir_array_fetch(&_4$$4, &_3$$4, &name, PH_NOISY, "phalcon/Container/Container.zep", 137);
 		RETURN_CCTOR(&_4$$4);
@@ -371,9 +371,9 @@ PHP_METHOD(Phalcon_Container_Container, getAlias)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset_value(&_0, &name_zv)) {
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&_2$$3);
 		zephir_array_fetch(&_2$$3, &_1$$3, &name_zv, PH_NOISY, "phalcon/Container/Container.zep", 146);
 		RETURN_CCTOR(&_2$$3);
@@ -413,9 +413,9 @@ PHP_METHOD(Phalcon_Container_Container, getByTag)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&tag_zv);
 	ZVAL_STR_COPY(&tag_zv, tag);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 347, PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset_value(&_0, &tag_zv)) {
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 347, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&names);
 		zephir_array_fetch(&names, &_1$$3, &tag_zv, PH_NOISY, "phalcon/Container/Container.zep", 157);
 	} else {
@@ -493,7 +493,7 @@ PHP_METHOD(Phalcon_Container_Container, getDefinition)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_0, &name_zv))) {
 		ZEPHIR_CALL_CE_STATIC(&_1$$3, phalcon_container_exception_notfound_ce, "serviceNotFound", NULL, 0, &name_zv);
 		zephir_check_call_status();
@@ -501,7 +501,7 @@ PHP_METHOD(Phalcon_Container_Container, getDefinition)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_3);
 	zephir_array_fetch(&_3, &_2, &name_zv, PH_NOISY, "phalcon/Container/Container.zep", 177);
 	RETURN_CCTOR(&_3);
@@ -532,7 +532,7 @@ PHP_METHOD(Phalcon_Container_Container, getInstance)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 342, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_0, &name_zv))) {
 		ZEPHIR_CALL_CE_STATIC(&_1$$3, phalcon_container_exception_notfound_ce, "instanceNotFound", NULL, 0, &name_zv);
 		zephir_check_call_status();
@@ -540,7 +540,7 @@ PHP_METHOD(Phalcon_Container_Container, getInstance)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 342, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_3);
 	zephir_array_fetch(&_3, &_2, &name_zv, PH_NOISY, "phalcon/Container/Container.zep", 186);
 	RETURN_CCTOR(&_3);
@@ -569,7 +569,7 @@ PHP_METHOD(Phalcon_Container_Container, getParameter)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_key_exists(&_0, &name_zv))) {
 		ZEPHIR_CALL_CE_STATIC(&_1$$3, phalcon_container_exception_notfound_ce, "parameterNotFound", NULL, 0, &name_zv);
 		zephir_check_call_status();
@@ -678,24 +678,24 @@ PHP_METHOD(Phalcon_Container_Container, has)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
 	_2 = zephir_array_key_exists(&_1, &name);
 	if (!(_2)) {
-		zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 342, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 343, PH_NOISY_CC | PH_READONLY);
 		_2 = zephir_array_isset_value(&_3, &name);
 	}
 	_4 = _2;
 	if (!(_4)) {
-		zephir_read_property_cached(&_5, this_ptr, _zephir_prop_2, 343, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_5, this_ptr, _zephir_prop_2, 344, PH_NOISY_CC | PH_READONLY);
 		_4 = zephir_array_isset_value(&_5, &name);
 	}
 	if (_4) {
 		RETURN_MM_BOOL(1);
 	}
-	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_3, 347, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_3, 348, PH_NOISY_CC | PH_READONLY);
 	_7 = zephir_is_true(&_6);
 	if (_7) {
-		zephir_read_property_cached(&_8, this_ptr, _zephir_prop_4, 340, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_8, this_ptr, _zephir_prop_4, 341, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_METHOD(&_9, &_8, "isResolvableClass", NULL, 0, &name);
 		zephir_check_call_status();
 		_7 = zephir_is_true(&_9);
@@ -720,7 +720,7 @@ PHP_METHOD(Phalcon_Container_Container, hasAlias)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, &name_zv));
 }
 
@@ -741,7 +741,7 @@ PHP_METHOD(Phalcon_Container_Container, hasDefinition)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, &name_zv));
 }
 
@@ -762,7 +762,7 @@ PHP_METHOD(Phalcon_Container_Container, hasInstance)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 342, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, &name_zv));
 }
 
@@ -783,7 +783,7 @@ PHP_METHOD(Phalcon_Container_Container, hasParameter)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_key_exists(&_0, &name_zv));
 }
 
@@ -952,9 +952,9 @@ PHP_METHOD(Phalcon_Container_Container, setAutowire)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &enabled_param);
 	if (enabled) {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 347, &__$true);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 348, &__$true);
 	} else {
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 347, &__$false);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 348, &__$false);
 	}
 	RETURN_THISW();
 }
@@ -1050,19 +1050,19 @@ PHP_METHOD(Phalcon_Container_Container, setTag)
 	ZVAL_STR_COPY(&tag_zv, tag);
 	zephir_memory_observe(&serviceName_zv);
 	ZVAL_STR_COPY(&serviceName_zv, serviceName);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 347, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_0, &tag_zv))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		array_init(&_1$$3);
 		zephir_update_property_array(this_ptr, SL("tags"), &tag_zv, &_1$$3);
 	}
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_0, 347, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_3);
 	zephir_array_fetch(&_3, &_2, &tag_zv, PH_NOISY, "phalcon/Container/Container.zep", 330);
 	ZEPHIR_CALL_FUNCTION(&_4, "in_array", NULL, 209, &serviceName_zv, &_3, &__$true);
 	zephir_check_call_status();
 	if (!(zephir_is_true(&_4))) {
-		zephir_read_property_cached(&_5$$4, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_5$$4, this_ptr, _zephir_prop_0, 347, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&tagList);
 		zephir_array_fetch(&tagList, &_5$$4, &tag_zv, PH_NOISY, "phalcon/Container/Container.zep", 331);
 		zephir_array_append(&tagList, &serviceName_zv, PH_SEPARATE, "phalcon/Container/Container.zep", 332);
@@ -1158,7 +1158,7 @@ PHP_METHOD(Phalcon_Container_Container, unsetInstances)
 	ZVAL_STR_COPY(&lifetime_zv, lifetime);
 	ZEPHIR_INIT_VAR(&toUnset);
 	array_init(&toUnset);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 348, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 349, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_0) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_2);
 		zephir_string_to_char_array(&_2, &_0);
@@ -1300,12 +1300,12 @@ PHP_METHOD(Phalcon_Container_Container, detectCircularAlias)
 		if (zephir_array_isset_value(&seen, &current)) {
 			break;
 		}
-		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
 		if (!(zephir_array_isset_value(&_2$$3, &current))) {
 			break;
 		}
 		zephir_array_update_zval(&seen, &current, &__$true, PH_COPY | PH_SEPARATE);
-		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_OBS_NVAR(&_4$$3);
 		zephir_array_fetch(&_4$$3, &_3$$3, &current, PH_NOISY, "phalcon/Container/Container.zep", 397);
 		ZEPHIR_CPY_WRT(&current, &_4$$3);
@@ -1340,7 +1340,7 @@ PHP_METHOD(Phalcon_Container_Container, findProcessor)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &definition);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 341, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 342, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_0) == IS_STRING) {
 		ZEPHIR_INIT_VAR(&_2);
 		zephir_string_to_char_array(&_2, &_0);
@@ -1428,9 +1428,9 @@ PHP_METHOD(Phalcon_Container_Container, resolve)
 	cache_param = ZEND_CALL_ARG(execute_data, 2);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_array_isset_value(&_0, &name_zv))) {
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_1, 347, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_1, 348, PH_NOISY_CC | PH_READONLY);
 		_2$$3 = zephir_is_true(&_1$$3);
 		if (_2$$3) {
 			_2$$3 = zephir_class_exists(&name_zv, 1);
@@ -1446,7 +1446,7 @@ PHP_METHOD(Phalcon_Container_Container, resolve)
 			return;
 		}
 	}
-	zephir_read_property_cached(&_4, this_ptr, _zephir_prop_0, 343, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_4, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&definition);
 	zephir_array_fetch(&definition, &_4, &name_zv, PH_NOISY, "phalcon/Container/Container.zep", 426);
 	ZEPHIR_CALL_METHOD(NULL, &definition, "freeze", NULL, 0, this_ptr);
@@ -1499,7 +1499,7 @@ PHP_METHOD(Phalcon_Container_Container, resolveAlias)
 	array_init(&seen);
 	ZEPHIR_CPY_WRT(&current, &name_zv);
 	while (1) {
-		zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
 		if (!(zephir_array_isset_value(&_0, &current))) {
 			break;
 		}
@@ -1511,7 +1511,7 @@ PHP_METHOD(Phalcon_Container_Container, resolveAlias)
 			return;
 		}
 		zephir_array_update_zval(&seen, &current, &__$true, PH_COPY | PH_SEPARATE);
-		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_0, 346, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_OBS_NVAR(&_4$$3);
 		zephir_array_fetch(&_4$$3, &_3$$3, &current, PH_NOISY, "phalcon/Container/Container.zep", 459);
 		ZEPHIR_CPY_WRT(&current, &_4$$3);
@@ -1544,7 +1544,7 @@ PHP_METHOD(Phalcon_Container_Container, resolveParameter)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 344, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 345, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&value);
 	zephir_array_fetch(&value, &_0, &name_zv, PH_NOISY, "phalcon/Container/Container.zep", 469);
 	_1 = Z_TYPE_P(&value) == IS_OBJECT;

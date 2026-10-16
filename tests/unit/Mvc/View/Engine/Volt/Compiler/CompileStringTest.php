@@ -16,8 +16,10 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Exception;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Traits\DiTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function ob_get_clean;
 use function ob_start;
@@ -485,10 +487,135 @@ class CompileStringTest extends AbstractUnitTestCase
                 "{{ [1, 2]|join(',') }}",
                 "<?= join(',', [1, 2]) ?>",
             ],
+            // join filter - a separator containing a single quote must be
+            // escaped through expression(), not spliced raw into join('...').
+            [
+                "{{ [1, 2]|join(\"'\") }}",
+                "<?= join('\\'', [1, 2]) ?>",
+            ],
+            // join filter - a separator crafted to break out of the generated
+            // call is emitted as a single escaped string literal, so the
+            // injected payload is never executed.
+            [
+                "{{ [\"x\", \"y\"]|join(\"' . phpinfo() . '\") }}",
+                "<?= join('\\' . phpinfo() . \\'', ['x', 'y']) ?>",
+            ],
             // Issue: 16019
             [
                 "{{ readonly|default(false) ? 'readonly=\"readonly\"' : '' }}",
                 '<?= ((empty($readonly) ? (false) : ($readonly)) ? \'readonly="readonly"\' : \'\') ?>',
+            ],
+            // Issue: 17002
+            [
+                '{{ \'Let\\\'s Encrypt\' }}',
+                '<?= \'Let\\\'s Encrypt\' ?>',
+            ],
+            // Issue: 17046 - literal single quotes inside a double-quoted volt string
+            [
+                '{{ "say \'hi\'" }}',
+                "<?= 'say \\'hi\\'' ?>",
+            ],
+            // Issue: 17046 - the reported set/concatenation case
+            [
+                '{% set ga_action="send_ga(\'Link\', \'External\', \'"'
+                . ' ~ item.title|striptags|url_encode ~ "\');" %}',
+                "<?php \$ga_action = 'send_ga(\\'Link\\', \\'External\\', \\''"
+                . " . urlencode(strip_tags(\$item->title)) . '\\');'; ?>",
+            ],
+            // Issue: 17046 - double-quoted volt with only literal single quotes
+            [
+                '{% set x = "it\'s" %}',
+                "<?php \$x = 'it\\'s'; ?>",
+            ],
+            // GHSA-fq2j-m2c4-gfhg - a quote must not close the php string
+            [
+                '{{ tag.textField(\'x".system("id")."\') }}',
+                '<?= $this->tag->textField("x\\".system(\\"id\\").\\"") ?>',
+            ],
+            // GHSA-fq2j-m2c4-gfhg - no interpolation of the value
+            [
+                '{{ tag.textField(\'{${system(chr(105).chr(100))}}\') }}',
+                '<?= $this->tag->textField("{\\${system(chr(105).chr(100))}}") ?>',
+            ],
+            // GHSA-fq2j-m2c4-gfhg - an even number of backslashes before a quote
+            [
+                '{{ tag.textField(\'x\\\\"\') }}',
+                '<?= $this->tag->textField("x\\\\\\"") ?>',
+            ],
+            // Issue: 16005 - escape sequences go through to php
+            [
+                '{{ tag.textField(\'\\t\') }}',
+                '<?= $this->tag->textField("\\t") ?>',
+            ],
+            // Issue: 16005 - an escaped backslash stays literal
+            [
+                '{{ tag.textField(\'\\\\t\') }}',
+                '<?= $this->tag->textField("\\\\t") ?>',
+            ],
+            // Issue: 16005 - plain arguments do not change
+            [
+                '{{ tag.textField(\'-\') }}',
+                '<?= $this->tag->textField("-") ?>',
+            ],
+            [
+                '{{ tag.textField(\'+\') }}',
+                '<?= $this->tag->textField("+") ?>',
+            ],
+            [
+                "{{ tag.textField('\t') }}",
+                "<?= \$this->tag->textField(\"\t\") ?>",
+            ],
+            // GHSA-vxr9-x5jh-r4rw - a quote must not close the array key
+            [
+                '{{ ["x\' => system(\'id\'), \'y": 1] }}',
+                '<?= [\'x\\\' => system(\\\'id\\\'), \\\'y\' => 1] ?>',
+            ],
+            // GHSA-vxr9-x5jh-r4rw - the same sink through set
+            [
+                '{% set x = ["a\' => system(\'id\'), \'b": 1] %}',
+                '<?php $x = [\'a\\\' => system(\\\'id\\\'), \\\'b\' => 1]; ?>',
+            ],
+            // GHSA-vxr9-x5jh-r4rw - an even number of backslashes before a quote
+            [
+                '{{ ["x\\\\\'": 1] }}',
+                '<?= [\'x\\\\\\\'\' => 1] ?>',
+            ],
+            // GHSA-vxr9-x5jh-r4rw - an apostrophe in a key gives valid php
+            [
+                '{{ ["it\'s": 1] }}',
+                '<?= [\'it\\\'s\' => 1] ?>',
+            ],
+            // GHSA-vxr9-x5jh-r4rw - a single quoted key does not change
+            [
+                '{{ [\'it\\\'s\': 1] }}',
+                '<?= [\'it\\\'s\' => 1] ?>',
+            ],
+            // Advisory: single quoted echo string - a quote must not close the
+            // string and inject code (an even number of backslashes before a
+            // quote bypasses the old lookbehind escaping)
+            [
+                '{{ "x\\\\\'.injected();//" }}',
+                '<?= \'x\\\\\\\'.injected();//\' ?>',
+            ],
+            // Advisory: single quoted echo string - even backslashes then quote
+            [
+                '{{ "x\\\\\'" }}',
+                '<?= \'x\\\\\\\'\' ?>',
+            ],
+            // Advisory: single quoted echo string - an apostrophe gives valid php
+            [
+                '{{ "it\'s" }}',
+                '<?= \'it\\\'s\' ?>',
+            ],
+            // Advisory: single quoted echo string - an escape sequence stays literal
+            [
+                '{{ "\\t" }}',
+                '<?= \'\\t\' ?>',
+            ],
+            // Advisory: single quoted echo string - an escaped backslash stays literal
+            [
+                '{{ "\\\\t" }}',
+                '<?= \'\\\\t\' ?>',
             ],
         ];
     }
@@ -515,11 +642,10 @@ class CompileStringTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider getVoltCompileString
-     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2017-01-17
      */
+    #[DataProvider('getVoltCompileString')]
     public function testMvcViewEngineVoltCompilerCompileString(
         string $param,
         string $expected
@@ -530,6 +656,72 @@ class CompileStringTest extends AbstractUnitTestCase
 
         $actual = $volt->compileString($param);
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * compileString() after a compile() that compiled a template with
+     * "extends" and a compile() that used the compiled file gives the
+     * correct output.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-10-14
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringAfterCompile(): void
+    {
+        $dir   = Talon::settings()->outputPath('tests/volt-compile-state-compile/');
+        $cache = $dir . 'cache/';
+
+        $this->safeDeleteDirectory($dir);
+        mkdir($cache, 0777, true);
+        file_put_contents($dir . 'parent.volt', '[P[{% block body %}{% endblock %}]]');
+        file_put_contents(
+            $dir . 'child.volt',
+            "{% extends '" . $dir . "parent.volt' %}{% block body %}[C]{% endblock %}"
+        );
+        file_put_contents($dir . 'plain.volt', 'plain');
+
+        $compiler = new Compiler();
+        $compiler->setOptions(['path' => $cache, 'separator' => '_', 'stat' => false]);
+
+        $compiler->compile($dir . 'plain.volt');
+        $compiler->compile($dir . 'child.volt');
+        $compiler->compile($dir . 'plain.volt');
+
+        $actual = $compiler->compileString('{{ "x" }}');
+
+        $this->safeDeleteDirectory($dir);
+
+        $this->assertSame("<?= 'x' ?>", $actual);
+    }
+
+    /**
+     * compileString() after a compileString() of a template with "extends"
+     * gives the correct output.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-10-14
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringAfterExtends(): void
+    {
+        $dir   = Talon::settings()->outputPath('tests/volt-compile-state-extends/');
+        $cache = $dir . 'cache/';
+
+        $this->safeDeleteDirectory($dir);
+        mkdir($cache, 0777, true);
+        file_put_contents($dir . 'parent.volt', '[P[{% block body %}{% endblock %}]]');
+
+        $compiler = new Compiler();
+        $compiler->setOptions(['path' => $cache, 'separator' => '_']);
+
+        $extends = $compiler->compileString(
+            "{% extends '" . $dir . "parent.volt' %}{% block body %}[C]{% endblock %}"
+        );
+        $actual  = $compiler->compileString('{{ "x" }}');
+
+        $this->safeDeleteDirectory($dir);
+
+        $this->assertSame('[P[[C]]]', $extends);
+        $this->assertSame("<?= 'x' ?>", $actual);
     }
 
     /**
@@ -675,11 +867,32 @@ class CompileStringTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider getVoltCompileStringErrors
+     * Array literals are built in linear time; 40,000 items used to take
+     * seconds.
      *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-26
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringLargeArrayLiteral(): void
+    {
+        $count    = 40000;
+        $template = '{{ [' . implode(',', array_fill(0, $count, '1')) . '] }}';
+        $volt     = new Compiler();
+
+        $start  = microtime(true);
+        $actual = $volt->compileString($template);
+        $spent  = microtime(true) - $start;
+
+        $this->assertStringStartsWith('<?= ', $actual);
+        $this->assertSame($count - 1, substr_count($actual, ', 1'));
+        $this->assertLessThan(3.0, $spent);
+    }
+
+    /**
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2017-01-17
      */
+    #[DataProvider('getVoltCompileStringErrors')]
     public function testMvcViewEngineVoltCompilerCompileStringSyntaxError(
         string $code,
         string $message
@@ -690,5 +903,30 @@ class CompileStringTest extends AbstractUnitTestCase
         $this->expectExceptionMessage($message);
 
         $volt->compileString($code);
+    }
+
+    /**
+     * A backslash as the last byte of a quoted string must be a scanning
+     * error, not an escape that swallows the terminator.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-26
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringTrailingBackslash(): void
+    {
+        $volt = new Compiler();
+
+        foreach (['{{ "abc\\', "{{ 'abc\\"] as $template) {
+            $caught = null;
+
+            try {
+                $volt->compileString($template);
+            } catch (Exception $ex) {
+                $caught = $ex;
+            }
+
+            $this->assertNotNull($caught, $template);
+            $this->assertStringContainsString('Scanning error', $caught->getMessage());
+        }
     }
 }

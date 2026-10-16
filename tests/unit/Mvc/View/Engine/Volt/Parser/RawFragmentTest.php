@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class RawFragmentTest extends AbstractUnitTestCase
 {
@@ -34,10 +34,10 @@ final class RawFragmentTest extends AbstractUnitTestCase
         $source   = 'Hello World';
         $expected = [
             [
-                'type' => 357,
+                'type'  => 357,
                 'value' => 'Hello World',
-                'file' => 'eval code',
-                'line' => 1,
+                'file'  => 'eval code',
+                'line'  => 1,
             ],
         ];
         $actual   = $this->compiler->parse($source);
@@ -54,7 +54,7 @@ final class RawFragmentTest extends AbstractUnitTestCase
 Line two";
         $expected = [
             [
-                'type' => 357,
+                'type'  => 357,
                 'value' => "Line one
 Line two",
                 'file' => 'eval code',

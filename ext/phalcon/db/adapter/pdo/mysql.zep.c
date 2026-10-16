@@ -99,7 +99,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Mysql, addForeignKey)
 	ZVAL_STR_COPY(&tableName_zv, tableName);
 	zephir_memory_observe(&schemaName_zv);
 	ZVAL_STR_COPY(&schemaName_zv, schemaName);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 406, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 407, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_1, &_0, "getForeignKeyChecks", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&foreignKeyCheck, this_ptr, "prepare", NULL, 0, &_1);
@@ -110,7 +110,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Mysql, addForeignKey)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_db_exception_ce, "DATABASE PARAMETER 'FOREIGN_KEY_CHECKS' HAS TO BE 1", "phalcon/Db/Adapter/Pdo/Mysql.zep", 66);
 		return;
 	}
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 406, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_0, 407, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_4, &_3, "addForeignKey", NULL, 0, &tableName_zv, &schemaName_zv, reference);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "execute", NULL, 0, &_4);
@@ -302,7 +302,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Mysql, describeColumns)
 	ZVAL_STRING(&sizePattern, "#\\(([0-9]+)(?:,\\s*([0-9]+))*\\)#");
 	ZEPHIR_INIT_VAR(&columns);
 	array_init(&columns);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 406, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 407, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_1, &_0, "describeColumns", NULL, 0, &table_zv, &schema_zv);
 	zephir_check_call_status();
 	ZVAL_LONG(&_2, 3);
@@ -1051,7 +1051,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Mysql, describeIndexes)
 	}
 	ZEPHIR_INIT_VAR(&indexes);
 	array_init(&indexes);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 406, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 407, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_2, &_1, "describeIndexes", NULL, 0, &table_zv, &schema_zv);
 	zephir_check_call_status();
 	ZVAL_LONG(&_3, 2);
@@ -1299,7 +1299,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Mysql, describeReferences)
 	}
 	ZEPHIR_INIT_VAR(&references);
 	array_init(&references);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 406, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 407, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_2, &_1, "describeReferences", NULL, 0, &table_zv, &schema_zv);
 	zephir_check_call_status();
 	ZVAL_LONG(&_3, 3);

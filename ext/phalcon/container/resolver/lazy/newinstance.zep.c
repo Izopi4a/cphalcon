@@ -78,7 +78,7 @@ PHP_METHOD(Phalcon_Container_Resolver_Lazy_NewInstance, __construct)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_ce_type_error, "Argument 'id' must be string or Lazy", "phalcon/Container/Resolver/Lazy/NewInstance.zep", 43);
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 376, id);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 377, id);
 }
 
 PHP_METHOD(Phalcon_Container_Resolver_Lazy_NewInstance, resolve)
@@ -102,7 +102,7 @@ PHP_METHOD(Phalcon_Container_Resolver_Lazy_NewInstance, resolve)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &container);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 376, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 377, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&resolvedId, this_ptr, "resolveArgument", NULL, 0, container, &_0);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(container, "new", NULL, 0, &resolvedId);

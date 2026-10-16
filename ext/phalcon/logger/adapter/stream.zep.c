@@ -146,8 +146,8 @@ PHP_METHOD(Phalcon_Logger_Adapter_Stream, __construct)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_logger_exception_ce, "Adapter cannot be opened in read mode", "phalcon/Logger/Adapter/Stream.zep", 84);
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 644, &name_zv);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 645, &mode);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 645, &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 646, &mode);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -172,11 +172,11 @@ PHP_METHOD(Phalcon_Logger_Adapter_Stream, close)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 646, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 647, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_0) != IS_NULL) {
-		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 646, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$3, this_ptr, _zephir_prop_0, 647, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CPY_WRT(&handler, &_1$$3);
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 646, &__$null);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 647, &__$null);
 		ZEPHIR_RETURN_CALL_METHOD(this_ptr, "phpFclose", NULL, 0, &handler);
 		zephir_check_call_status();
 		RETURN_MM();
@@ -241,20 +241,20 @@ PHP_METHOD(Phalcon_Logger_Adapter_Stream, process)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &item);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 646, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 647, PH_NOISY_CC | PH_READONLY);
 	if (!(Z_TYPE_P(&_0) == IS_RESOURCE)) {
-		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_1, 644, PH_NOISY_CC | PH_READONLY);
-		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_2, 645, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_2$$3, this_ptr, _zephir_prop_1, 645, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_3$$3, this_ptr, _zephir_prop_2, 646, PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_CALL_METHOD(&_1$$3, this_ptr, "phpFopen", NULL, 0, &_2$$3, &_3$$3);
 		zephir_check_call_status();
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 646, &_1$$3);
-		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_0, 646, PH_NOISY_CC | PH_READONLY);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 647, &_1$$3);
+		zephir_read_property_cached(&_4$$3, this_ptr, _zephir_prop_0, 647, PH_NOISY_CC | PH_READONLY);
 		if (!(Z_TYPE_P(&_4$$3) == IS_RESOURCE)) {
-			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 646, &__$null);
+			zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 647, &__$null);
 			ZEPHIR_INIT_VAR(&_5$$4);
 			object_init_ex(&_5$$4, spl_ce_LogicException);
-			zephir_read_property_cached(&_6$$4, this_ptr, _zephir_prop_1, 644, PH_NOISY_CC | PH_READONLY);
-			zephir_read_property_cached(&_7$$4, this_ptr, _zephir_prop_2, 645, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_6$$4, this_ptr, _zephir_prop_1, 645, PH_NOISY_CC | PH_READONLY);
+			zephir_read_property_cached(&_7$$4, this_ptr, _zephir_prop_2, 646, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_INIT_VAR(&_8$$4);
 			ZEPHIR_CONCAT_SVSVS(&_8$$4, "The file '", &_6$$4, "' cannot be opened with mode '", &_7$$4, "'");
 			if (UNEXPECTED(EG(exception))) {
@@ -278,7 +278,7 @@ PHP_METHOD(Phalcon_Logger_Adapter_Stream, process)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_11, this_ptr, _zephir_prop_0, 646, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_11, this_ptr, _zephir_prop_0, 647, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "phpFwrite", NULL, 0, &_11, &message);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();

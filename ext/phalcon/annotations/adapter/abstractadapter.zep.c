@@ -85,9 +85,9 @@ PHP_METHOD(Phalcon_Annotations_Adapter_AbstractAdapter, get)
 	} else {
 		ZEPHIR_CPY_WRT(&realClassName, className);
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 65, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 66, PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset_value(&_0, &realClassName)) {
-		zephir_read_property_cached(&_1$$5, this_ptr, _zephir_prop_0, 65, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_1$$5, this_ptr, _zephir_prop_0, 66, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&_2$$5);
 		zephir_array_fetch(&_2$$5, &_1$$5, &realClassName, PH_NOISY, "phalcon/Annotations/Adapter/AbstractAdapter.zep", 51);
 		RETURN_CCTOR(&_2$$5);
@@ -391,7 +391,7 @@ PHP_METHOD(Phalcon_Annotations_Adapter_AbstractAdapter, getReader)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 66, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 67, PH_NOISY_CC | PH_READONLY);
 	if (Z_TYPE_P(&_0) == IS_NULL) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		object_init_ex(&_1$$3, phalcon_annotations_reader_ce);
@@ -400,7 +400,7 @@ PHP_METHOD(Phalcon_Annotations_Adapter_AbstractAdapter, getReader)
 			zephir_check_call_status();
 		}
 
-		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 66, &_1$$3);
+		zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 67, &_1$$3);
 	}
 	RETURN_MM_MEMBER(getThis(), "reader");
 }
@@ -423,7 +423,7 @@ PHP_METHOD(Phalcon_Annotations_Adapter_AbstractAdapter, setReader)
 		Z_PARAM_OBJECT_OF_CLASS(reader, phalcon_annotations_readerinterface_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &reader);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 66, reader);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 67, reader);
 }
 
 zend_object *zephir_init_properties_Phalcon_Annotations_Adapter_AbstractAdapter(zend_class_entry *class_type)

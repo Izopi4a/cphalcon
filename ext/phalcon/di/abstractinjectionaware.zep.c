@@ -68,6 +68,6 @@ PHP_METHOD(Phalcon_Di_AbstractInjectionAware, setDI)
 		Z_PARAM_OBJECT_OF_CLASS(container, phalcon_di_diinterface_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &container);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 12, container);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 13, container);
 }
 

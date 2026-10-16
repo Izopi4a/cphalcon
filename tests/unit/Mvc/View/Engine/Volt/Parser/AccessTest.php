@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class AccessTest extends AbstractUnitTestCase
 {
@@ -23,6 +23,111 @@ final class AccessTest extends AbstractUnitTestCase
     public function setUp(): void
     {
         $this->compiler = new Compiler();
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcViewEngineVoltParserExprArrayAccess(): void
+    {
+        $source   = '{{ items[0] }}';
+        $expected = [
+            [
+                'type' => 359,
+                'expr' => [
+                    'type' => 361,
+                    'left' => [
+                        'type'  => 265,
+                        'value' => 'items',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    'right' => [
+                        'type'  => 258,
+                        'value' => '0',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    'file' => 'eval code',
+                    'line' => 1,
+                ],
+                'file' => 'eval code',
+                'line' => 1,
+            ],
+        ];
+        $actual   = $this->compiler->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcViewEngineVoltParserExprArrayAccessKey(): void
+    {
+        $source   = '{{ map[\'key\'] }}';
+        $expected = [
+            [
+                'type' => 359,
+                'expr' => [
+                    'type' => 361,
+                    'left' => [
+                        'type'  => 265,
+                        'value' => 'map',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    'right' => [
+                        'type'  => 260,
+                        'value' => 'key',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    'file' => 'eval code',
+                    'line' => 1,
+                ],
+                'file' => 'eval code',
+                'line' => 1,
+            ],
+        ];
+        $actual   = $this->compiler->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcViewEngineVoltParserExprArrayAccessVar(): void
+    {
+        $source   = '{{ items[index] }}';
+        $expected = [
+            [
+                'type' => 359,
+                'expr' => [
+                    'type' => 361,
+                    'left' => [
+                        'type'  => 265,
+                        'value' => 'items',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    'right' => [
+                        'type'  => 265,
+                        'value' => 'index',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    'file' => 'eval code',
+                    'line' => 1,
+                ],
+                'file' => 'eval code',
+                'line' => 1,
+            ],
+        ];
+        $actual   = $this->compiler->parse($source);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -38,16 +143,16 @@ final class AccessTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 46,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'user',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'name',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,
@@ -75,130 +180,25 @@ final class AccessTest extends AbstractUnitTestCase
                     'left' => [
                         'type' => 46,
                         'left' => [
-                            'type' => 265,
+                            'type'  => 265,
                             'value' => 'user',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'right' => [
-                            'type' => 265,
+                            'type'  => 265,
                             'value' => 'address',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'city',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    'file' => 'eval code',
-                    'line' => 1,
-                ],
-                'file' => 'eval code',
-                'line' => 1,
-            ],
-        ];
-        $actual   = $this->compiler->parse($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-10
-     */
-    public function testMvcViewEngineVoltParserExprArrayAccess(): void
-    {
-        $source   = '{{ items[0] }}';
-        $expected = [
-            [
-                'type' => 359,
-                'expr' => [
-                    'type' => 361,
-                    'left' => [
-                        'type' => 265,
-                        'value' => 'items',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    'right' => [
-                        'type' => 258,
-                        'value' => '0',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    'file' => 'eval code',
-                    'line' => 1,
-                ],
-                'file' => 'eval code',
-                'line' => 1,
-            ],
-        ];
-        $actual   = $this->compiler->parse($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-10
-     */
-    public function testMvcViewEngineVoltParserExprArrayAccessKey(): void
-    {
-        $source   = '{{ map[\'key\'] }}';
-        $expected = [
-            [
-                'type' => 359,
-                'expr' => [
-                    'type' => 361,
-                    'left' => [
-                        'type' => 265,
-                        'value' => 'map',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    'right' => [
-                        'type' => 260,
-                        'value' => 'key',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    'file' => 'eval code',
-                    'line' => 1,
-                ],
-                'file' => 'eval code',
-                'line' => 1,
-            ],
-        ];
-        $actual   = $this->compiler->parse($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-10
-     */
-    public function testMvcViewEngineVoltParserExprArrayAccessVar(): void
-    {
-        $source   = '{{ items[index] }}';
-        $expected = [
-            [
-                'type' => 359,
-                'expr' => [
-                    'type' => 361,
-                    'left' => [
-                        'type' => 265,
-                        'value' => 'items',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    'right' => [
-                        'type' => 265,
-                        'value' => 'index',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,

@@ -85,7 +85,7 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Token_Parser, __construct)
 		}
 
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 495, &service);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 496, &service);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -185,7 +185,7 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Token_Parser, decodeClaims)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&claims_zv);
 	ZVAL_STR_COPY(&claims_zv, claims);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 495, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 496, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_1, this_ptr, "decodeUrl", NULL, 295, &claims_zv);
 	zephir_check_call_status();
 	ZVAL_BOOL(&_2, 1);
@@ -247,7 +247,7 @@ PHP_METHOD(Phalcon_Encryption_Security_JWT_Token_Parser, decodeHeaders)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&headers_zv);
 	ZVAL_STR_COPY(&headers_zv, headers);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 495, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 496, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_1, this_ptr, "decodeUrl", NULL, 295, &headers_zv);
 	zephir_check_call_status();
 	ZVAL_BOOL(&_2, 1);

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class FilterTest extends AbstractUnitTestCase
 {
@@ -38,16 +38,16 @@ final class FilterTest extends AbstractUnitTestCase
                 'expr' => [
                     'type' => 124,
                     'left' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'name',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'upper',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,
@@ -75,25 +75,25 @@ final class FilterTest extends AbstractUnitTestCase
                     'left' => [
                         'type' => 124,
                         'left' => [
-                            'type' => 265,
+                            'type'  => 265,
                             'value' => 'name',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'right' => [
-                            'type' => 265,
+                            'type'  => 265,
                             'value' => 'upper',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'trim',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,

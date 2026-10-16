@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class ConcatenationTest extends AbstractUnitTestCase
 {
@@ -40,25 +40,25 @@ final class ConcatenationTest extends AbstractUnitTestCase
                     'left' => [
                         'type' => 126,
                         'left' => [
-                            'type' => 260,
+                            'type'  => 260,
                             'value' => 'Hello',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'right' => [
-                            'type' => 260,
+                            'type'  => 260,
                             'value' => ' ',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,
                     ],
                     'right' => [
-                        'type' => 260,
+                        'type'  => 260,
                         'value' => 'World',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,
@@ -86,25 +86,25 @@ final class ConcatenationTest extends AbstractUnitTestCase
                     'left' => [
                         'type' => 126,
                         'left' => [
-                            'type' => 265,
+                            'type'  => 265,
                             'value' => 'firstName',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'right' => [
-                            'type' => 260,
+                            'type'  => 260,
                             'value' => ' ',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,
                     ],
                     'right' => [
-                        'type' => 265,
+                        'type'  => 265,
                         'value' => 'lastName',
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'file'  => 'eval code',
+                        'line'  => 1,
                     ],
                     'file' => 'eval code',
                     'line' => 1,

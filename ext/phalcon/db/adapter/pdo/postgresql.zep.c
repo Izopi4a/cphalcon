@@ -133,7 +133,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Postgresql, connect)
 	ZEPHIR_OBS_COPY_OR_DUP(&descriptor, descriptor_param);
 	}
 	if (ZEPHIR_IS_EMPTY(&descriptor)) {
-		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 407, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_0$$3, this_ptr, _zephir_prop_0, 408, PH_NOISY_CC | PH_READONLY);
 		if (UNEXPECTED(Z_TYPE_P(&_0$$3) != IS_ARRAY)) {
 			zephir_throw_variable_type_error(&_0$$3, "descriptor", "array");
 			ZEPHIR_MM_RESTORE();
@@ -234,7 +234,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Postgresql, createTable)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(phalcon_db_exception_ce, "The table must contain at least one column", "phalcon/Db/Adapter/Pdo/Postgresql.zep", 111);
 		return;
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 408, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 409, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&sql, &_0, "createTable", NULL, 0, &tableName_zv, &schemaName_zv, &definition);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&queries);
@@ -485,7 +485,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Postgresql, describeColumns)
 	ZVAL_NULL(&oldColumn);
 	ZEPHIR_INIT_VAR(&columns);
 	array_init(&columns);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 408, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 409, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_1, &_0, "describeColumns", NULL, 0, &table_zv, &schema_zv);
 	zephir_check_call_status();
 	ZVAL_LONG(&_2, 3);
@@ -1216,7 +1216,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Postgresql, describeReferences)
 	}
 	ZEPHIR_INIT_VAR(&references);
 	array_init(&references);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 408, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_0, 409, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&_2, &_1, "describeReferences", NULL, 0, &table_zv, &schema_zv);
 	zephir_check_call_status();
 	ZVAL_LONG(&_3, 3);
@@ -1501,7 +1501,7 @@ PHP_METHOD(Phalcon_Db_Adapter_Pdo_Postgresql, modifyColumn)
 		currentColumn = &currentColumn_sub;
 		currentColumn = &__$null;
 	}
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 408, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 409, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&sql, &_0, "modifyColumn", NULL, 0, &tableName_zv, &schemaName_zv, column, currentColumn);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&queries);

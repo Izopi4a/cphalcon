@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 class GetExtensionsTest extends AbstractUnitTestCase
 {
@@ -27,7 +27,7 @@ class GetExtensionsTest extends AbstractUnitTestCase
         $compiler = new Compiler();
         $this->assertSame([], $compiler->getExtensions());
 
-        $extension = new class {
+        $extension = new class () {
         };
         $compiler->addExtension($extension);
 

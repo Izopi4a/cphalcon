@@ -108,9 +108,9 @@ PHP_METHOD(Phalcon_Container_Resolver_Lazy_StaticCall, __construct)
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_ce_type_error, "Argument 'id' must be string or Lazy", "phalcon/Container/Resolver/Lazy/StaticCall.zep", 51);
 		return;
 	}
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 377, className);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 378, &method_zv);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 379, &arguments);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 378, className);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 379, &method_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 380, &arguments);
 	ZEPHIR_MM_RESTORE();
 }
 
@@ -148,17 +148,17 @@ PHP_METHOD(Phalcon_Container_Resolver_Lazy_StaticCall, resolve)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &container);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 377, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 378, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&resolvedClass, this_ptr, "resolveArgument", NULL, 0, container, &_0);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 379, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 380, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&resolvedArgs, this_ptr, "resolveArguments", NULL, 0, container, &_1);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_create_array(&_2, 2, 0);
 	zephir_array_fast_append(&_2, &resolvedClass);
 	zephir_memory_observe(&_3);
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_2, 378, PH_NOISY_CC);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_2, 379, PH_NOISY_CC);
 	zephir_array_fast_append(&_2, &_3);
 	ZEPHIR_CALL_USER_FUNC_ARRAY(return_value, &_2, &resolvedArgs);
 	zephir_check_call_status();

@@ -14,16 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FunctionCallTest extends AbstractUnitTestCase
 {
     use DiTrait;
 
-    /**
-     * @return array
-     */
     public static function getExamples(): array
     {
         return [
@@ -441,11 +439,10 @@ class FunctionCallTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider getExamples
-     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-11
      */
+    #[DataProvider('getExamples')]
     public function testMvcViewEngineVoltCompilerFunctionCall(
         string $source,
         string $expected

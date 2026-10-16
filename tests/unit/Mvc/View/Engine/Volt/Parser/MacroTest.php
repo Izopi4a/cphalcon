@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class MacroTest extends AbstractUnitTestCase
 {
@@ -29,135 +29,34 @@ final class MacroTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-10
      */
-    public function testMvcViewEngineVoltParserMacroNoParams(): void
+    public function testMvcViewEngineVoltParserMacroDefaultFalse(): void
     {
-        $source   = '{% macro myMacro() %}content{% endmacro %}';
+        $source   = '{% macro show(visible = false) %}{{ visible }}{% endmacro %}';
         $expected = [
             [
-                'type' => 322,
-                'name' => 'myMacro',
-                'block_statements' => [
-                    [
-                        'type' => 357,
-                        'value' => 'content',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                ],
-                'file' => 'eval code',
-                'line' => 1,
-            ],
-        ];
-        $actual   = $this->compiler->parse($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-10
-     */
-    public function testMvcViewEngineVoltParserMacroOneParam(): void
-    {
-        $source   = '{% macro greet(name) %}Hello {{ name }}{% endmacro %}';
-        $expected = [
-            [
-                'type' => 322,
-                'name' => 'greet',
+                'type'       => 322,
+                'name'       => 'show',
                 'parameters' => [
                     [
-                        'variable' => 'name',
+                        'variable' => 'visible',
+                        'default'  => [
+                            'type' => 262,
+                            'file' => 'eval code',
+                            'line' => 1,
+                        ],
                         'file' => 'eval code',
                         'line' => 1,
                     ],
                 ],
                 'block_statements' => [
                     [
-                        'type' => 357,
-                        'value' => 'Hello ',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    [
                         'type' => 359,
                         'expr' => [
-                            'type' => 265,
-                            'value' => 'name',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'type'  => 265,
+                            'value' => 'visible',
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                ],
-                'file' => 'eval code',
-                'line' => 1,
-            ],
-        ];
-        $actual   = $this->compiler->parse($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-10
-     */
-    public function testMvcViewEngineVoltParserMacroMultiParams(): void
-    {
-        $source   = '{% macro input(name, value) %}<input name="{{ name }}" value="{{ value }}">{% endmacro %}';
-        $expected = [
-            [
-                'type' => 322,
-                'name' => 'input',
-                'parameters' => [
-                    [
-                        'variable' => 'name',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    [
-                        'variable' => 'value',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                ],
-                'block_statements' => [
-                    [
-                        'type' => 357,
-                        'value' => '<input name="',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    [
-                        'type' => 359,
-                        'expr' => [
-                            'type' => 265,
-                            'value' => 'name',
-                            'file' => 'eval code',
-                            'line' => 1,
-                        ],
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    [
-                        'type' => 357,
-                        'value' => '" value="',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    [
-                        'type' => 359,
-                        'expr' => [
-                            'type' => 265,
-                            'value' => 'value',
-                            'file' => 'eval code',
-                            'line' => 1,
-                        ],
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    [
-                        'type' => 357,
-                        'value' => '">',
                         'file' => 'eval code',
                         'line' => 1,
                     ],
@@ -179,16 +78,16 @@ final class MacroTest extends AbstractUnitTestCase
         $source   = '{% macro repeat(times = 1) %}{{ times }}{% endmacro %}';
         $expected = [
             [
-                'type' => 322,
-                'name' => 'repeat',
+                'type'       => 322,
+                'name'       => 'repeat',
                 'parameters' => [
                     [
                         'variable' => 'times',
-                        'default' => [
-                            'type' => 258,
+                        'default'  => [
+                            'type'  => 258,
                             'value' => '1',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,
@@ -198,61 +97,10 @@ final class MacroTest extends AbstractUnitTestCase
                     [
                         'type' => 359,
                         'expr' => [
-                            'type' => 265,
+                            'type'  => 265,
                             'value' => 'times',
-                            'file' => 'eval code',
-                            'line' => 1,
-                        ],
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                ],
-                'file' => 'eval code',
-                'line' => 1,
-            ],
-        ];
-        $actual   = $this->compiler->parse($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-10
-     */
-    public function testMvcViewEngineVoltParserMacroDefaultString(): void
-    {
-        $source   = '{% macro greet(name = \'World\') %}Hello {{ name }}{% endmacro %}';
-        $expected = [
-            [
-                'type' => 322,
-                'name' => 'greet',
-                'parameters' => [
-                    [
-                        'variable' => 'name',
-                        'default' => [
-                            'type' => 260,
-                            'value' => 'World',
-                            'file' => 'eval code',
-                            'line' => 1,
-                        ],
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                ],
-                'block_statements' => [
-                    [
-                        'type' => 357,
-                        'value' => 'Hello ',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                    [
-                        'type' => 359,
-                        'expr' => [
-                            'type' => 265,
-                            'value' => 'name',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,
@@ -275,12 +123,12 @@ final class MacroTest extends AbstractUnitTestCase
         $source   = '{% macro render(item = null) %}{{ item }}{% endmacro %}';
         $expected = [
             [
-                'type' => 322,
-                'name' => 'render',
+                'type'       => 322,
+                'name'       => 'render',
                 'parameters' => [
                     [
                         'variable' => 'item',
-                        'default' => [
+                        'default'  => [
                             'type' => 261,
                             'file' => 'eval code',
                             'line' => 1,
@@ -293,10 +141,61 @@ final class MacroTest extends AbstractUnitTestCase
                     [
                         'type' => 359,
                         'expr' => [
-                            'type' => 265,
+                            'type'  => 265,
                             'value' => 'item',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
+                        ],
+                        'file' => 'eval code',
+                        'line' => 1,
+                    ],
+                ],
+                'file' => 'eval code',
+                'line' => 1,
+            ],
+        ];
+        $actual   = $this->compiler->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcViewEngineVoltParserMacroDefaultString(): void
+    {
+        $source   = '{% macro greet(name = \'World\') %}Hello {{ name }}{% endmacro %}';
+        $expected = [
+            [
+                'type'       => 322,
+                'name'       => 'greet',
+                'parameters' => [
+                    [
+                        'variable' => 'name',
+                        'default'  => [
+                            'type'  => 260,
+                            'value' => 'World',
+                            'file'  => 'eval code',
+                            'line'  => 1,
+                        ],
+                        'file' => 'eval code',
+                        'line' => 1,
+                    ],
+                ],
+                'block_statements' => [
+                    [
+                        'type'  => 357,
+                        'value' => 'Hello ',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    [
+                        'type' => 359,
+                        'expr' => [
+                            'type'  => 265,
+                            'value' => 'name',
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,
@@ -319,12 +218,12 @@ final class MacroTest extends AbstractUnitTestCase
         $source   = '{% macro show(visible = true) %}{{ visible }}{% endmacro %}';
         $expected = [
             [
-                'type' => 322,
-                'name' => 'show',
+                'type'       => 322,
+                'name'       => 'show',
                 'parameters' => [
                     [
                         'variable' => 'visible',
-                        'default' => [
+                        'default'  => [
                             'type' => 263,
                             'file' => 'eval code',
                             'line' => 1,
@@ -337,10 +236,10 @@ final class MacroTest extends AbstractUnitTestCase
                     [
                         'type' => 359,
                         'expr' => [
-                            'type' => 265,
+                            'type'  => 265,
                             'value' => 'visible',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,
@@ -358,33 +257,134 @@ final class MacroTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-10
      */
-    public function testMvcViewEngineVoltParserMacroDefaultFalse(): void
+    public function testMvcViewEngineVoltParserMacroMultiParams(): void
     {
-        $source   = '{% macro show(visible = false) %}{{ visible }}{% endmacro %}';
+        $source   = '{% macro input(name, value) %}<input name="{{ name }}" value="{{ value }}">{% endmacro %}';
         $expected = [
             [
-                'type' => 322,
-                'name' => 'show',
+                'type'       => 322,
+                'name'       => 'input',
                 'parameters' => [
                     [
-                        'variable' => 'visible',
-                        'default' => [
-                            'type' => 262,
-                            'file' => 'eval code',
-                            'line' => 1,
-                        ],
-                        'file' => 'eval code',
-                        'line' => 1,
+                        'variable' => 'name',
+                        'file'     => 'eval code',
+                        'line'     => 1,
+                    ],
+                    [
+                        'variable' => 'value',
+                        'file'     => 'eval code',
+                        'line'     => 1,
                     ],
                 ],
                 'block_statements' => [
                     [
+                        'type'  => 357,
+                        'value' => '<input name="',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    [
                         'type' => 359,
                         'expr' => [
-                            'type' => 265,
-                            'value' => 'visible',
-                            'file' => 'eval code',
-                            'line' => 1,
+                            'type'  => 265,
+                            'value' => 'name',
+                            'file'  => 'eval code',
+                            'line'  => 1,
+                        ],
+                        'file' => 'eval code',
+                        'line' => 1,
+                    ],
+                    [
+                        'type'  => 357,
+                        'value' => '" value="',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    [
+                        'type' => 359,
+                        'expr' => [
+                            'type'  => 265,
+                            'value' => 'value',
+                            'file'  => 'eval code',
+                            'line'  => 1,
+                        ],
+                        'file' => 'eval code',
+                        'line' => 1,
+                    ],
+                    [
+                        'type'  => 357,
+                        'value' => '">',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                ],
+                'file' => 'eval code',
+                'line' => 1,
+            ],
+        ];
+        $actual   = $this->compiler->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcViewEngineVoltParserMacroNoParams(): void
+    {
+        $source   = '{% macro myMacro() %}content{% endmacro %}';
+        $expected = [
+            [
+                'type'             => 322,
+                'name'             => 'myMacro',
+                'block_statements' => [
+                    [
+                        'type'  => 357,
+                        'value' => 'content',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                ],
+                'file' => 'eval code',
+                'line' => 1,
+            ],
+        ];
+        $actual   = $this->compiler->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcViewEngineVoltParserMacroOneParam(): void
+    {
+        $source   = '{% macro greet(name) %}Hello {{ name }}{% endmacro %}';
+        $expected = [
+            [
+                'type'       => 322,
+                'name'       => 'greet',
+                'parameters' => [
+                    [
+                        'variable' => 'name',
+                        'file'     => 'eval code',
+                        'line'     => 1,
+                    ],
+                ],
+                'block_statements' => [
+                    [
+                        'type'  => 357,
+                        'value' => 'Hello ',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                    [
+                        'type' => 359,
+                        'expr' => [
+                            'type'  => 265,
+                            'value' => 'name',
+                            'file'  => 'eval code',
+                            'line'  => 1,
                         ],
                         'file' => 'eval code',
                         'line' => 1,

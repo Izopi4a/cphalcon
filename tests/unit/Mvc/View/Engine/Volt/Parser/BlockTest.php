@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class BlockTest extends AbstractUnitTestCase
 {
@@ -29,21 +29,13 @@ final class BlockTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-10
      */
-    public function testMvcViewEngineVoltParserBlockWithContent(): void
+    public function testMvcViewEngineVoltParserBlockEmpty(): void
     {
-        $source   = '{% block content %}Default content{% endblock %}';
+        $source   = '{% block sidebar %}{% endblock %}';
         $expected = [
             [
                 'type' => 307,
-                'name' => 'content',
-                'block_statements' => [
-                    [
-                        'type' => 357,
-                        'value' => 'Default content',
-                        'file' => 'eval code',
-                        'line' => 1,
-                    ],
-                ],
+                'name' => 'sidebar',
                 'file' => 'eval code',
                 'line' => 1,
             ],
@@ -56,13 +48,21 @@ final class BlockTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-10
      */
-    public function testMvcViewEngineVoltParserBlockEmpty(): void
+    public function testMvcViewEngineVoltParserBlockWithContent(): void
     {
-        $source   = '{% block sidebar %}{% endblock %}';
+        $source   = '{% block content %}Default content{% endblock %}';
         $expected = [
             [
-                'type' => 307,
-                'name' => 'sidebar',
+                'type'             => 307,
+                'name'             => 'content',
+                'block_statements' => [
+                    [
+                        'type'  => 357,
+                        'value' => 'Default content',
+                        'file'  => 'eval code',
+                        'line'  => 1,
+                    ],
+                ],
                 'file' => 'eval code',
                 'line' => 1,
             ],

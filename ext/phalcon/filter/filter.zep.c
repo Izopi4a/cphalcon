@@ -313,7 +313,7 @@ PHP_METHOD(Phalcon_Filter_Filter, get)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 512, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 513, PH_NOISY_CC | PH_READONLY);
 	if (1 != zephir_array_isset_value(&_0, &name_zv)) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		object_init_ex(&_1$$3, phalcon_filter_exception_ce);
@@ -329,16 +329,16 @@ PHP_METHOD(Phalcon_Filter_Filter, get)
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 513, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_3, this_ptr, _zephir_prop_1, 514, PH_NOISY_CC | PH_READONLY);
 	if (1 != zephir_array_isset_value(&_3, &name_zv)) {
-		zephir_read_property_cached(&_4$$4, this_ptr, _zephir_prop_0, 512, PH_NOISY_CC | PH_READONLY);
+		zephir_read_property_cached(&_4$$4, this_ptr, _zephir_prop_0, 513, PH_NOISY_CC | PH_READONLY);
 		zephir_memory_observe(&definition);
 		zephir_array_fetch(&definition, &_4$$4, &name_zv, PH_NOISY, "phalcon/Filter/Filter.zep", 196);
 		ZEPHIR_CALL_METHOD(&_5$$4, this_ptr, "createInstance", NULL, 305, &definition);
 		zephir_check_call_status();
 		zephir_update_property_array(this_ptr, SL("services"), &name_zv, &_5$$4);
 	}
-	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_1, 513, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_6, this_ptr, _zephir_prop_1, 514, PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_7);
 	zephir_array_fetch(&_7, &_6, &name_zv, PH_NOISY, "phalcon/Filter/Filter.zep", 200);
 	RETURN_CCTOR(&_7);
@@ -368,7 +368,7 @@ PHP_METHOD(Phalcon_Filter_Filter, has)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 512, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 513, PH_NOISY_CC | PH_READONLY);
 	RETURN_BOOL(zephir_array_isset_value(&_0, &name_zv));
 }
 

@@ -102,7 +102,7 @@ PHP_METHOD(Phalcon_Container_Resolver_Lazy_EnvDefault, __construct)
 	}
 	ZEPHIR_CALL_PARENT(NULL, phalcon_container_resolver_lazy_envdefault_ce, getThis(), "__construct", NULL, 0, &varname_zv, vartype);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 366, defaultValue);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 367, defaultValue);
 	ZEPHIR_MM_RESTORE();
 }
 

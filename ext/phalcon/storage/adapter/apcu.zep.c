@@ -114,7 +114,7 @@ PHP_METHOD(Phalcon_Storage_Adapter_Apcu, clear)
 
 	ZEPHIR_INIT_VAR(&apc);
 	ZVAL_NULL(&apc);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 227, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 228, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&pattern);
 	ZEPHIR_CONCAT_SVS(&pattern, "/^", &_0, "/");
 	if (UNEXPECTED(EG(exception))) {
@@ -192,7 +192,7 @@ PHP_METHOD(Phalcon_Storage_Adapter_Apcu, getKeys)
 	}
 	ZEPHIR_INIT_VAR(&apc);
 	ZVAL_NULL(&apc);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 227, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 228, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&pattern);
 	ZEPHIR_CONCAT_SVVS(&pattern, "/^", &_0, &prefix_zv, "/");
 	if (UNEXPECTED(EG(exception))) {

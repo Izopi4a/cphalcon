@@ -57,7 +57,7 @@ PHP_METHOD(Phalcon_Storage_Serializer_Msgpack, doSerialize)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value);
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 957, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 966, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_RETURN_CALL_FUNCTION("msgpack_pack", NULL, 0, &_0);
 	zephir_check_call_status();
 	RETURN_MM();

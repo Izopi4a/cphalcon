@@ -10,12 +10,18 @@
 
 namespace Phalcon\Mvc\Model\Query;
 
+use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\Di;
 use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\ManagerInterface;
+use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Mvc\Model\Query;
 use Phalcon\Mvc\Model\QueryInterface;
+use Phalcon\Mvc\Model\RelationInterface;
+use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
 
 /**
@@ -1046,6 +1052,34 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     {
         var query, bindParams, bindTypes, phql, container;
 
+        var compiled;
+
+        if Settings::get("orm.native_compiler") {
+            /**
+             * Native path: the builder state is compiled straight into the
+             * intermediate representation, no PHQL string and no parser
+             */
+            let compiled = this->compileIntermediate();
+
+            let container = <DiInterface> this->container;
+
+            let query = <QueryInterface> container->get(
+                "Phalcon\\Mvc\\Model\\Query",
+                [null, container]
+            );
+
+            query->setType(Query::TYPE_SELECT);
+            query->setIntermediate(compiled["intermediate"]);
+            query->setBindParams(compiled["bindParams"]);
+            query->setBindTypes(compiled["bindTypes"]);
+
+            if typeof this->sharedLock === "boolean" {
+                query->setSharedLock(this->sharedLock);
+            }
+
+            return query;
+        }
+
         let phql = this->getPhql();
 
         let container = <DiInterface> this->container;
@@ -1109,11 +1143,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     public function groupBy(var group) -> <BuilderInterface>
     {
         if typeof group == "string" {
-            if memstr(group, ",") {
-                let group = str_replace(" ", "", group);
-            }
-
-            let group = explode(",", group);
+            let group = FragmentRewriter::splitList(group);
         }
 
         let this->group = group;
@@ -1577,6 +1607,681 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         }
 
         return this;
+    }
+
+    /**
+     * Compiles the builder state into the intermediate representation that
+     * Phalcon\Mvc\Model\Query executes, with no PHQL string and no parser.
+     *
+     * Models, aliases, default columns, joins (including implicit joins from
+     * relations), LIMIT/OFFSET and FOR UPDATE are built from metadata. The
+     * raw parts (conditions, columns, group, having, order, join conditions)
+     * go through FragmentRewriter and reach the database as written.
+     *
+     * Returns ["intermediate": array, "bindParams": array, "bindTypes": array]
+     */
+    protected function compileIntermediate() -> array
+    {
+        var container, manager, metaData, models, modelAlias, modelName,
+            model, source, schema, table, sqlAlias, rewriter, dialect,
+            irModels, irTables, irColumns, irJoins, queryModels, join,
+            joinModel, joinConditions, joinAlias, joinType, joinItems,
+            joinItem, columns, items, key, item, split, columnAlias,
+            domain, domainInfo, expression, conditions, primaryKeys, group,
+            groupItems, having, order, orderItems, limit, number, offset,
+            bindParams, bindTypes, typeName, typeValue, intermediate, matches,
+            relationJoins, relationJoin, queryModel, distinct;
+        int position;
+        bool named;
+
+        let container = this->container;
+
+        if typeof container != "object" {
+            let container = Di::getDefault(),
+                this->container = container;
+        }
+
+        if unlikely typeof container != "object" {
+            throw new Exception(
+                "A dependency injection container is required to access the services related to the ORM"
+            );
+        }
+
+        let models = this->models;
+
+        if typeof models != "array" {
+            if unlikely !models {
+                throw new Exception(
+                    "At least one model is required to build the query"
+                );
+            }
+
+            let models = [models];
+        } elseif unlikely !count(models) {
+            throw new Exception(
+                "At least one model is required to build the query"
+            );
+        }
+
+        let manager    = <ManagerInterface> container->getShared("modelsManager"),
+            metaData   = <MetaDataInterface> container->getShared("modelsMetadata"),
+            bindParams = this->bindParams,
+            bindTypes  = this->bindTypes;
+
+        if typeof bindParams != "array" {
+            let bindParams = [];
+        }
+
+        if typeof bindTypes != "array" {
+            let bindTypes = [];
+        }
+
+        let irModels    = [],
+            irTables    = [],
+            irJoins     = [],
+            irColumns   = [],
+            queryModels = [],
+            joinItems   = [],
+            rewriter    = null;
+
+        /**
+         * FROM models
+         */
+        for modelAlias, modelName in models {
+            let model  = manager->load(modelName),
+                source = model->getSource(),
+                schema = model->getSchema();
+
+            if rewriter === null {
+                let dialect  = model->getReadConnection()->getDialect(),
+                    rewriter = new FragmentRewriter(
+                        manager,
+                        metaData,
+                        dialect,
+                        bindParams
+                    );
+            }
+
+            let named = typeof modelAlias == "string";
+
+            if named {
+                let table    = [source, schema, modelAlias],
+                    sqlAlias = modelAlias;
+            } else {
+                let sqlAlias = source;
+
+                if schema {
+                    let table = [source, schema];
+                } else {
+                    let table = source;
+                }
+            }
+
+            rewriter->addModel(modelName, model, sqlAlias, named);
+
+            let irModels[]    = modelName,
+                irTables[]    = table,
+                queryModels[] = [
+                    "model":  modelName,
+                    "alias":  sqlAlias,
+                    "named":  named,
+                    "source": source,
+                    "from":   true
+                ];
+        }
+
+        /**
+         * JOIN models are registered before any fragment is rewritten
+         */
+        if typeof this->joins == "array" {
+            for join in this->joins {
+                /**
+                 * join() always stores [model, conditions, alias, type]
+                 */
+                let joinModel      = join[0],
+                    joinConditions = join[1],
+                    joinAlias      = join[2],
+                    joinType       = join[3];
+
+                let model  = manager->load(joinModel),
+                    source = model->getSource(),
+                    schema = model->getSchema();
+
+                let named = !empty joinAlias;
+
+                if named {
+                    let table    = [source, schema, joinAlias],
+                        sqlAlias = joinAlias;
+                } elseif schema {
+                    let table    = [source, schema],
+                        sqlAlias = source;
+                } else {
+                    let table    = source,
+                        sqlAlias = source;
+                }
+
+                rewriter->addModel(joinModel, model, sqlAlias, named);
+
+                if joinType {
+                    let joinType = strtoupper(joinType);
+                } else {
+                    let joinType = "INNER";
+                }
+
+                let joinItems[] = [
+                    "model":      joinModel,
+                    "alias":      sqlAlias,
+                    "table":      table,
+                    "type":       joinType,
+                    "conditions": joinConditions
+                ];
+
+                let queryModels[] = [
+                    "model":  joinModel,
+                    "alias":  sqlAlias,
+                    "named":  named,
+                    "source": source,
+                    "from":   false
+                ];
+            }
+        }
+
+        for joinItem in joinItems {
+            let joinConditions = joinItem["conditions"];
+
+            if typeof joinConditions == "string" && joinConditions !== "" {
+                let irJoins[] = [
+                    "type":       joinItem["type"],
+                    "source":     joinItem["table"],
+                    "conditions": [rewriter->rewrite(joinConditions)]
+                ];
+
+                continue;
+            }
+
+            /**
+             * Implicit join: resolved from the relations of the models
+             * already in the query
+             */
+            let relationJoins = null;
+
+            for queryModel in queryModels {
+                if queryModel["alias"] === joinItem["alias"] {
+                    break;
+                }
+
+                let relationJoins = this->compileRelationJoin(
+                    manager,
+                    rewriter,
+                    queryModel,
+                    joinItem
+                );
+
+                if typeof relationJoins == "array" {
+                    break;
+                }
+            }
+
+            if typeof relationJoins == "array" {
+                for relationJoin in relationJoins {
+                    let irJoins[] = relationJoin;
+                }
+            } else {
+                let irJoins[] = [
+                    "type":       joinItem["type"],
+                    "source":     joinItem["table"],
+                    "conditions": []
+                ];
+            }
+        }
+
+        /**
+         * COLUMNS
+         */
+        let columns = this->columns;
+
+        if columns === null {
+            for queryModel in queryModels {
+                if queryModel["from"] {
+                    let columnAlias = this->compileObjectAlias(queryModel, null),
+                        irColumns[columnAlias] = [
+                            "type":   "object",
+                            "model":  queryModel["model"],
+                            "column": queryModel["alias"],
+                            "balias": columnAlias
+                        ];
+                }
+            }
+        } else {
+            if typeof columns == "array" {
+                let items = columns;
+            } else {
+                let items = FragmentRewriter::splitList((string) columns);
+            }
+
+            let position = 0;
+
+            for key, item in items {
+                if typeof key == "string" {
+                    let expression  = trim(item),
+                        columnAlias = key;
+                } else {
+                    let split       = FragmentRewriter::splitAlias(item),
+                        expression  = split[0],
+                        columnAlias = split[1];
+                }
+
+                /**
+                 * SELECT * -> every FROM model as an object
+                 */
+                if expression === "*" {
+                    for queryModel in queryModels {
+                        if queryModel["from"] {
+                            let domain = this->compileObjectAlias(queryModel, null),
+                                irColumns[domain] = [
+                                    "type":   "object",
+                                    "model":  queryModel["model"],
+                                    "column": queryModel["alias"],
+                                    "balias": domain
+                                ];
+                        }
+                    }
+
+                    let position++;
+                    continue;
+                }
+
+                /**
+                 * alias.* / [Model].* -> a complete object
+                 */
+                if ends_with(expression, ".*") {
+                    let domain     = trim(substr(expression, 0, -2), "[]"),
+                        domainInfo = null;
+
+                    for queryModel in queryModels {
+                        if queryModel["alias"] === domain || ltrim(queryModel["model"], "\\") === ltrim(domain, "\\") {
+                            let domainInfo = queryModel;
+                            break;
+                        }
+                    }
+
+                    if unlikely typeof domainInfo != "array" {
+                        throw new Exception(
+                            "Unknown model or alias '" . domain . "' in the columns"
+                        );
+                    }
+
+                    let domain = this->compileObjectAlias(domainInfo, columnAlias),
+                        irColumns[domain] = [
+                            "type":   "object",
+                            "model":  domainInfo["model"],
+                            "column": domainInfo["alias"],
+                            "balias": domain
+                        ];
+
+                    let position++;
+                    continue;
+                }
+
+                /**
+                 * Scalar: `expr AS alias`, or a plain (qualified) column
+                 * which is named after its property, like PHQL does
+                 */
+                if columnAlias === null {
+                    let matches = null;
+
+                    if preg_match("/^(?:\\[?[A-Za-z_\\\\][A-Za-z0-9_\\\\]*\\]?\\.)?\\[?([A-Za-z_][A-Za-z0-9_]*)\\]?$/", expression, matches) {
+                        let columnAlias = matches[1];
+                    }
+                }
+
+                let expression = [
+                    "type":   "scalar",
+                    "column": rewriter->rewrite(expression)
+                ];
+
+                if columnAlias !== null {
+                    let expression["balias"]   = columnAlias,
+                        expression["sqlAlias"] = columnAlias,
+                        irColumns[columnAlias] = expression;
+                } else {
+                    let irColumns["_" . position] = expression;
+                }
+
+                let position++;
+            }
+        }
+
+        let intermediate = [
+            "models":  irModels,
+            "tables":  irTables,
+            "columns": irColumns
+        ];
+
+        let distinct = this->distinct;
+
+        if typeof distinct == "boolean" {
+            let intermediate["distinct"] = distinct;
+        }
+
+        if count(irJoins) {
+            let intermediate["joins"] = irJoins;
+        }
+
+        /**
+         * WHERE: a numeric condition is the primary key
+         */
+        let conditions = this->conditions;
+
+        if is_numeric(conditions) {
+            if unlikely count(irModels) > 1 {
+                throw new Exception(
+                    "Cannot build the query. Invalid condition"
+                );
+            }
+
+            let queryModel  = queryModels[0],
+                model       = manager->load(queryModel["model"]),
+                primaryKeys = metaData->getPrimaryKeyAttributes(model);
+
+            if unlikely !count(primaryKeys) {
+                throw new Exception(
+                    "Source related to this model does not have a primary key defined"
+                );
+            }
+
+            let bindParams["APK0"] = conditions;
+
+            let intermediate["where"] = [
+                "type":  "literal",
+                "value": rewriter->escape(queryModel["alias"]) . "." . rewriter->escape(primaryKeys[0]) . " = :APK0"
+            ];
+        } elseif typeof conditions == "string" && conditions !== "" {
+            let intermediate["where"] = rewriter->rewrite(conditions);
+        }
+
+        /**
+         * GROUP BY
+         */
+        let group = this->group;
+
+        if typeof group == "array" && count(group) {
+            let groupItems = [];
+
+            for item in group {
+                if typeof item == "string" && trim(item) !== "" {
+                    let groupItems[] = rewriter->rewrite(item);
+                }
+            }
+
+            if count(groupItems) {
+                let intermediate["group"] = groupItems;
+            }
+        }
+
+        /**
+         * HAVING
+         */
+        let having = this->having;
+
+        if typeof having == "string" && having !== "" {
+            let intermediate["having"] = rewriter->rewrite(having);
+        }
+
+        /**
+         * ORDER BY
+         */
+        let order = this->order;
+
+        if order !== null && order !== "" {
+            if typeof order != "array" {
+                let order = [order];
+            }
+
+            let orderItems = [];
+
+            for item in order {
+                if typeof item == "integer" {
+                    let orderItems[] = [
+                        [
+                            "type":  "literal",
+                            "value": (string) item
+                        ]
+                    ];
+                } else {
+                    let orderItems[] = [rewriter->rewrite((string) item)];
+                }
+            }
+
+            let intermediate["order"] = orderItems;
+        }
+
+        /**
+         * LIMIT / OFFSET: same placeholders and types as PHQL
+         */
+        let limit = this->limit;
+
+        if limit !== null {
+            let number = null,
+                offset = null;
+
+            if typeof limit == "array" {
+                fetch number, limit["number"];
+
+                if fetch offset, limit["offset"] {
+                    if !is_numeric(offset) {
+                        let offset = 0;
+                    }
+                }
+            } elseif is_numeric(limit) {
+                let number = limit,
+                    offset = this->offset;
+
+                if offset !== null && !is_numeric(offset) {
+                    let offset = 0;
+                }
+            }
+
+            if is_numeric(number) {
+                let limit = [
+                    "number": [
+                        "type":  "placeholder",
+                        "value": ":APL0"
+                    ]
+                ];
+
+                let bindParams["APL0"] = intval(number, 10),
+                    bindTypes["APL0"]  = Column::BIND_PARAM_INT;
+
+                if is_numeric(offset) && offset != 0 {
+                    let limit["offset"] = [
+                        "type":  "placeholder",
+                        "value": ":APL1"
+                    ];
+
+                    let bindParams["APL1"] = intval(offset, 10),
+                        bindTypes["APL1"]  = Column::BIND_PARAM_INT;
+                }
+
+                let intermediate["limit"] = limit;
+            }
+        }
+
+        if this->forUpdate === true {
+            let intermediate["forUpdate"] = true;
+        }
+
+        /**
+         * Typed placeholders ({id:int}) win over the builder's types, as
+         * they do in PHQL
+         */
+        for typeName, typeValue in rewriter->getBindTypes() {
+            let bindTypes[typeName] = typeValue;
+        }
+
+        return [
+            "intermediate": intermediate,
+            "bindParams":   bindParams,
+            "bindTypes":    bindTypes
+        ];
+    }
+
+    /**
+     * Best alias for a complete object in the resultset, as PHQL picks it
+     */
+    protected function compileObjectAlias(array queryModel, var columnAlias) -> string
+    {
+        var modelName;
+
+        if typeof columnAlias == "string" && columnAlias !== "" {
+            return columnAlias;
+        }
+
+        if queryModel["named"] {
+            return queryModel["alias"];
+        }
+
+        let modelName = queryModel["model"];
+
+        if memstr(modelName, "\\") {
+            return modelName;
+        }
+
+        return lcfirst(modelName);
+    }
+
+    /**
+     * Join conditions for an implicit join, from the relation between a
+     * model already in the query and the joined model. Returns null when the
+     * models are not related.
+     */
+    protected function compileRelationJoin(
+        <ManagerInterface> manager,
+        <FragmentRewriter> rewriter,
+        array left,
+        array right
+    ) -> array | null {
+        var relation, relations, fields, referencedFields, position, field,
+            conditions, intermediateModelName, intermediateModel,
+            intermediateFields, intermediateReferencedFields,
+            intermediateSource, intermediateSchema, intermediateTable,
+            intermediateConditions;
+
+        let relation = manager->getRelationByAlias(left["model"], right["model"]);
+
+        if relation === false {
+            let relations = manager->getRelationsBetween(left["model"], right["model"]);
+
+            if typeof relations != "array" {
+                return null;
+            }
+
+            if unlikely count(relations) != 1 {
+                throw new Exception(
+                    "There is more than one relation between models '" . left["model"] . "' and '" . right["model"] . "', the join must be done using an alias"
+                );
+            }
+
+            let relation = relations[0];
+        }
+
+        if typeof relation != "object" {
+            return null;
+        }
+
+        let fields           = relation->getFields(),
+            referencedFields = relation->getReferencedFields();
+
+        if !relation->isThrough() {
+            if typeof fields != "array" {
+                let fields           = [fields],
+                    referencedFields = [referencedFields];
+            }
+
+            let conditions = [];
+
+            for position, field in fields {
+                if unlikely !isset referencedFields[position] {
+                    throw new Exception(
+                        "The number of fields must be equal to the number of referenced fields in join " . left["alias"] . "-" . right["alias"]
+                    );
+                }
+
+                let conditions[] = rewriter->qualify(left["alias"], field) . " = " . rewriter->qualify(right["alias"], referencedFields[position]);
+            }
+
+            return [
+                [
+                    "type":       right["type"],
+                    "source":     right["table"],
+                    "conditions": [
+                        [
+                            "type":  "literal",
+                            "value": implode(" AND ", conditions)
+                        ]
+                    ]
+                ]
+            ];
+        }
+
+        /**
+         * Many-to-many: through the intermediate model
+         */
+        let intermediateModelName        = relation->getIntermediateModel(),
+            intermediateModel            = manager->load(intermediateModelName),
+            intermediateSource           = intermediateModel->getSource(),
+            intermediateSchema           = intermediateModel->getSchema(),
+            intermediateFields           = relation->getIntermediateFields(),
+            intermediateReferencedFields = relation->getIntermediateReferencedFields();
+
+        rewriter->addModel(intermediateModelName, intermediateModel, intermediateSource, false);
+
+        if intermediateSchema {
+            let intermediateTable = [intermediateSource, intermediateSchema];
+        } else {
+            let intermediateTable = intermediateSource;
+        }
+
+        if typeof fields != "array" {
+            let fields                       = [fields],
+                referencedFields             = [referencedFields],
+                intermediateFields           = [intermediateFields],
+                intermediateReferencedFields = [intermediateReferencedFields];
+        }
+
+        let intermediateConditions = [],
+            conditions             = [];
+
+        for position, field in fields {
+            let intermediateConditions[] = rewriter->qualify(left["alias"], field) . " = " . rewriter->qualify(intermediateSource, intermediateFields[position]);
+        }
+
+        for position, field in intermediateReferencedFields {
+            let conditions[] = rewriter->qualify(intermediateSource, field) . " = " . rewriter->qualify(right["alias"], referencedFields[position]);
+        }
+
+        return [
+            [
+                "type":       right["type"],
+                "source":     intermediateTable,
+                "conditions": [
+                    [
+                        "type":  "literal",
+                        "value": implode(" AND ", intermediateConditions)
+                    ]
+                ]
+            ],
+            [
+                "type":       right["type"],
+                "source":     right["table"],
+                "conditions": [
+                    [
+                        "type":  "literal",
+                        "value": implode(" AND ", conditions)
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**

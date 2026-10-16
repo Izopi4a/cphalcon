@@ -813,6 +813,66 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
+     * Runs a native SQL statement and returns the rows as
+     * Phalcon\Mvc\Model\Row objects
+     *
+     * ```php
+     * $rows = $manager->nativeQuery(
+     *     "SELECT country, COUNT(*) AS total,
+     *             RANK() OVER (ORDER BY COUNT(*) DESC) AS position
+     *      FROM customers GROUP BY country"
+     * );
+     *
+     * foreach ($rows as $row) {
+     *     echo $row->country, " ", $row->total, PHP_EOL;
+     * }
+     * ```
+     *
+     * @param string                       $sql
+     * @param array                        $bindParams
+     * @param array                        $bindTypes
+     * @param string|AdapterInterface|null $connection service name (default "db") or adapter
+     */
+    public function nativeQuery(string sql, array bindParams = [], array bindTypes = [], var connection = null) -> <ResultsetInterface>
+    {
+        var result;
+
+        if connection === null {
+            let connection = "db";
+        }
+
+        if typeof connection == "string" {
+            if unlikely typeof this->container != "object" {
+                throw new Exception(
+                    "A dependency injection container is required to access the services related to the ORM"
+                );
+            }
+
+            let connection = this->container->getShared(connection);
+        }
+
+        if unlikely !(connection instanceof AdapterInterface) {
+            throw new Exception(
+                "The connection must be a service name or an instance of Phalcon\\Db\\Adapter\\AdapterInterface"
+            );
+        }
+
+        let result = connection->query(sql, bindParams, bindTypes);
+
+        if typeof result != "object" {
+            let result = null;
+        }
+
+        return new \Phalcon\Mvc\Model\Resultset\Simple(
+            null,
+            new Row(),
+            result,
+            null,
+            false
+        );
+    }
+
+    /**
      * Creates a Phalcon\Mvc\Model\Query\Builder
      *
      * @param array|string|null params

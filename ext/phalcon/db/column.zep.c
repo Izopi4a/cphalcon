@@ -641,7 +641,7 @@ PHP_METHOD(Phalcon_Db_Column, __construct)
 PHP_METHOD(Phalcon_Db_Column, getAfterPosition)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "after", IS_STRING);
+	RETURN_MEMBER(getThis(), "after");
 }
 
 /**
@@ -704,7 +704,7 @@ PHP_METHOD(Phalcon_Db_Column, getSize)
 PHP_METHOD(Phalcon_Db_Column, getType)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "type", IS_LONG);
+	RETURN_MEMBER(getThis(), "type");
 }
 
 /**

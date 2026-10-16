@@ -129,6 +129,10 @@
       "type": "bool",
       "default": false
     },
+    "orm.native_compiler": {
+      "type": "bool",
+      "default": true
+    },
     "orm.not_null_validations": {
       "type": "bool",
       "default": true

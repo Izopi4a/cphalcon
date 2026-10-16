@@ -107,12 +107,12 @@ PHP_METHOD(Phalcon_Session_Bag, __construct)
 	session = ZEND_CALL_ARG(execute_data, 1);
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 943, session);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 944, &name_zv);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 952, session);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_1, 953, &name_zv);
 	ZEPHIR_CALL_METHOD(&_0, session, "getDI", NULL, 0);
 	zephir_check_call_status();
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 945, &_0);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 944, PH_NOISY_CC | PH_READONLY);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_2, 954, &_0);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 953, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(&data, session, "get", NULL, 0, &_1);
 	zephir_check_call_status();
 	if (Z_TYPE_P(&data) != IS_ARRAY) {
@@ -149,8 +149,8 @@ PHP_METHOD(Phalcon_Session_Bag, clear)
 
 	ZEPHIR_CALL_PARENT(NULL, phalcon_session_bag_ce, getThis(), "clear", NULL, 0);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 943, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 944, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 952, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 953, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(NULL, &_0, "remove", NULL, 0, &_1);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
@@ -203,8 +203,8 @@ PHP_METHOD(Phalcon_Session_Bag, init)
 	}
 	ZEPHIR_CALL_PARENT(NULL, phalcon_session_bag_ce, getThis(), "init", NULL, 0, &data);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 943, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 944, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 952, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 953, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(NULL, &_0, "set", NULL, 0, &_1, &data);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
@@ -247,9 +247,9 @@ PHP_METHOD(Phalcon_Session_Bag, remove)
 	ZVAL_STR_COPY(&element_zv, element);
 	ZEPHIR_CALL_PARENT(NULL, phalcon_session_bag_ce, getThis(), "remove", NULL, 0, &element_zv);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 943, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 944, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_2, 946, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 952, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 953, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_2, 955, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(NULL, &_0, "set", NULL, 0, &_1, &_2);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
@@ -295,9 +295,9 @@ PHP_METHOD(Phalcon_Session_Bag, set)
 	ZVAL_STR_COPY(&element_zv, element);
 	ZEPHIR_CALL_PARENT(NULL, phalcon_session_bag_ce, getThis(), "set", NULL, 0, &element_zv, value);
 	zephir_check_call_status();
-	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 943, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 944, PH_NOISY_CC | PH_READONLY);
-	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_2, 946, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_0, this_ptr, _zephir_prop_0, 952, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_1, this_ptr, _zephir_prop_1, 953, PH_NOISY_CC | PH_READONLY);
+	zephir_read_property_cached(&_2, this_ptr, _zephir_prop_2, 955, PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CALL_METHOD(NULL, &_0, "set", NULL, 0, &_1, &_2);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
@@ -321,6 +321,6 @@ PHP_METHOD(Phalcon_Session_Bag, setDI)
 		Z_PARAM_OBJECT_OF_CLASS(container, phalcon_di_diinterface_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &container);
-	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 945, container);
+	zephir_update_property_zval_cached(this_ptr, _zephir_prop_0, 954, container);
 }
 

@@ -1886,6 +1886,139 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     }
 
     /**
+     * Runs a native SQL statement and hydrates every row into this model.
+     *
+     * The statement goes to the database as written: CTEs, UNION, window
+     * functions, database specific syntax. Placeholders are the PDO ones
+     * (`:name` or `?`). The statement must return the model's real column
+     * names; the column map, snapshots and the resultset class apply as they
+     * do for find().
+     *
+     * ```php
+     * $robots = Robots::findBySql(
+     *     "WITH recent AS (SELECT * FROM robots WHERE year > :year)
+     *      SELECT * FROM recent ORDER BY name",
+     *     [
+     *         "year" => 2000,
+     *     ]
+     * );
+     * ```
+     */
+    public static function findBySql(string sql, array bindParams = [], array bindTypes = []) -> <ResultsetInterface>
+    {
+        var container, manager, metaData, model, connection, result,
+            columnMap, typesColumnMap, attribute, column, resultsetClassName;
+        bool keepSnapshots;
+
+        let container  = Di::getDefault(),
+            manager    = <ManagerInterface> container->getShared("modelsManager"),
+            metaData   = <MetaDataInterface> container->getShared("modelsMetadata"),
+            model      = manager->load(get_called_class()),
+            connection = model->getReadConnection();
+
+        let result = connection->query(sql, bindParams, bindTypes);
+
+        if typeof result != "object" {
+            let result = null;
+        }
+
+        /**
+         * Same column map as Query::executeSelect() builds for find()
+         */
+        if !Settings::get("orm.cast_on_hydrate") {
+            let columnMap = metaData->getColumnMap(model);
+        } else {
+            let typesColumnMap = metaData->getDataTypes(model),
+                column         = metaData->getColumnMap(model);
+
+            if column === null {
+                let columnMap = [];
+
+                for attribute in metaData->getAttributes(model) {
+                    let columnMap[attribute] = [
+                        attribute,
+                        typesColumnMap[attribute]
+                    ];
+                }
+            } else {
+                let columnMap = [];
+
+                for column, attribute in metaData->getColumnMap(model) {
+                    let columnMap[column] = [
+                        attribute,
+                        typesColumnMap[column]
+                    ];
+                }
+            }
+        }
+
+        let keepSnapshots = (bool) manager->isKeepingSnapshots(model);
+
+        if method_exists(model, "getResultsetClass") {
+            let resultsetClassName = model->getResultsetClass();
+
+            if resultsetClassName {
+                if unlikely !class_exists(resultsetClassName) {
+                    throw new Exception(
+                        "Resultset class \"" . resultsetClassName . "\" not found"
+                    );
+                }
+
+                if unlikely !is_subclass_of(resultsetClassName, "Phalcon\\Mvc\\Model\\ResultsetInterface") {
+                    throw new Exception(
+                        "Resultset class \"" . resultsetClassName . "\" must be an implementation of Phalcon\\Mvc\\Model\\ResultsetInterface"
+                    );
+                }
+
+                return create_instance_params(
+                    resultsetClassName,
+                    [
+                        columnMap,
+                        model,
+                        result,
+                        null,
+                        keepSnapshots
+                    ]
+                );
+            }
+        }
+
+        return new \Phalcon\Mvc\Model\Resultset\Simple(
+            columnMap,
+            model,
+            result,
+            null,
+            keepSnapshots
+        );
+    }
+
+    /**
+     * Runs a native SQL statement and returns the first row as this model,
+     * or null when there is none
+     *
+     * ```php
+     * $robot = Robots::findFirstBySql(
+     *     "SELECT * FROM robots WHERE name ILIKE :name LIMIT 1",
+     *     [
+     *         "name" => "astro%",
+     *     ]
+     * );
+     * ```
+     */
+    public static function findFirstBySql(string sql, array bindParams = [], array bindTypes = []) -> <ModelInterface> | null
+    {
+        var first;
+
+        let first = static::findBySql(sql, bindParams, bindTypes)->getFirst();
+
+        if typeof first != "object" {
+            return null;
+        }
+
+        return first;
+    }
+
+    /**
      * Fires an event, implicitly calls behaviors and listeners in the events
      * manager are notified
      */
@@ -3274,7 +3407,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             exceptionOnFailedSave, exceptionOnFailedMetaDataSave, phqlLiterals,
             virtualForeignKeys, lateStateBinding, castOnHydrate,
             ignoreUnknownColumns, updateSnapshotOnSave, disableAssignSetters,
-            caseInsensitiveColumnMap, prefetchRecords, lastInsertId;
+            caseInsensitiveColumnMap, prefetchRecords, lastInsertId,
+            nativeCompiler;
 
         /**
          * Enables/Disables globally the internal events
@@ -3324,6 +3458,15 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          */
         if fetch phqlLiterals, options["phqlLiterals"] {
             Settings::set("orm.enable_literals", phqlLiterals);
+        }
+
+        /**
+         * Enables/Disables the native compiler: find(), the query builder
+         * and relations are compiled straight to SQL instead of going
+         * through the PHQL parser
+         */
+        if fetch nativeCompiler, options["nativeCompiler"] {
+            Settings::set("orm.native_compiler", nativeCompiler);
         }
 
         /**

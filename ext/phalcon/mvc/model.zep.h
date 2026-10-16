@@ -25,6 +25,8 @@ PHP_METHOD(Phalcon_Mvc_Model, delete);
 PHP_METHOD(Phalcon_Mvc_Model, dump);
 PHP_METHOD(Phalcon_Mvc_Model, find);
 PHP_METHOD(Phalcon_Mvc_Model, findFirst);
+PHP_METHOD(Phalcon_Mvc_Model, findBySql);
+PHP_METHOD(Phalcon_Mvc_Model, findFirstBySql);
 PHP_METHOD(Phalcon_Mvc_Model, fireEvent);
 PHP_METHOD(Phalcon_Mvc_Model, fireEventCancel);
 PHP_METHOD(Phalcon_Mvc_Model, getChangedFields);
@@ -206,6 +208,18 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_mvc_model_findfirst, 0, 0, 0)
 	ZEND_ARG_INFO(0, parameters)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_findbysql, 0, 1, Phalcon\\Mvc\\Model\\ResultsetInterface, 0)
+	ZEND_ARG_TYPE_INFO(0, sql, IS_STRING, 0)
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bindParams, IS_ARRAY, 0, "[]")
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bindTypes, IS_ARRAY, 0, "[]")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_findfirstbysql, 0, 1, Phalcon\\Mvc\\ModelInterface, 1)
+	ZEND_ARG_TYPE_INFO(0, sql, IS_STRING, 0)
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bindParams, IS_ARRAY, 0, "[]")
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bindTypes, IS_ARRAY, 0, "[]")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_fireevent, 0, 1, _IS_BOOL, 0)
@@ -595,6 +609,8 @@ ZEPHIR_INIT_FUNCS(phalcon_mvc_model_method_entry) {
 	PHP_ME(Phalcon_Mvc_Model, dump, arginfo_phalcon_mvc_model_dump, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model, find, arginfo_phalcon_mvc_model_find, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Phalcon_Mvc_Model, findFirst, arginfo_phalcon_mvc_model_findfirst, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Phalcon_Mvc_Model, findBySql, arginfo_phalcon_mvc_model_findbysql, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Phalcon_Mvc_Model, findFirstBySql, arginfo_phalcon_mvc_model_findfirstbysql, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Phalcon_Mvc_Model, fireEvent, arginfo_phalcon_mvc_model_fireevent, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model, fireEventCancel, arginfo_phalcon_mvc_model_fireeventcancel, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model, getChangedFields, arginfo_phalcon_mvc_model_getchangedfields, ZEND_ACC_PUBLIC)

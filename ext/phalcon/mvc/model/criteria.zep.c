@@ -815,7 +815,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, fromInput)
 		zephir_check_call_status();
 	}
 
-	ZEPHIR_CALL_METHOD(NULL, &criteria, "setDI", NULL, 467, container);
+	ZEPHIR_CALL_METHOD(NULL, &criteria, "setDI", NULL, 469, container);
 	zephir_check_call_status();
 	if (zephir_fast_count_int(&conditions)) {
 		ZEPHIR_INIT_VAR(&_17$$16);
@@ -826,12 +826,12 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, fromInput)
 			return;
 		}
 		zephir_fast_join(&_17$$16, &_18$$16, &conditions);
-		ZEPHIR_CALL_METHOD(NULL, &criteria, "where", NULL, 477, &_17$$16);
+		ZEPHIR_CALL_METHOD(NULL, &criteria, "where", NULL, 478, &_17$$16);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, &criteria, "bind", NULL, 478, &bind);
+		ZEPHIR_CALL_METHOD(NULL, &criteria, "bind", NULL, 479, &bind);
 		zephir_check_call_status();
 	}
-	ZEPHIR_CALL_METHOD(NULL, &criteria, "setModelName", NULL, 468, &modelName_zv);
+	ZEPHIR_CALL_METHOD(NULL, &criteria, "setModelName", NULL, 470, &modelName_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&criteria);
 }
@@ -1136,7 +1136,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, innerJoin)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval model_zv, *conditions = NULL, conditions_sub, *alias = NULL, alias_sub, __$null, _0, _1;
+	zval model_zv, *conditions = NULL, conditions_sub, *alias = NULL, alias_sub, __$null, _0;
 	zend_string *model = NULL;
 	zval *this_ptr = getThis();
 
@@ -1145,7 +1145,6 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, innerJoin)
 	ZVAL_UNDEF(&alias_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_STR(model)
@@ -1173,9 +1172,9 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, innerJoin)
 	}
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "INNER");
-	ZEPHIR_CALL_FUNCTION(&_1, "join", NULL, 479, &model_zv, conditions, alias, &_0, this_ptr);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "join", NULL, 0, &model_zv, conditions, alias, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM();
 }
 
 /**
@@ -1472,7 +1471,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, leftJoin)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval model_zv, *conditions = NULL, conditions_sub, *alias = NULL, alias_sub, __$null, _0, _1;
+	zval model_zv, *conditions = NULL, conditions_sub, *alias = NULL, alias_sub, __$null, _0;
 	zend_string *model = NULL;
 	zval *this_ptr = getThis();
 
@@ -1481,7 +1480,6 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, leftJoin)
 	ZVAL_UNDEF(&alias_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_STR(model)
@@ -1509,9 +1507,9 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, leftJoin)
 	}
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "LEFT");
-	ZEPHIR_CALL_FUNCTION(&_1, "join", NULL, 479, &model_zv, conditions, alias, &_0, this_ptr);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "join", NULL, 0, &model_zv, conditions, alias, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM();
 }
 
 /**
@@ -1939,7 +1937,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, rightJoin)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval model_zv, *conditions = NULL, conditions_sub, *alias = NULL, alias_sub, __$null, _0, _1;
+	zval model_zv, *conditions = NULL, conditions_sub, *alias = NULL, alias_sub, __$null, _0;
 	zend_string *model = NULL;
 	zval *this_ptr = getThis();
 
@@ -1948,7 +1946,6 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, rightJoin)
 	ZVAL_UNDEF(&alias_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_STR(model)
@@ -1976,9 +1973,9 @@ PHP_METHOD(Phalcon_Mvc_Model_Criteria, rightJoin)
 	}
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "RIGHT");
-	ZEPHIR_CALL_FUNCTION(&_1, "join", NULL, 479, &model_zv, conditions, alias, &_0, this_ptr);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "join", NULL, 0, &model_zv, conditions, alias, &_0);
 	zephir_check_call_status();
-	RETURN_CCTOR(&_1);
+	RETURN_MM();
 }
 
 /**

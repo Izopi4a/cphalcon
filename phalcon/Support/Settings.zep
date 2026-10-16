@@ -115,6 +115,9 @@ class Settings
             case "orm.late_state_binding":
                 return (bool) globals_get("orm.late_state_binding");
 
+            case "orm.native_compiler":
+                return (bool) globals_get("orm.native_compiler");
+
             case "orm.not_null_validations":
                 return (bool) globals_get("orm.not_null_validations");
 
@@ -171,6 +174,7 @@ class Settings
             case "orm.exception_on_failed_metadata_save":
             case "orm.ignore_unknown_columns":
             case "orm.late_state_binding":
+            case "orm.native_compiler":
             case "orm.not_null_validations":
             case "orm.resultset_prefetch_records":
             case "orm.update_snapshot_on_save":

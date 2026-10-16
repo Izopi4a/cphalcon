@@ -11,6 +11,7 @@ PHP_METHOD(Phalcon_Mvc_Model_Manager, addHasManyToMany);
 PHP_METHOD(Phalcon_Mvc_Model_Manager, addHasOne);
 PHP_METHOD(Phalcon_Mvc_Model_Manager, addHasOneThrough);
 PHP_METHOD(Phalcon_Mvc_Model_Manager, clearReusableObjects);
+PHP_METHOD(Phalcon_Mvc_Model_Manager, nativeQuery);
 PHP_METHOD(Phalcon_Mvc_Model_Manager, createBuilder);
 PHP_METHOD(Phalcon_Mvc_Model_Manager, createQuery);
 PHP_METHOD(Phalcon_Mvc_Model_Manager, executeQuery);
@@ -135,6 +136,13 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_manager_clearreusableobjects, 0, 0, IS_VOID, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_manager_nativequery, 0, 1, Phalcon\\Mvc\\Model\\ResultsetInterface, 0)
+	ZEND_ARG_TYPE_INFO(0, sql, IS_STRING, 0)
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bindParams, IS_ARRAY, 0, "[]")
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bindTypes, IS_ARRAY, 0, "[]")
+	ZEND_ARG_INFO(0, connection)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_manager_createbuilder, 0, 0, Phalcon\\Mvc\\Model\\Query\\BuilderInterface, 0)
 	ZEND_ARG_INFO(0, params)
 ZEND_END_ARG_INFO()
@@ -240,7 +248,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_manager_gethas
 	ZEND_ARG_OBJ_INFO(0, model, Phalcon\\Mvc\\ModelInterface, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_manager_getlastinitialized, 0, 0, Phalcon\\Mvc\\ModelInterface, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_manager_getlastinitialized, 0, 0, Phalcon\\Mvc\\ModelInterface, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_manager_getlastquery, 0, 0, Phalcon\\Mvc\\Model\\QueryInterface, 0)
@@ -458,6 +466,7 @@ PHP_ME(Phalcon_Mvc_Model_Manager, __destruct, arginfo_phalcon_mvc_model_manager_
 	PHP_ME(Phalcon_Mvc_Model_Manager, addHasOne, arginfo_phalcon_mvc_model_manager_addhasone, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Manager, addHasOneThrough, arginfo_phalcon_mvc_model_manager_addhasonethrough, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Manager, clearReusableObjects, arginfo_phalcon_mvc_model_manager_clearreusableobjects, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_Model_Manager, nativeQuery, arginfo_phalcon_mvc_model_manager_nativequery, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Manager, createBuilder, arginfo_phalcon_mvc_model_manager_createbuilder, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Manager, createQuery, arginfo_phalcon_mvc_model_manager_createquery, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Manager, executeQuery, arginfo_phalcon_mvc_model_manager_executequery, ZEND_ACC_PUBLIC)

@@ -1771,7 +1771,7 @@ PHP_METHOD(Phalcon_Db_Adapter_AbstractAdapter, getColumnList)
 PHP_METHOD(Phalcon_Db_Adapter_AbstractAdapter, getConnectionId)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "connectionId", IS_STRING);
+	RETURN_MEMBER_TYPED(getThis(), "connectionId", IS_LONG);
 }
 
 /**

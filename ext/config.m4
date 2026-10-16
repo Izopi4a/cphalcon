@@ -534,6 +534,7 @@ if test "$PHP_PHALCON" = "yes"; then
 	phalcon/mvc/model/metadata/stream.zep.c
 	phalcon/mvc/model/query.zep.c
 	phalcon/mvc/model/query/builder.zep.c
+	phalcon/mvc/model/query/fragmentrewriter.zep.c
 	phalcon/mvc/model/query/lang.zep.c
 	phalcon/mvc/model/query/status.zep.c
 	phalcon/mvc/model/relation.zep.c

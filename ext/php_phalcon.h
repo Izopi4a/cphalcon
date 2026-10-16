@@ -45,6 +45,7 @@ typedef struct _zephir_struct_orm {
 	zend_bool exception_on_failed_metadata_save;
 	zend_bool ignore_unknown_columns;
 	zend_bool late_state_binding;
+	zend_bool native_compiler;
 	zend_bool not_null_validations;
 	HashTable * parser_cache;
 	char * resultset_prefetch_records;

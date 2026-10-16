@@ -277,8 +277,8 @@ class PdoResult implements ResultInterface
      */
     public function numRows() -> int
     {
-        var sqlStatement, rowCount, connection, type, pdoStatement, matches,
-            result, row;
+        var sqlStatement, rowCount, connection, type, pdoStatement, result,
+            row;
 
         let rowCount = this->rowCount;
 
@@ -310,11 +310,15 @@ class PdoResult implements ResultInterface
                  * make the count
                  */
                 if !starts_with(sqlStatement, "SELECT COUNT(*) ") {
-                    let matches = null;
-
-                    if preg_match("/^SELECT\\s+(.*)/i", sqlStatement, matches) {
+                    /**
+                     * Count by wrapping the whole statement, so CTEs (WITH),
+                     * leading comments and multi-line statements are
+                     * counted too. The newline keeps a trailing "-- comment"
+                     * from swallowing the closing parenthesis.
+                     */
+                    if preg_match("/^\\s*(?:(?:--[^\\n]*\\n|\\/\\*.*?\\*\\/)\\s*)*(?:SELECT|WITH|VALUES|\\()/is", sqlStatement) {
                         let result = connection->query(
-                            "SELECT COUNT(*) \"numrows\" FROM (SELECT " . matches[1] . ")",
+                            "SELECT COUNT(*) \"numrows\" FROM (" . rtrim(trim(sqlStatement), ";") . "\n) phalcon_numrows",
                             this->bindParams,
                             this->bindTypes
                         );

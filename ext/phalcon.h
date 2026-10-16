@@ -529,6 +529,7 @@
 #include "phalcon/mvc/model/metadata/stream.zep.h"
 #include "phalcon/mvc/model/query.zep.h"
 #include "phalcon/mvc/model/query/builder.zep.h"
+#include "phalcon/mvc/model/query/fragmentrewriter.zep.h"
 #include "phalcon/mvc/model/query/lang.zep.h"
 #include "phalcon/mvc/model/query/status.zep.h"
 #include "phalcon/mvc/model/relation.zep.h"

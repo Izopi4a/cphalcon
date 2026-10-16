@@ -76,13 +76,13 @@ ZEPHIR_INIT_CLASS(Phalcon_Support_Settings)
 PHP_METHOD(Phalcon_Support_Settings, get)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval key_zv, localOverrides, _0$$4, _1$$21;
+	zval key_zv, localOverrides, _0$$4, _1$$22;
 	zend_string *key = NULL;
 
 	ZVAL_UNDEF(&key_zv);
 	ZVAL_UNDEF(&localOverrides);
 	ZVAL_UNDEF(&_0$$4);
-	ZVAL_UNDEF(&_1$$21);
+	ZVAL_UNDEF(&_1$$22);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(key)
 	ZEND_PARSE_PARAMETERS_END();
@@ -116,11 +116,12 @@ PHP_METHOD(Phalcon_Support_Settings, get)
 	if (ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_metadata_save")) { goto zephir_switch_0_clause_12; }
 	if (ZEPHIR_IS_STRING(&key_zv, "orm.ignore_unknown_columns")) { goto zephir_switch_0_clause_13; }
 	if (ZEPHIR_IS_STRING(&key_zv, "orm.late_state_binding")) { goto zephir_switch_0_clause_14; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.not_null_validations")) { goto zephir_switch_0_clause_15; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.resultset_prefetch_records")) { goto zephir_switch_0_clause_16; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.update_snapshot_on_save")) { goto zephir_switch_0_clause_17; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.virtual_foreign_keys")) { goto zephir_switch_0_clause_18; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.dynamic_update")) { goto zephir_switch_0_clause_19; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.native_compiler")) { goto zephir_switch_0_clause_15; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.not_null_validations")) { goto zephir_switch_0_clause_16; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.resultset_prefetch_records")) { goto zephir_switch_0_clause_17; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.update_snapshot_on_save")) { goto zephir_switch_0_clause_18; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.virtual_foreign_keys")) { goto zephir_switch_0_clause_19; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.dynamic_update")) { goto zephir_switch_0_clause_20; }
 	goto zephir_switch_0_end;
 	zephir_switch_0_clause_0: ;
 		RETURN_MM_BOOL(ZEPHIR_GLOBAL(db).escape_identifiers);
@@ -153,16 +154,18 @@ PHP_METHOD(Phalcon_Support_Settings, get)
 	zephir_switch_0_clause_14: ;
 		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).late_state_binding);
 	zephir_switch_0_clause_15: ;
-		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).not_null_validations);
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).native_compiler);
 	zephir_switch_0_clause_16: ;
-		ZEPHIR_INIT_VAR(&_1$$21);
-		ZVAL_STRING(&_1$$21, "ZEPHIR_GLOBAL(orm).resultset_prefetch_records");
-		RETURN_MM_LONG(zephir_get_intval(&_1$$21));
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).not_null_validations);
 	zephir_switch_0_clause_17: ;
-		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).update_snapshot_on_save);
+		ZEPHIR_INIT_VAR(&_1$$22);
+		ZVAL_STRING(&_1$$22, "ZEPHIR_GLOBAL(orm).resultset_prefetch_records");
+		RETURN_MM_LONG(zephir_get_intval(&_1$$22));
 	zephir_switch_0_clause_18: ;
-		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).virtual_foreign_keys);
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).update_snapshot_on_save);
 	zephir_switch_0_clause_19: ;
+		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).virtual_foreign_keys);
+	zephir_switch_0_clause_20: ;
 		RETURN_MM_BOOL(ZEPHIR_GLOBAL(orm).dynamic_update);
 	zephir_switch_0_end: ;
 
@@ -219,12 +222,13 @@ PHP_METHOD(Phalcon_Support_Settings, set)
 	if (ZEPHIR_IS_STRING(&key_zv, "orm.exception_on_failed_metadata_save")) { goto zephir_switch_0_clause_12; }
 	if (ZEPHIR_IS_STRING(&key_zv, "orm.ignore_unknown_columns")) { goto zephir_switch_0_clause_13; }
 	if (ZEPHIR_IS_STRING(&key_zv, "orm.late_state_binding")) { goto zephir_switch_0_clause_14; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.not_null_validations")) { goto zephir_switch_0_clause_15; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.resultset_prefetch_records")) { goto zephir_switch_0_clause_16; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.update_snapshot_on_save")) { goto zephir_switch_0_clause_17; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.virtual_foreign_keys")) { goto zephir_switch_0_clause_18; }
-	if (ZEPHIR_IS_STRING(&key_zv, "orm.dynamic_update")) { goto zephir_switch_0_clause_19; }
-	goto zephir_switch_0_clause_20;
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.native_compiler")) { goto zephir_switch_0_clause_15; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.not_null_validations")) { goto zephir_switch_0_clause_16; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.resultset_prefetch_records")) { goto zephir_switch_0_clause_17; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.update_snapshot_on_save")) { goto zephir_switch_0_clause_18; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.virtual_foreign_keys")) { goto zephir_switch_0_clause_19; }
+	if (ZEPHIR_IS_STRING(&key_zv, "orm.dynamic_update")) { goto zephir_switch_0_clause_20; }
+	goto zephir_switch_0_clause_21;
 	zephir_switch_0_clause_0: ;
 	zephir_switch_0_clause_1: ;
 	zephir_switch_0_clause_2: ;
@@ -245,10 +249,11 @@ PHP_METHOD(Phalcon_Support_Settings, set)
 	zephir_switch_0_clause_17: ;
 	zephir_switch_0_clause_18: ;
 	zephir_switch_0_clause_19: ;
+	zephir_switch_0_clause_20: ;
 		zephir_array_update_zval(&localOverrides, &key_zv, value, PH_COPY | PH_SEPARATE);
 		zephir_update_static_property_ce(phalcon_support_settings_ce, ZEND_STRL("overrides"), &localOverrides);
 		goto zephir_switch_0_end;
-	zephir_switch_0_clause_20: ;
+	zephir_switch_0_clause_21: ;
 		goto zephir_switch_0_end;
 	zephir_switch_0_end: ;
 

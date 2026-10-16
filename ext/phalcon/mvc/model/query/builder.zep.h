@@ -51,6 +51,9 @@ PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, setBindParams);
 PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, setBindTypes);
 PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, setDI);
 PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, where);
+PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, compileIntermediate);
+PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, compileObjectAlias);
+PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, compileRelationJoin);
 PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, conditionBetween);
 PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, conditionIn);
 PHP_METHOD(Phalcon_Mvc_Model_Query_Builder, conditionNotBetween);
@@ -134,7 +137,7 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_query_builder_getgroupby, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_query_builder_gethaving, 0, 0, IS_STRING, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_query_builder_gethaving, 0, 0, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_query_builder_getjoins, 0, 0, IS_ARRAY, 0)
@@ -280,6 +283,21 @@ ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bindParams, IS_ARRAY, 0, "[]")
 ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bindTypes, IS_ARRAY, 0, "[]")
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_query_builder_compileintermediate, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_query_builder_compileobjectalias, 0, 2, IS_STRING, 0)
+	ZEND_ARG_ARRAY_INFO(0, queryModel, 0)
+	ZEND_ARG_INFO(0, columnAlias)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_query_builder_compilerelationjoin, 0, 4, IS_ARRAY, 1)
+	ZEND_ARG_OBJ_INFO(0, manager, Phalcon\\Mvc\\Model\\ManagerInterface, 0)
+	ZEND_ARG_OBJ_INFO(0, rewriter, Phalcon\\Mvc\\Model\\Query\\FragmentRewriter, 0)
+	ZEND_ARG_ARRAY_INFO(0, left, 0)
+	ZEND_ARG_ARRAY_INFO(0, right, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_query_builder_conditionbetween, 0, 5, Phalcon\\Mvc\\Model\\Query\\BuilderInterface, 0)
 	ZEND_ARG_TYPE_INFO(0, clause, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, operator, IS_STRING, 0)
@@ -362,6 +380,9 @@ PHP_ME(Phalcon_Mvc_Model_Query_Builder, getWhere, arginfo_phalcon_mvc_model_quer
 	PHP_ME(Phalcon_Mvc_Model_Query_Builder, setBindTypes, arginfo_phalcon_mvc_model_query_builder_setbindtypes, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Query_Builder, setDI, arginfo_phalcon_mvc_model_query_builder_setdi, ZEND_ACC_PUBLIC)
 	PHP_ME(Phalcon_Mvc_Model_Query_Builder, where, arginfo_phalcon_mvc_model_query_builder_where, ZEND_ACC_PUBLIC)
+	PHP_ME(Phalcon_Mvc_Model_Query_Builder, compileIntermediate, arginfo_phalcon_mvc_model_query_builder_compileintermediate, ZEND_ACC_PROTECTED)
+	PHP_ME(Phalcon_Mvc_Model_Query_Builder, compileObjectAlias, arginfo_phalcon_mvc_model_query_builder_compileobjectalias, ZEND_ACC_PROTECTED)
+	PHP_ME(Phalcon_Mvc_Model_Query_Builder, compileRelationJoin, arginfo_phalcon_mvc_model_query_builder_compilerelationjoin, ZEND_ACC_PROTECTED)
 	PHP_ME(Phalcon_Mvc_Model_Query_Builder, conditionBetween, arginfo_phalcon_mvc_model_query_builder_conditionbetween, ZEND_ACC_PROTECTED)
 	PHP_ME(Phalcon_Mvc_Model_Query_Builder, conditionIn, arginfo_phalcon_mvc_model_query_builder_conditionin, ZEND_ACC_PROTECTED)
 	PHP_ME(Phalcon_Mvc_Model_Query_Builder, conditionNotBetween, arginfo_phalcon_mvc_model_query_builder_conditionnotbetween, ZEND_ACC_PROTECTED)

@@ -25,7 +25,6 @@
 #include "kernel/file.h"
 #include "ext/spl/spl_iterators.h"
 #include "ext/spl/spl_directory.h"
-#include "kernel/main.h"
 
 
 /**
@@ -1092,7 +1091,7 @@ PHP_METHOD(Phalcon_Storage_Adapter_Stream, storePayload)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zend_string *key = NULL;
-	zval *payload_param = NULL, key_zv, __$true, directory, _0, _1, _3, _4, _5, _2$$3;
+	zval *payload_param = NULL, key_zv, __$true, directory, serialized, _0, _2, _3, _4, _1$$3;
 	zval payload;
 	zval *this_ptr = getThis();
 
@@ -1100,12 +1099,12 @@ PHP_METHOD(Phalcon_Storage_Adapter_Stream, storePayload)
 	ZVAL_UNDEF(&key_zv);
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&directory);
+	ZVAL_UNDEF(&serialized);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
-	ZVAL_UNDEF(&_5);
-	ZVAL_UNDEF(&_2$$3);
+	ZVAL_UNDEF(&_1$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		ZEPHIR_Z_PARAM_ARRAY(payload, payload_param)
 		Z_PARAM_STR(key)
@@ -1116,33 +1115,27 @@ PHP_METHOD(Phalcon_Storage_Adapter_Stream, storePayload)
 	zephir_get_arrval(&payload, payload_param);
 	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
-	ZEPHIR_CALL_FUNCTION(&_0, "serialize", NULL, 14, &payload);
+	ZEPHIR_CALL_FUNCTION(&serialized, "serialize", NULL, 14, &payload);
 	zephir_check_call_status();
-	if (UNEXPECTED(Z_TYPE_P(&_0) != IS_ARRAY)) {
-		zephir_throw_variable_type_error(&_0, "payload", "array");
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
-	ZEPHIR_CPY_WRT(&payload, &_0);
 	ZEPHIR_CALL_METHOD(&directory, this_ptr, "getDir", NULL, 124, &key_zv);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(&_1, "is_dir", NULL, 140, &directory);
+	ZEPHIR_CALL_FUNCTION(&_0, "is_dir", NULL, 140, &directory);
 	zephir_check_call_status();
-	if (!(zephir_is_true(&_1))) {
-		ZVAL_LONG(&_2$$3, 0777);
-		ZEPHIR_CALL_FUNCTION(NULL, "mkdir", NULL, 141, &directory, &_2$$3, &__$true);
+	if (!(zephir_is_true(&_0))) {
+		ZVAL_LONG(&_1$$3, 0777);
+		ZEPHIR_CALL_FUNCTION(NULL, "mkdir", NULL, 141, &directory, &_1$$3, &__$true);
 		zephir_check_call_status();
 	}
-	ZEPHIR_INIT_VAR(&_4);
-	ZEPHIR_CONCAT_VV(&_4, &directory, &key_zv);
+	ZEPHIR_INIT_VAR(&_3);
+	ZEPHIR_CONCAT_VV(&_3, &directory, &key_zv);
 	if (UNEXPECTED(EG(exception))) {
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZVAL_LONG(&_5, 2);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "phpFilePutContents", NULL, 0, &_4, &payload, &_5);
+	ZVAL_LONG(&_4, 2);
+	ZEPHIR_CALL_METHOD(&_2, this_ptr, "phpFilePutContents", NULL, 0, &_3, &serialized, &_4);
 	zephir_check_call_status();
-	RETURN_MM_BOOL(!ZEPHIR_IS_FALSE_IDENTICAL(&_3));
+	RETURN_MM_BOOL(!ZEPHIR_IS_FALSE_IDENTICAL(&_2));
 }
 
 /**

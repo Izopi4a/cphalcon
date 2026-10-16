@@ -524,7 +524,7 @@ PHP_METHOD(Phalcon_Db_Result_PdoResult, getInternalResult)
 PHP_METHOD(Phalcon_Db_Result_PdoResult, numRows)
 {
 	zend_bool _2$$3;
-	zval sqlStatement, rowCount, connection, type, pdoStatement, matches, result, row, _0, _1$$3, _3$$4, _4$$5, _5$$6, _6$$6, _7$$6, _8$$7, _9$$7, _10$$7, _11$$7;
+	zval sqlStatement, rowCount, connection, type, pdoStatement, result, row, _0, _1$$3, _3$$4, _4$$5, _5$$6, _6$$6, _7$$6, _8$$6, _9$$7, _10$$7, _11$$7, _12$$7, _13$$7, _14$$7;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -534,7 +534,6 @@ PHP_METHOD(Phalcon_Db_Result_PdoResult, numRows)
 	ZVAL_UNDEF(&connection);
 	ZVAL_UNDEF(&type);
 	ZVAL_UNDEF(&pdoStatement);
-	ZVAL_UNDEF(&matches);
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&row);
 	ZVAL_UNDEF(&_0);
@@ -544,10 +543,13 @@ PHP_METHOD(Phalcon_Db_Result_PdoResult, numRows)
 	ZVAL_UNDEF(&_5$$6);
 	ZVAL_UNDEF(&_6$$6);
 	ZVAL_UNDEF(&_7$$6);
-	ZVAL_UNDEF(&_8$$7);
+	ZVAL_UNDEF(&_8$$6);
 	ZVAL_UNDEF(&_9$$7);
 	ZVAL_UNDEF(&_10$$7);
 	ZVAL_UNDEF(&_11$$7);
+	ZVAL_UNDEF(&_12$$7);
+	ZVAL_UNDEF(&_13$$7);
+	ZVAL_UNDEF(&_14$$7);
 	static zend_string *_zephir_prop_0 = NULL;
 	static zend_string *_zephir_prop_1 = NULL;
 	static zend_string *_zephir_prop_2 = NULL;
@@ -596,31 +598,34 @@ PHP_METHOD(Phalcon_Db_Result_PdoResult, numRows)
 			zephir_read_property_cached(&_4$$5, this_ptr, _zephir_prop_3, 449, PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_CPY_WRT(&sqlStatement, &_4$$5);
 			if (!(zephir_start_with_str(&sqlStatement, SL("SELECT COUNT(*) ")))) {
-				ZEPHIR_INIT_VAR(&matches);
-				ZVAL_NULL(&matches);
 				ZEPHIR_INIT_VAR(&_5$$6);
-				ZVAL_STRING(&_5$$6, "/^SELECT\\s+(.*)/i");
 				ZEPHIR_INIT_VAR(&_6$$6);
+				ZVAL_STRING(&_6$$6, "/^\\s*(?:(?:--[^\\n]*\\n|\\/\\*.*?\\*\\/)\\s*)*(?:SELECT|WITH|VALUES|\\()/is");
 				ZEPHIR_INIT_VAR(&_7$$6);
-				ZVAL_STRING(&_7$$6, "/^SELECT\\s+(.*)/i");
-				zephir_preg_match(&_6$$6, &_7$$6, &sqlStatement, &matches, 0, 0 , 0 );
-				if (zephir_is_true(&_6$$6)) {
-					zephir_memory_observe(&_8$$7);
-					zephir_array_fetch_long(&_8$$7, &matches, 1, PH_NOISY, "phalcon/Db/Result/PdoResult.zep", 316);
+				ZEPHIR_INIT_VAR(&_8$$6);
+				ZVAL_STRING(&_8$$6, "/^\\s*(?:(?:--[^\\n]*\\n|\\/\\*.*?\\*\\/)\\s*)*(?:SELECT|WITH|VALUES|\\()/is");
+				zephir_preg_match(&_7$$6, &_8$$6, &sqlStatement, &_5$$6, 0, 0 , 0 );
+				if (zephir_is_true(&_7$$6)) {
 					ZEPHIR_INIT_VAR(&_9$$7);
-					ZEPHIR_CONCAT_SVS(&_9$$7, "SELECT COUNT(*) \"numrows\" FROM (SELECT ", &_8$$7, ")");
+					ZEPHIR_INIT_VAR(&_10$$7);
+					zephir_fast_trim(&_10$$7, &sqlStatement, NULL , ZEPHIR_TRIM_BOTH);
+					ZEPHIR_INIT_VAR(&_11$$7);
+					ZVAL_STRING(&_11$$7, ";");
+					zephir_fast_trim(&_9$$7, &_10$$7, &_11$$7, ZEPHIR_TRIM_RIGHT);
+					ZEPHIR_INIT_VAR(&_12$$7);
+					ZEPHIR_CONCAT_SVS(&_12$$7, "SELECT COUNT(*) \"numrows\" FROM (", &_9$$7, "\n) phalcon_numrows");
 					if (UNEXPECTED(EG(exception))) {
 						ZEPHIR_MM_RESTORE();
 						return;
 					}
-					zephir_read_property_cached(&_10$$7, this_ptr, _zephir_prop_4, 450, PH_NOISY_CC | PH_READONLY);
-					zephir_read_property_cached(&_11$$7, this_ptr, _zephir_prop_5, 451, PH_NOISY_CC | PH_READONLY);
-					ZEPHIR_CALL_METHOD(&result, &connection, "query", NULL, 0, &_9$$7, &_10$$7, &_11$$7);
+					zephir_read_property_cached(&_13$$7, this_ptr, _zephir_prop_4, 450, PH_NOISY_CC | PH_READONLY);
+					zephir_read_property_cached(&_14$$7, this_ptr, _zephir_prop_5, 451, PH_NOISY_CC | PH_READONLY);
+					ZEPHIR_CALL_METHOD(&result, &connection, "query", NULL, 0, &_12$$7, &_13$$7, &_14$$7);
 					zephir_check_call_status();
 					ZEPHIR_CALL_METHOD(&row, &result, "fetch", NULL, 0);
 					zephir_check_call_status();
 					ZEPHIR_OBS_NVAR(&rowCount);
-					zephir_array_fetch_string(&rowCount, &row, SL("numrows"), PH_NOISY, "phalcon/Db/Result/PdoResult.zep", 322);
+					zephir_array_fetch_string(&rowCount, &row, SL("numrows"), PH_NOISY, "phalcon/Db/Result/PdoResult.zep", 326);
 				}
 			} else {
 				ZEPHIR_INIT_NVAR(&rowCount);

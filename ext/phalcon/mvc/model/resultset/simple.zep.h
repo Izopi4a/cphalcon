@@ -19,7 +19,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_phalcon_mvc_model_resultset_simple___construct, 0
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, keepSnapshots, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_model_resultset_simple_current, 0, 0, Phalcon\\Mvc\\ModelInterface, 1)
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX(arginfo_phalcon_mvc_model_resultset_simple_current, 0, 0, Phalcon\\Mvc\\ModelInterface|Phalcon\\Mvc\\Model\\Row, MAY_BE_NULL)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_model_resultset_simple_toarray, 0, 0, IS_ARRAY, 0)

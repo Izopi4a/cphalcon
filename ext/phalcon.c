@@ -568,6 +568,7 @@ zend_class_entry *phalcon_mvc_model_metadata_strategy_introspection_ce;
 zend_class_entry *phalcon_mvc_model_metadata_stream_ce;
 zend_class_entry *phalcon_mvc_model_query_builder_ce;
 zend_class_entry *phalcon_mvc_model_query_ce;
+zend_class_entry *phalcon_mvc_model_query_fragmentrewriter_ce;
 zend_class_entry *phalcon_mvc_model_query_lang_ce;
 zend_class_entry *phalcon_mvc_model_query_status_ce;
 zend_class_entry *phalcon_mvc_model_relation_ce;
@@ -716,6 +717,7 @@ PHP_INI_BEGIN()
 	STD_PHP_INI_BOOLEAN("phalcon.orm.exception_on_failed_metadata_save", "1", PHP_INI_ALL, OnUpdateBool, orm.exception_on_failed_metadata_save, zend_phalcon_globals, phalcon_globals)
 	STD_PHP_INI_BOOLEAN("phalcon.orm.ignore_unknown_columns", "0", PHP_INI_ALL, OnUpdateBool, orm.ignore_unknown_columns, zend_phalcon_globals, phalcon_globals)
 	STD_PHP_INI_BOOLEAN("phalcon.orm.late_state_binding", "0", PHP_INI_ALL, OnUpdateBool, orm.late_state_binding, zend_phalcon_globals, phalcon_globals)
+	STD_PHP_INI_BOOLEAN("phalcon.orm.native_compiler", "1", PHP_INI_ALL, OnUpdateBool, orm.native_compiler, zend_phalcon_globals, phalcon_globals)
 	STD_PHP_INI_BOOLEAN("phalcon.orm.not_null_validations", "1", PHP_INI_ALL, OnUpdateBool, orm.not_null_validations, zend_phalcon_globals, phalcon_globals)
 	STD_PHP_INI_ENTRY("phalcon.orm.resultset_prefetch_records", "0", PHP_INI_ALL, OnUpdateString, orm.resultset_prefetch_records, zend_phalcon_globals, phalcon_globals)
 	STD_PHP_INI_ENTRY("phalcon.orm.unique_cache_id", "3", PHP_INI_ALL, OnUpdateLong, orm.unique_cache_id, zend_phalcon_globals, phalcon_globals)
@@ -749,6 +751,7 @@ static const char *const zephir_request_ini_entries[] = {
 	"phalcon.orm.exception_on_failed_metadata_save",
 	"phalcon.orm.ignore_unknown_columns",
 	"phalcon.orm.late_state_binding",
+	"phalcon.orm.native_compiler",
 	"phalcon.orm.not_null_validations",
 	"phalcon.orm.resultset_prefetch_records",
 	"phalcon.orm.unique_cache_id",
@@ -1289,6 +1292,7 @@ static PHP_MINIT_FUNCTION(phalcon)
 	ZEPHIR_INIT(Phalcon_Mvc_Model_MetaData_Stream);
 	ZEPHIR_INIT(Phalcon_Mvc_Model_Query);
 	ZEPHIR_INIT(Phalcon_Mvc_Model_Query_Builder);
+	ZEPHIR_INIT(Phalcon_Mvc_Model_Query_FragmentRewriter);
 	ZEPHIR_INIT(Phalcon_Mvc_Model_Query_Lang);
 	ZEPHIR_INIT(Phalcon_Mvc_Model_Query_Status);
 	ZEPHIR_INIT(Phalcon_Mvc_Model_Relation);

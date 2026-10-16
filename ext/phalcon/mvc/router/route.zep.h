@@ -67,7 +67,7 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_phalcon_mvc_router_route_getgroup, 0, 0, Phalcon\\Mvc\\Router\\GroupInterface, 1)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_phalcon_mvc_router_route_gethttpmethods, 0, 0, MAY_BE_ARRAY|MAY_BE_STRING)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_phalcon_mvc_router_route_gethttpmethods, 0, 0, MAY_BE_NULL|MAY_BE_ARRAY|MAY_BE_STRING)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_phalcon_mvc_router_route_gethostname, 0, 0, IS_STRING, 1)

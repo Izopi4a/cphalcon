@@ -242,7 +242,7 @@ PHP_METHOD(Phalcon_Db_Reference, getReferencedColumns)
 PHP_METHOD(Phalcon_Db_Reference, getReferencedSchema)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "referencedSchema", IS_STRING);
+	RETURN_MEMBER(getThis(), "referencedSchema");
 }
 
 /**
@@ -260,7 +260,7 @@ PHP_METHOD(Phalcon_Db_Reference, getReferencedTable)
 PHP_METHOD(Phalcon_Db_Reference, getSchemaName)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "schemaName", IS_STRING);
+	RETURN_MEMBER(getThis(), "schemaName");
 }
 
 /**
@@ -269,7 +269,7 @@ PHP_METHOD(Phalcon_Db_Reference, getSchemaName)
 PHP_METHOD(Phalcon_Db_Reference, getOnDelete)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "onDelete", IS_STRING);
+	RETURN_MEMBER(getThis(), "onDelete");
 }
 
 /**
@@ -278,6 +278,6 @@ PHP_METHOD(Phalcon_Db_Reference, getOnDelete)
 PHP_METHOD(Phalcon_Db_Reference, getOnUpdate)
 {
 
-	RETURN_MEMBER_TYPED(getThis(), "onUpdate", IS_STRING);
+	RETURN_MEMBER(getThis(), "onUpdate");
 }
 

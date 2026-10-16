@@ -64,6 +64,14 @@ final class ParserTest extends TestCase
     }
 
     /**
+     * #12846: a property named "block" (after ".") is an identifier too.
+     */
+    public function testBlockAsAPropertyName(): void
+    {
+        $this->assertSame('<?= $article->block ?>', (new Compiler())->compileString('{{ article.block }}'));
+    }
+
+    /**
      * @return array<string, array{string, int}>
      */
     public static function expressions(): array

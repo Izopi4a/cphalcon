@@ -39,6 +39,16 @@ final class OutputTodayTest extends TemplateTestCase
     }
 
     /**
+     * The rendered view inserted by content() is escaped again, and a
+     * property named like a keyword cannot be read (#12846).
+     */
+    public function testContentIsEscapedAndKeywordPropertiesFail(): void
+    {
+        $this->assertSame('<?= $this->escaper->html($this->getContent()) ?>', $this->compile('{{ content() }}', ['autoescape' => true]));
+        $this->assertThrowsMessage('unexpected token BLOCK', fn () => $this->compile('{{ article.block }}'));
+    }
+
+    /**
      * |default uses empty(): 0, "0" and false are replaced as well.
      */
     public function testNoNullCoalescingAndDefaultUsesEmpty(): void

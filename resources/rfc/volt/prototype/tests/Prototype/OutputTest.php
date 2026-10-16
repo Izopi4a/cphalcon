@@ -23,6 +23,11 @@ final class OutputTest extends TemplateTestCase
         $this->assertSame('<?= $this->escaper->html($x) ?>', $this->compile('{{ x }}', self::AUTOESCAPE));
     }
 
+    public function testContentIsNotEscapedAgain(): void
+    {
+        $this->assertSame('<?= $this->getContent() ?>', $this->compile('{{ content() }}', self::AUTOESCAPE));
+    }
+
     public function testRawFilter(): void
     {
         $this->views(['page' => '{{ html }}|{{ html|raw }}']);
